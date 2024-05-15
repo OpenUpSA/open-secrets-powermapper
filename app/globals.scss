@@ -4,8 +4,11 @@
   box-sizing: border-box;
 }
 
-aside {
+body, html {
   background: #333;
+}
+
+aside {
   color: #fff;
   display: flex;
   flex-direction: column;
