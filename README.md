@@ -10,6 +10,9 @@ yarn dev
 
 ## Deployment
 
-```bash
-netlify deploy --prod
-```
+Deployed on Netlify:
+   
+https://roaring-cactus-a582ea.netlify.app/
+
+
+Automatic deployment of `main` and preview deployments of pull-requests.
