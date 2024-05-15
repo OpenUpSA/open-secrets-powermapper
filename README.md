@@ -4,6 +4,12 @@ by [OpenUp](https://OpenUp.org.za).
 
 ## Development
 
+```
+cp env.example .env
+``` 
+
+Modify `.env` with real values.
+
 ```bash
 yarn dev
 ```

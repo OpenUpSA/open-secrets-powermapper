@@ -1,10 +1,9 @@
 import { PowerStation } from "@/types";
 
-import type { NextApiRequest, NextApiResponse } from "next";
 import Airtable from "airtable";
 import { NextResponse } from "next/server";
 
-export async function GET(request: NextApiRequest, response: NextApiResponse) {
+export async function GET(req: Request) {
   const base = Airtable.base("appZdj1pFZQOBMn4E");
   const table = base("Power Stations").select({
     view: "Grid view",
@@ -22,7 +21,6 @@ export async function GET(request: NextApiRequest, response: NextApiResponse) {
           region: fields.Region as PowerStation["region"],
           latitude: fields.Latitude as PowerStation["latitude"],
           longitude: fields.Longitude as PowerStation["longitude"],
-
         });
       });
       processNextPage();
