@@ -1,4 +1,4 @@
-import { PowerStation } from "@/types";
+import { Position, PowerStation } from "@/types";
 
 import Airtable from "airtable";
 import { NextResponse } from "next/server";
@@ -19,8 +19,10 @@ export async function GET(req: Request) {
           fuelType: fields["Fuel Type"] as PowerStation["fuelType"],
           country: fields.Country as PowerStation["country"],
           region: fields.Region as PowerStation["region"],
-          latitude: fields.Latitude as PowerStation["latitude"],
-          longitude: fields.Longitude as PowerStation["longitude"],
+          position: {
+            lat: fields.Latitude as Position["lat"],
+            lng: fields.Longitude as Position["lng"],
+          },
         });
       });
       processNextPage();

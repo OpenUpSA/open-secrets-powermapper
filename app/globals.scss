@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+aside {
+  background: #333;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.mapContainer {
+  height: 100vh;
+  width: 60vw;
+  float: right;
+  position: sticky;
+  top: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      th {
+        text-align: left;
+        border-bottom: 1px solid #fff;
+        position: sticky;
+        top: 0;
+        padding: 10px 5px;
+        background: #333;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding: 5px;
+      }
+    }
+
+    // Zebra stripe the table
+    tr:nth-child(even) {
+      background: #444;
+    }
+  }
+}
