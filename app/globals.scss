@@ -4,52 +4,19 @@
   box-sizing: border-box;
 }
 
-body, html {
-  background: #333;
-}
-
-aside {
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+body,
+html {
+  color: #7a747f;
+  background: #555555;
+  overflow: hidden;
 }
 
 .mapContainer {
   height: 100vh;
-  width: 60vw;
-  float: right;
-  position: sticky;
-  top: 0;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-
-  thead {
-    tr {
-      th {
-        text-align: left;
-        border-bottom: 1px solid #fff;
-        position: sticky;
-        top: 0;
-        padding: 10px 5px;
-        background: #333;
-      }
-    }
-  }
-  tbody {
-    tr {
-      td {
-        padding: 5px;
-      }
-    }
-
-    // Zebra stripe the table
-    tr:nth-child(even) {
-      background: #444;
-    }
-  }
+.filterPanel {
+  background-color: #ffffff;
+  padding: 1em;
+  height: 100vh;
 }
