@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -20,6 +20,17 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import List from "@mui/material/List";
 
+import { PowerStation } from "@/types";
+
+type Props = {
+  setFilteredPowerStations: Function;
+};
+
+type Marks = {
+  value: number;
+  label: string;
+};
+
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
@@ -32,7 +43,9 @@ function truncateString(str: string, num: number) {
   }
 }
 
-function Component() {
+function Component(props: Props) {
+  const initialized = useRef(false);
+
   const currentSearchParams = useSearchParams();
 
   const energyTypes = {
@@ -51,85 +64,67 @@ function Component() {
     gp: { label: "Gauteng" },
   };
 
-  const powerOutputMarks = [
-    { value: 0, label: "0" },
-    { value: 2000, label: "2000" },
-  ];
-  const powerOutputValueDefault = [
-    powerOutputMarks[0].value,
-    powerOutputMarks[powerOutputMarks.length - 1].value,
-  ];
+  const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
 
-  const ageMarks = [
-    { value: 0, label: "0" },
-    { value: 20, label: "20" },
-  ];
-  const ageValueDefault = [
+  const ageMarksDefault = useRef([
+    {
+      value: 11,
+      label: "10",
+    },
+    {
+      value: 62,
+      label: "60",
+    },
+  ] as Marks[]);
+  const [ageMarks, setAgeMarks] = useState<Marks[]>(ageMarksDefault.current);
+
+  const ageValueDefault = (ages: Marks[]) => {
+    return [ages[0].value, ages[ages.length - 1].value];
+  };
+  const [ageValue, setAgeValue] = useState<number[]>([
     ageMarks[0].value,
     ageMarks[ageMarks.length - 1].value,
-  ];
+  ]);
 
-  const [ageValue, setAgeValue] = useState<number[]>(
-    currentSearchParams.get("age")?.split(",").map(Number) ?? ageValueDefault
-  );
-  const [powerOutputValue, setPowerOutputValue] = useState<number[]>(
-    currentSearchParams.get("power")?.split(",").map(Number) ??
-      powerOutputValueDefault
-  );
-  const [locationsValue, setLocationsValue] = useState<string[]>(
-    currentSearchParams.get("locations")?.split(",").map(String) ?? [""]
-  );
-  const [energiesValue, setEnergiesValue] = useState<string[]>(
-    currentSearchParams.get("energies")?.split(",").map(String) ?? [""]
-  );
-  const [operatorsValue, setOperatorsValue] = useState<string[]>(
-    currentSearchParams.get("operators")?.split(",").map(String) ?? [""]
-  );
-  const [nameValue, setNameValue] = useState(
-    currentSearchParams.get("name") ?? ""
+  const powerOutputMarksDefault = useRef([
+    {
+      value: 100,
+      label: "100",
+    },
+    {
+      value: 1500,
+      label: "1500",
+    },
+  ] as Marks[]);
+
+  const [powerOutputMarks, setPowerOutputMarks] = useState<Marks[]>(
+    powerOutputMarksDefault.current
   );
 
-  const [filters, setFilters] = useState<string[][]>([]);
-
-  const updateFilters = () => {
-    const newFilters = [];
-
-    if (nameValue !== "") {
-      newFilters.push(["name", nameValue]);
-    }
-
-    energiesValue
-      .filter((energy) => energy !== "")
-      .forEach((energy) => {
-        newFilters.push(["energy", energy]);
-      });
-
-    operatorsValue
-      .filter((operator) => operator !== "")
-      .forEach((operator) => {
-        newFilters.push(["operator", operator]);
-      });
-
-    locationsValue
-      .filter((location) => location !== "")
-      .forEach((location) => {
-        newFilters.push(["location", location]);
-      });
-
-    if (powerOutputValue.join("-") !== powerOutputValueDefault.join("-")) {
-      newFilters.push(["power", powerOutputValue.join(" - ")]);
-    }
-    if (ageValue.join("-") !== ageValueDefault.join("-")) {
-      newFilters.push(["age", ageValue.join(" - ")]);
-    }
-    setFilters(newFilters);
+  const powerOutputValueDefault = (powerOutputs: Marks[]) => {
+    return [powerOutputs[0].value, powerOutputs[powerOutputs.length - 1].value];
   };
+  const [powerOutputValue, setPowerOutputValue] = useState<number[]>([
+    powerOutputMarks[0].value,
+    powerOutputMarks[powerOutputMarks.length - 1].value,
+  ]);
+
+  const [locationsValue, setLocationsValue] = useState<string[]>([""]);
+  const [energiesValue, setEnergiesValue] = useState<string[]>([""]);
+  const [operatorsValue, setOperatorsValue] = useState<string[]>([""]);
+  const [nameValue, setNameValue] = useState("");
+  const [filters, setFilters] = useState<string[][]>([]);
 
   const handleAgeChange = (event: Event, newValue: number | number[]) => {
     setAgeValue(newValue as number[]);
-    updatedSearchParams.set("age", String(newValue));
+    if (
+      (newValue as number[]).join("-") === ageValueDefault(ageMarks).join("-")
+    ) {
+      updatedSearchParams.delete("age");
+    } else {
+      updatedSearchParams.set("age", String(newValue));
+    }
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
 
   const handleEnergiesChange = (event: SelectChangeEvent<string[]>) => {
@@ -145,7 +140,6 @@ function Component() {
       updatedSearchParams.set("energies", newValue.join(",") as string);
     }
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
 
   const handleLocationsChange = (event: SelectChangeEvent<string[]>) => {
@@ -161,7 +155,6 @@ function Component() {
       updatedSearchParams.set("locations", newValue.join(",") as string);
     }
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
 
   const handleOperatorsChange = (event: SelectChangeEvent<string[]>) => {
@@ -177,7 +170,6 @@ function Component() {
       updatedSearchParams.set("operators", newValue.join(",") as string);
     }
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
 
   const handlePowerOutputChange = (
@@ -185,21 +177,26 @@ function Component() {
     newValue: number | number[]
   ) => {
     setPowerOutputValue(newValue as number[]);
-    updatedSearchParams.set("power", String(newValue));
+    if (
+      (newValue as number[]).join("-") ===
+      powerOutputValueDefault(powerOutputMarks).join("-")
+    ) {
+      updatedSearchParams.delete("power");
+    } else {
+      updatedSearchParams.set("power", String(newValue));
+    }
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
 
   const changeNameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNameValue(e.target.value);
-    updatedSearchParams.set("name", e.target.value);
+    if (e.target.value === "") {
+      updatedSearchParams.delete("name");
+    } else {
+      updatedSearchParams.set("name", e.target.value);
+    }
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
-
-  /*const filteredPowerStations = powerStations.filter(({ name }) =>
-    name.toLowerCase().includes(nameValue.toLowerCase())
-  );*/
 
   const updatedSearchParams = new URLSearchParams(
     currentSearchParams.toString()
@@ -210,8 +207,8 @@ function Component() {
     setEnergiesValue([""]);
     setOperatorsValue([""]);
     setLocationsValue([""]);
-    setPowerOutputValue(powerOutputValueDefault);
-    setAgeValue(ageValueDefault);
+    setPowerOutputValue(powerOutputValueDefault(powerOutputMarks));
+    setAgeValue(ageValueDefault(ageMarks));
     updatedSearchParams.delete("name");
     updatedSearchParams.delete("energies");
     updatedSearchParams.delete("operators");
@@ -219,7 +216,6 @@ function Component() {
     updatedSearchParams.delete("power");
     updatedSearchParams.delete("age");
     window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
-    updateFilters();
   };
 
   const removeFilter = (filter: string[]) => {
@@ -231,23 +227,30 @@ function Component() {
     switch (filter[0]) {
       case "name":
         setNameValue("");
+        updatedSearchParams.delete("name");
         break;
       case "energy":
         setEnergiesValue(energiesValue.filter((item) => item !== filter[1]));
+        updatedSearchParams.delete("energies");
         break;
       case "operator":
         setOperatorsValue(operatorsValue.filter((item) => item !== filter[1]));
+        updatedSearchParams.delete("operators");
         break;
       case "location":
         setLocationsValue(locationsValue.filter((item) => item !== filter[1]));
+        updatedSearchParams.delete("locations");
         break;
       case "power":
-        setPowerOutputValue(powerOutputValueDefault);
+        setPowerOutputValue(powerOutputValueDefault(powerOutputMarks));
+        updatedSearchParams.delete("power");
         break;
       case "age":
-        setAgeValue(ageValueDefault);
+        setAgeValue(ageValueDefault(ageMarks));
+        updatedSearchParams.delete("age");
         break;
     }
+    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
   };
 
   const getLabelForFilter = (filter: string[]) => {
@@ -270,15 +273,193 @@ function Component() {
   };
 
   useEffect(() => {
+    const updateFilters = () => {
+      const newFilters = [];
+
+      if (nameValue !== "") {
+        newFilters.push(["name", nameValue]);
+      }
+
+      energiesValue
+        .filter((energy) => energy !== "")
+        .forEach((energy) => {
+          newFilters.push(["energy", energy]);
+        });
+
+      operatorsValue
+        .filter((operator) => operator !== "")
+        .forEach((operator) => {
+          newFilters.push(["operator", operator]);
+        });
+
+      locationsValue
+        .filter((location) => location !== "")
+        .forEach((location) => {
+          newFilters.push(["location", location]);
+        });
+
+      if (
+        powerOutputValue.join("-") !==
+        powerOutputValueDefault(powerOutputMarks).join("-")
+      ) {
+        newFilters.push(["power", powerOutputValue.join(" - ")]);
+      }
+
+      if (ageValue.join("-") !== ageValueDefault(ageMarks).join("-")) {
+        newFilters.push(["age", ageValue.join(" - ")]);
+      }
+      setFilters(newFilters);
+
+      props.setFilteredPowerStations(
+        powerStations.filter((station) => {
+          return (
+            nameValue === "" ||
+            station.name.toLowerCase().includes(nameValue.toLowerCase())
+          );
+        })
+      );
+    };
     updateFilters();
   }, [
-    nameValue,
-    energiesValue,
-    operatorsValue,
-    locationsValue,
-    powerOutputValue,
+    powerStations,
+    currentSearchParams,
     ageValue,
+    energiesValue,
+    locationsValue,
+    nameValue,
+    operatorsValue,
+    powerOutputValue,
   ]);
+
+  useEffect(() => {
+    async function getData() {
+      initialized.current = true;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/power-stations`
+      );
+      const data = await res.json();
+      setPowerStations(data.powerStations);
+
+      const powerOutputMarksData = [
+        { value: 0, label: "0" },
+        { value: 2000, label: "2000" },
+      ];
+      setPowerOutputMarks(powerOutputMarksData);
+
+      const ageMarksData = [
+        { value: 10, label: "10" },
+        { value: 40, label: "40" },
+      ];
+      ageMarksDefault.current = ageMarksData;
+      setAgeMarks(ageMarksData);
+
+      const nameParam = currentSearchParams.get("name");
+      if (nameParam) {
+        setNameValue(nameParam);
+      }
+
+      const operatorsParam = currentSearchParams
+        .get("operators")
+        ?.split(",")
+        .map(String);
+      if (operatorsParam) {
+        setOperatorsValue(operatorsParam);
+      }
+
+      const energiesParam = currentSearchParams
+        .get("energies")
+        ?.split(",")
+        .map(String);
+      if (energiesParam) {
+        setEnergiesValue(energiesParam);
+      }
+
+      const locationsParam = currentSearchParams
+        .get("locations")
+        ?.split(",")
+        .map(String);
+      if (locationsParam) {
+        setLocationsValue(locationsParam);
+      }
+
+      const powerParam = currentSearchParams
+        .get("power")
+        ?.split(",")
+        .map(Number);
+      if (powerParam) {
+        setPowerOutputValue(powerParam);
+      } else {
+        setPowerOutputValue(powerOutputValueDefault(powerOutputMarksData));
+      }
+
+      const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
+      if (ageParam) {
+        setAgeValue(ageParam);
+      } else {
+        setAgeValue(ageValueDefault(ageMarksData));
+      }
+    }
+
+    if (!initialized.current) {
+      getData();
+    }
+  }, [
+    powerStations,
+    currentSearchParams,
+    ageValue,
+    energiesValue,
+    locationsValue,
+    nameValue,
+    operatorsValue,
+    powerOutputValue,
+  ]);
+
+  useEffect(() => {
+    const nameParam = currentSearchParams.get("name");
+    if (nameParam && nameParam !== nameValue) {
+      setNameValue(nameParam);
+    }
+
+    const operatorsParam = currentSearchParams
+      .get("operators")
+      ?.split(",")
+      .map(String);
+    if (
+      operatorsParam &&
+      operatorsParam?.join(",") !== operatorsValue.join(",")
+    ) {
+      setOperatorsValue(operatorsParam);
+    }
+
+    const energiesParam = currentSearchParams
+      .get("energies")
+      ?.split(",")
+      .map(String);
+    if (energiesParam && energiesParam?.join(",") !== energiesValue.join(",")) {
+      setEnergiesValue(energiesParam);
+    }
+
+    const locationsParam = currentSearchParams
+      .get("locations")
+      ?.split(",")
+      .map(String);
+    if (
+      locationsParam &&
+      locationsParam?.join(",") !== locationsValue.join(",")
+    ) {
+      setLocationsValue(locationsParam);
+    }
+
+    const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
+    if (powerParam && powerParam?.join(",") !== powerOutputValue.join(",")) {
+      setPowerOutputValue(powerParam);
+    }
+
+    const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
+    if (ageParam && ageParam?.join(",") !== ageValue.join(",")) {
+      setAgeValue(ageParam);
+    }
+  }, [currentSearchParams]);
 
   return (
     <Stack spacing={2} className="filterPanel">
@@ -413,8 +594,8 @@ function Component() {
           id="power-output"
           value={powerOutputValue}
           onChange={handlePowerOutputChange}
-          min={powerOutputValueDefault[0]}
-          max={powerOutputValueDefault[1]}
+          min={powerOutputValueDefault(powerOutputMarks)[0]}
+          max={powerOutputValueDefault(powerOutputMarks)[1]}
           step={100}
           marks={powerOutputMarks}
         />
@@ -428,8 +609,8 @@ function Component() {
           id="age"
           value={ageValue}
           onChange={handleAgeChange}
-          min={ageValueDefault[0]}
-          max={ageValueDefault[1]}
+          min={ageValueDefault(ageMarks)[0]}
+          max={ageValueDefault(ageMarks)[1]}
           step={5}
           marks={ageMarks}
         />

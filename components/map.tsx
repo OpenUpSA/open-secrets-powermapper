@@ -5,7 +5,7 @@ import {
   MapCameraChangedEvent,
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 function Component({ powerStations }: { powerStations: PowerStation[] }) {
   const defaultCenter = { lat: -29.01886710220426, lng: 26.096035496567033 };
