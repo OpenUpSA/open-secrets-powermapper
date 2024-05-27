@@ -51,8 +51,23 @@ function Component() {
     gp: { label: "Gauteng" },
   };
 
-  const powerOutputValueDefault = [1, 2000];
-  const ageValueDefault = [1, 20];
+  const powerOutputMarks = [
+    { value: 0, label: "0" },
+    { value: 2000, label: "2000" },
+  ];
+  const powerOutputValueDefault = [
+    powerOutputMarks[0].value,
+    powerOutputMarks[powerOutputMarks.length - 1].value,
+  ];
+
+  const ageMarks = [
+    { value: 0, label: "0" },
+    { value: 20, label: "20" },
+  ];
+  const ageValueDefault = [
+    ageMarks[0].value,
+    ageMarks[ageMarks.length - 1].value,
+  ];
 
   const [ageValue, setAgeValue] = useState<number[]>(
     currentSearchParams.get("age")?.split(",").map(Number) ?? ageValueDefault
@@ -246,7 +261,7 @@ function Component() {
       case "location":
         return locations[filter[1]].label;
       case "power":
-        return `Power output: ${filter[1]} MW`;
+        return `Output: ${filter[1]} MW`;
       case "age":
         return `Age: ${filter[1]} years`;
     }
@@ -352,7 +367,7 @@ function Component() {
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel id="operators-label">Operators</InputLabel>
+        <InputLabel id="operators-label">Operator</InputLabel>
         <Select
           labelId="operators-label"
           id="operators"
@@ -390,7 +405,7 @@ function Component() {
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
           <BoltIcon />
-          <Typography gutterBottom>Filter by power output (MW)</Typography>
+          <Typography gutterBottom>Filter by power output (MW):</Typography>
         </Stack>
         <Slider
           id="power-output"
@@ -399,13 +414,13 @@ function Component() {
           min={powerOutputValueDefault[0]}
           max={powerOutputValueDefault[1]}
           step={100}
-          marks
+          marks={powerOutputMarks}
         />
       </FormControl>
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
           <EventIcon />
-          <Typography gutterBottom>Filter by age</Typography>
+          <Typography gutterBottom>Filter by age:</Typography>
         </Stack>
         <Slider
           id="age"
@@ -414,7 +429,7 @@ function Component() {
           min={ageValueDefault[0]}
           max={ageValueDefault[1]}
           step={5}
-          marks
+          marks={ageMarks}
         />
       </FormControl>
     </Stack>
