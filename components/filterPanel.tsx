@@ -255,15 +255,17 @@ function Component() {
       case "name":
         return filter[1];
       case "energy":
-        return energyTypes[filter[1]].label;
+        return energyTypes[filter[1] as keyof typeof energyTypes].label;
       case "operator":
-        return operators[filter[1]].label;
+        return operators[filter[1] as keyof typeof operators].label;
       case "location":
-        return locations[filter[1]].label;
+        return locations[filter[1] as keyof typeof locations].label;
       case "power":
         return `Output: ${filter[1]} MW`;
       case "age":
         return `Age: ${filter[1]} years`;
+      default:
+        return "";
     }
   };
 
