@@ -107,7 +107,6 @@ function Component() {
     if (ageValue.join("-") !== ageValueDefault.join("-")) {
       newFilters.push(["age", ageValue.join(" - ")]);
     }
-    console.log({ newFilters });
     setFilters(newFilters);
   };
 
@@ -407,7 +406,6 @@ function Component() {
         <Stack alignItems="center" direction="row" gap={2}>
           <EventIcon />
           <Typography gutterBottom>Filter by age</Typography>
-          {ageValue.join(" - ")}
         </Stack>
         <Slider
           id="age"
