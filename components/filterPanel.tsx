@@ -223,7 +223,7 @@ function Component(props: Props) {
           .get("energies")
           ?.split(",")
           .filter((item) => item !== filter[1]);
-        if (newEnergies) {
+        if (newEnergies && newEnergies.length > 0) {
           newParams.set("energies", newEnergies.join(","));
         } else {
           newParams.delete("energies");
@@ -235,10 +235,11 @@ function Component(props: Props) {
           .get("operators")
           ?.split(",")
           .filter((item) => item !== filter[1]);
-        if (newOperators) {
-          newParams.set("operator", newOperators.join(","));
+        console.log(newOperators);
+        if (newOperators && newOperators.length > 0) {
+          newParams.set("operators", newOperators.join(","));
         } else {
-          newParams.delete("operator");
+          newParams.delete("operators");
         }
         break;
 
