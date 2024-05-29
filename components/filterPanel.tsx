@@ -1,4 +1,4 @@
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -20,15 +20,10 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import List from "@mui/material/List";
 
-import { PowerStation } from "@/types";
+import { ItemLabel, Marks, PowerStation } from "@/types";
 
 type Props = {
   setFilteredPowerStations: Function;
-};
-
-type Marks = {
-  value: number;
-  label: string;
 };
 
 const ListItem = styled("li")(({ theme }) => ({
@@ -45,26 +40,15 @@ function truncateString(str: string, num: number) {
 
 function Component(props: Props) {
   const initialized = useRef(false);
+  const { setFilteredPowerStations } = props;
 
+  const router = useRouter();
   const currentSearchParams = useSearchParams();
 
-  const energyTypes = {
-    coal: { label: "Coal" },
-    solar: { label: "Solar" },
-    wind: { label: "Wind" },
-  };
-  const operators = {
-    eskom: { label: "Eskom" },
-    dingan: { label: "Dingan" },
-    matt: { label: "Matt's Energy" },
-  };
-  const locations = {
-    kzn: { label: "KwaZulu-Natal" },
-    fs: { label: "Free State" },
-    gp: { label: "Gauteng" },
-  };
-
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
+  const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
+  const [operators, setOperators] = useState<ItemLabel>();
+  const [locations, setLocations] = useState<ItemLabel>();
 
   const ageMarksDefault = useRef([
     {
@@ -81,10 +65,6 @@ function Component(props: Props) {
   const ageValueDefault = (ages: Marks[]) => {
     return [ages[0].value, ages[ages.length - 1].value];
   };
-  const [ageValue, setAgeValue] = useState<number[]>([
-    ageMarks[0].value,
-    ageMarks[ageMarks.length - 1].value,
-  ]);
 
   const powerOutputMarksDefault = useRef([
     {
@@ -104,27 +84,17 @@ function Component(props: Props) {
   const powerOutputValueDefault = (powerOutputs: Marks[]) => {
     return [powerOutputs[0].value, powerOutputs[powerOutputs.length - 1].value];
   };
-  const [powerOutputValue, setPowerOutputValue] = useState<number[]>([
-    powerOutputMarks[0].value,
-    powerOutputMarks[powerOutputMarks.length - 1].value,
-  ]);
-
-  const [locationsValue, setLocationsValue] = useState<string[]>([""]);
-  const [energiesValue, setEnergiesValue] = useState<string[]>([""]);
-  const [operatorsValue, setOperatorsValue] = useState<string[]>([""]);
-  const [nameValue, setNameValue] = useState("");
-  const [filters, setFilters] = useState<string[][]>([]);
 
   const handleAgeChange = (event: Event, newValue: number | number[]) => {
-    setAgeValue(newValue as number[]);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     if (
       (newValue as number[]).join("-") === ageValueDefault(ageMarks).join("-")
     ) {
-      updatedSearchParams.delete("age");
+      newParams.delete("age");
     } else {
-      updatedSearchParams.set("age", String(newValue));
+      newParams.set("age", String(newValue));
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const handleEnergiesChange = (event: SelectChangeEvent<string[]>) => {
@@ -133,13 +103,13 @@ function Component(props: Props) {
         ? event.target.value.split(",")
         : event.target.value
     ).filter((n) => n);
-    setEnergiesValue(newValue.length === 0 ? [""] : newValue);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     if (newValue.length === 0) {
-      updatedSearchParams.delete("energies");
+      newParams.delete("energies");
     } else {
-      updatedSearchParams.set("energies", newValue.join(",") as string);
+      newParams.set("energies", newValue.join(",") as string);
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const handleLocationsChange = (event: SelectChangeEvent<string[]>) => {
@@ -148,13 +118,14 @@ function Component(props: Props) {
         ? event.target.value.split(",")
         : event.target.value
     ).filter((n) => n);
-    setLocationsValue(newValue.length === 0 ? [""] : newValue);
+
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     if (newValue.length === 0) {
-      updatedSearchParams.delete("locations");
+      newParams.delete("locations");
     } else {
-      updatedSearchParams.set("locations", newValue.join(",") as string);
+      newParams.set("locations", newValue.join(",") as string);
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const handleOperatorsChange = (event: SelectChangeEvent<string[]>) => {
@@ -163,94 +134,113 @@ function Component(props: Props) {
         ? event.target.value.split(",")
         : event.target.value
     ).filter((n) => n);
-    setOperatorsValue(newValue.length === 0 ? [""] : newValue);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     if (newValue.length === 0) {
-      updatedSearchParams.delete("operators");
+      newParams.delete("operators");
     } else {
-      updatedSearchParams.set("operators", newValue.join(",") as string);
+      newParams.set("operators", newValue.join(",") as string);
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const handlePowerOutputChange = (
     event: Event,
     newValue: number | number[]
   ) => {
-    setPowerOutputValue(newValue as number[]);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     if (
       (newValue as number[]).join("-") ===
       powerOutputValueDefault(powerOutputMarks).join("-")
     ) {
-      updatedSearchParams.delete("power");
+      newParams.delete("power");
     } else {
-      updatedSearchParams.set("power", String(newValue));
+      newParams.set("power", String(newValue));
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const changeNameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNameValue(e.target.value);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     if (e.target.value === "") {
-      updatedSearchParams.delete("name");
+      newParams.delete("name");
     } else {
-      updatedSearchParams.set("name", e.target.value);
+      newParams.set("name", e.target.value);
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
-  const updatedSearchParams = new URLSearchParams(
-    currentSearchParams.toString()
-  );
+  useEffect(() => {
+    const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
+    setFilteredPowerStations(
+      powerStations.filter((station) =>
+        station.name.toLowerCase().includes(nameParam)
+      )
+    );
+  }, [currentSearchParams, powerStations, setFilteredPowerStations]);
 
   const clearFilters = () => {
-    setNameValue("");
-    setEnergiesValue([""]);
-    setOperatorsValue([""]);
-    setLocationsValue([""]);
-    setPowerOutputValue(powerOutputValueDefault(powerOutputMarks));
-    setAgeValue(ageValueDefault(ageMarks));
-    updatedSearchParams.delete("name");
-    updatedSearchParams.delete("energies");
-    updatedSearchParams.delete("operators");
-    updatedSearchParams.delete("locations");
-    updatedSearchParams.delete("power");
-    updatedSearchParams.delete("age");
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    newParams.delete("name");
+    newParams.delete("locations");
+    newParams.delete("energies");
+    newParams.delete("operators");
+    newParams.delete("age");
+    newParams.delete("power");
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const removeFilter = (filter: string[]) => {
-    setFilters(
-      filters.filter((item) => {
-        return item !== filter;
-      })
-    );
+    const newParams = new URLSearchParams(currentSearchParams.toString());
     switch (filter[0]) {
       case "name":
-        setNameValue("");
-        updatedSearchParams.delete("name");
+        newParams.delete("name");
         break;
+
       case "energy":
-        setEnergiesValue(energiesValue.filter((item) => item !== filter[1]));
-        updatedSearchParams.delete("energies");
+        const newEnergies = currentSearchParams
+          .get("energies")
+          ?.split(",")
+          .filter((item) => item !== filter[1]);
+        if (newEnergies) {
+          newParams.set("energies", newEnergies.join(","));
+        } else {
+          newParams.delete("energies");
+        }
         break;
+
       case "operator":
-        setOperatorsValue(operatorsValue.filter((item) => item !== filter[1]));
-        updatedSearchParams.delete("operators");
+        const newOperators = currentSearchParams
+          .get("operators")
+          ?.split(",")
+          .filter((item) => item !== filter[1]);
+        if (newOperators) {
+          newParams.set("operator", newOperators.join(","));
+        } else {
+          newParams.delete("operator");
+        }
         break;
+
       case "location":
-        setLocationsValue(locationsValue.filter((item) => item !== filter[1]));
-        updatedSearchParams.delete("locations");
+        const newLocations = currentSearchParams
+          .get("locations")
+          ?.split(",")
+          .filter((item) => item !== filter[1]);
+        if (newLocations) {
+          newParams.set("locations", newLocations.join(","));
+        } else {
+          newParams.delete("locations");
+        }
         break;
+
       case "power":
-        setPowerOutputValue(powerOutputValueDefault(powerOutputMarks));
-        updatedSearchParams.delete("power");
+        newParams.delete("power");
         break;
+
       case "age":
-        setAgeValue(ageValueDefault(ageMarks));
-        updatedSearchParams.delete("age");
+        newParams.delete("age");
         break;
     }
-    window.history.pushState(null, "", `?${updatedSearchParams.toString()}`);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const getLabelForFilter = (filter: string[]) => {
@@ -258,11 +248,17 @@ function Component(props: Props) {
       case "name":
         return filter[1];
       case "energy":
-        return energyTypes[filter[1] as keyof typeof energyTypes].label;
+        return energyTypes
+          ? energyTypes[filter[1] as keyof typeof energyTypes].label
+          : "";
       case "operator":
-        return operators[filter[1] as keyof typeof operators].label;
+        return operators
+          ? operators[filter[1] as keyof typeof operators].label
+          : "";
       case "location":
-        return locations[filter[1] as keyof typeof locations].label;
+        return locations
+          ? locations[filter[1] as keyof typeof locations].label
+          : "";
       case "power":
         return `Output: ${filter[1]} MW`;
       case "age":
@@ -273,65 +269,6 @@ function Component(props: Props) {
   };
 
   useEffect(() => {
-    const updateFilters = () => {
-      const newFilters = [];
-
-      if (nameValue !== "") {
-        newFilters.push(["name", nameValue]);
-      }
-
-      energiesValue
-        .filter((energy) => energy !== "")
-        .forEach((energy) => {
-          newFilters.push(["energy", energy]);
-        });
-
-      operatorsValue
-        .filter((operator) => operator !== "")
-        .forEach((operator) => {
-          newFilters.push(["operator", operator]);
-        });
-
-      locationsValue
-        .filter((location) => location !== "")
-        .forEach((location) => {
-          newFilters.push(["location", location]);
-        });
-
-      if (
-        powerOutputValue.join("-") !==
-        powerOutputValueDefault(powerOutputMarks).join("-")
-      ) {
-        newFilters.push(["power", powerOutputValue.join(" - ")]);
-      }
-
-      if (ageValue.join("-") !== ageValueDefault(ageMarks).join("-")) {
-        newFilters.push(["age", ageValue.join(" - ")]);
-      }
-      setFilters(newFilters);
-
-      props.setFilteredPowerStations(
-        powerStations.filter((station) => {
-          return (
-            nameValue === "" ||
-            station.name.toLowerCase().includes(nameValue.toLowerCase())
-          );
-        })
-      );
-    };
-    updateFilters();
-  }, [
-    powerStations,
-    currentSearchParams,
-    ageValue,
-    energiesValue,
-    locationsValue,
-    nameValue,
-    operatorsValue,
-    powerOutputValue,
-  ]);
-
-  useEffect(() => {
     async function getData() {
       initialized.current = true;
       const res = await fetch(
@@ -339,6 +276,27 @@ function Component(props: Props) {
       );
       const data = await res.json();
       setPowerStations(data.powerStations);
+
+      const energyTypesData = {
+        coal: { label: "Coal" },
+        solar: { label: "Solar" },
+        wind: { label: "Wind" },
+      } as ItemLabel;
+      setEnergyTypes(energyTypesData);
+
+      const operatorsData = {
+        eskom: { label: "Eskom" },
+        dingan: { label: "Dingan" },
+        matt: { label: "Matt's Energy" },
+      } as ItemLabel;
+      setOperators(operatorsData);
+
+      const locationsData = {
+        kzn: { label: "KwaZulu-Natal" },
+        fs: { label: "Free State" },
+        gp: { label: "Gauteng" },
+      } as ItemLabel;
+      setLocations(locationsData);
 
       const powerOutputMarksData = [
         { value: 0, label: "0" },
@@ -352,114 +310,59 @@ function Component(props: Props) {
       ];
       ageMarksDefault.current = ageMarksData;
       setAgeMarks(ageMarksData);
-
-      const nameParam = currentSearchParams.get("name");
-      if (nameParam) {
-        setNameValue(nameParam);
-      }
-
-      const operatorsParam = currentSearchParams
-        .get("operators")
-        ?.split(",")
-        .map(String);
-      if (operatorsParam) {
-        setOperatorsValue(operatorsParam);
-      }
-
-      const energiesParam = currentSearchParams
-        .get("energies")
-        ?.split(",")
-        .map(String);
-      if (energiesParam) {
-        setEnergiesValue(energiesParam);
-      }
-
-      const locationsParam = currentSearchParams
-        .get("locations")
-        ?.split(",")
-        .map(String);
-      if (locationsParam) {
-        setLocationsValue(locationsParam);
-      }
-
-      const powerParam = currentSearchParams
-        .get("power")
-        ?.split(",")
-        .map(Number);
-      if (powerParam) {
-        setPowerOutputValue(powerParam);
-      } else {
-        setPowerOutputValue(powerOutputValueDefault(powerOutputMarksData));
-      }
-
-      const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
-      if (ageParam) {
-        setAgeValue(ageParam);
-      } else {
-        setAgeValue(ageValueDefault(ageMarksData));
-      }
     }
 
     if (!initialized.current) {
       getData();
     }
-  }, [
-    powerStations,
-    currentSearchParams,
-    ageValue,
-    energiesValue,
-    locationsValue,
-    nameValue,
-    operatorsValue,
-    powerOutputValue,
-  ]);
+  }, [powerStations, currentSearchParams]);
 
-  useEffect(() => {
-    const nameParam = currentSearchParams.get("name");
-    if (nameParam && nameParam !== nameValue) {
-      setNameValue(nameParam);
+  const chipFilters = (): string[][] => {
+    const newFilters: string[][] = [];
+
+    if (currentSearchParams.get("name")) {
+      newFilters.push(["name", currentSearchParams.get("name") as string]);
     }
 
-    const operatorsParam = currentSearchParams
-      .get("operators")
-      ?.split(",")
-      .map(String);
-    if (
-      operatorsParam &&
-      operatorsParam?.join(",") !== operatorsValue.join(",")
-    ) {
-      setOperatorsValue(operatorsParam);
-    }
-
-    const energiesParam = currentSearchParams
+    currentSearchParams
       .get("energies")
       ?.split(",")
-      .map(String);
-    if (energiesParam && energiesParam?.join(",") !== energiesValue.join(",")) {
-      setEnergiesValue(energiesParam);
-    }
+      .filter((energy) => energy !== "")
+      .forEach((energy) => {
+        newFilters.push(["energy", energy]);
+      });
 
-    const locationsParam = currentSearchParams
+    currentSearchParams
+      .get("operators")
+      ?.split(",")
+      .filter((operator) => operator !== "")
+      .forEach((operator) => {
+        newFilters.push(["operator", operator]);
+      });
+
+    currentSearchParams
       .get("locations")
       ?.split(",")
-      .map(String);
-    if (
-      locationsParam &&
-      locationsParam?.join(",") !== locationsValue.join(",")
-    ) {
-      setLocationsValue(locationsParam);
+      .filter((location) => location !== "")
+      .forEach((location) => {
+        newFilters.push(["location", location]);
+      });
+
+    if (currentSearchParams.get("power")) {
+      newFilters.push([
+        "power",
+        currentSearchParams.get("power")?.split(",").join(" - ") as string,
+      ]);
     }
 
-    const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
-    if (powerParam && powerParam?.join(",") !== powerOutputValue.join(",")) {
-      setPowerOutputValue(powerParam);
+    if (currentSearchParams.get("age")) {
+      newFilters.push([
+        "age",
+        currentSearchParams.get("age")?.split(",").join(" - ") as string,
+      ]);
     }
-
-    const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
-    if (ageParam && ageParam?.join(",") !== ageValue.join(",")) {
-      setAgeValue(ageParam);
-    }
-  }, [currentSearchParams]);
+    return newFilters;
+  };
 
   return (
     <Stack spacing={2} className="filterPanel">
@@ -477,7 +380,7 @@ function Component(props: Props) {
         <Button
           size="small"
           onClick={clearFilters}
-          disabled={filters.length === 0}
+          disabled={chipFilters().length === 0}
           sx={{ textDecoration: "underline", marginLeft: "auto" }}
         >
           Clear all
@@ -496,7 +399,7 @@ function Component(props: Props) {
         }}
         component="ul"
       >
-        {filters.map((filter, index) => (
+        {chipFilters().map((filter, index) => (
           <ListItem key={index}>
             <Chip
               label={truncateString(getLabelForFilter(filter), 35)}
@@ -508,7 +411,7 @@ function Component(props: Props) {
             />
           </ListItem>
         ))}
-        {filters.length === 0 && (
+        {chipFilters().length === 0 && (
           <ListItem>
             <Chip label="No filters applied" variant="outlined" size="small" />
           </ListItem>
@@ -520,7 +423,7 @@ function Component(props: Props) {
       <TextField
         id="name"
         label="Name search"
-        value={nameValue}
+        value={currentSearchParams.get("name") || ""}
         onChange={changeNameValue}
         placeholder="Enter a station name"
         InputProps={{
@@ -537,16 +440,17 @@ function Component(props: Props) {
           labelId="energies-label"
           id="energies"
           label="Energy type"
-          value={energiesValue}
+          value={currentSearchParams.get("energies")?.split(",") || [""]}
           onChange={handleEnergiesChange}
           multiple
         >
           <MenuItem value={""}>Select energy type(s)</MenuItem>
-          {Object.entries(energyTypes).map(([value, { label }]) => (
-            <MenuItem key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
+          {energyTypes &&
+            Object.entries(energyTypes).map(([value, { label }]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -555,16 +459,17 @@ function Component(props: Props) {
           labelId="operators-label"
           id="operators"
           label="Energy type"
-          value={operatorsValue}
+          value={currentSearchParams.get("operators")?.split(",") || [""]}
           onChange={handleOperatorsChange}
           multiple
         >
           <MenuItem value={""}>Select operator(s)</MenuItem>
-          {Object.entries(operators).map(([value, { label }]) => (
-            <MenuItem key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
+          {operators &&
+            Object.entries(operators).map(([value, { label }]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -572,17 +477,18 @@ function Component(props: Props) {
         <Select
           labelId="locations-label"
           id="locations"
-          value={locationsValue}
+          value={currentSearchParams.get("locations")?.split(",") || [""]}
           onChange={handleLocationsChange}
           multiple
           label="Select province(s)"
         >
           <MenuItem value={""}>Select province(s)</MenuItem>
-          {Object.entries(locations).map(([value, { label }]) => (
-            <MenuItem key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
+          {locations &&
+            Object.entries(locations).map(([value, { label }]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -592,7 +498,12 @@ function Component(props: Props) {
         </Stack>
         <Slider
           id="power-output"
-          value={powerOutputValue}
+          value={
+            currentSearchParams.get("power")?.split(",").map(Number) || [
+              powerOutputMarks[0].value,
+              powerOutputMarks[powerOutputMarks.length - 1].value,
+            ]
+          }
           onChange={handlePowerOutputChange}
           min={powerOutputValueDefault(powerOutputMarks)[0]}
           max={powerOutputValueDefault(powerOutputMarks)[1]}
@@ -607,7 +518,12 @@ function Component(props: Props) {
         </Stack>
         <Slider
           id="age"
-          value={ageValue}
+          value={
+            currentSearchParams.get("age")?.split(",").map(Number) || [
+              ageMarks[0].value,
+              ageMarks[ageMarks.length - 1].value,
+            ]
+          }
           onChange={handleAgeChange}
           min={ageValueDefault(ageMarks)[0]}
           max={ageValueDefault(ageMarks)[1]}

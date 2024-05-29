@@ -15,3 +15,12 @@ export type PowerStationMarker = {
   colour: string;
   powerStation: PowerStation;
 };
+
+export type Marks = {
+  value: number;
+  label: string;
+};
+
+export type ItemLabel = {
+  [key: string]: { label: string };
+};
