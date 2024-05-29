@@ -41,7 +41,6 @@ export function PowerStationMarker({ powerStation }: Props) {
       <Marker
         ref={markerRef}
         position={powerStation.position}
-        title={powerStation.name}
         onMouseOver={showHoverInfoWindow}
         onMouseOut={hideHoverInfoWindow}
         onClick={showMoreInfoWindow}
