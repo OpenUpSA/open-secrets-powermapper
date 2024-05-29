@@ -24,6 +24,7 @@ import { ItemLabel, Marks, PowerStation } from "@/types";
 
 type Props = {
   setFilteredPowerStations: Function;
+  filteredPowerStations: PowerStation[];
 };
 
 const ListItem = styled("li")(({ theme }) => ({
@@ -40,7 +41,7 @@ function truncateString(str: string, num: number) {
 
 function Component(props: Props) {
   const initialized = useRef(false);
-  const { setFilteredPowerStations } = props;
+  const { setFilteredPowerStations, filteredPowerStations } = props;
 
   const router = useRouter();
   const currentSearchParams = useSearchParams();
@@ -171,9 +172,30 @@ function Component(props: Props) {
 
   useEffect(() => {
     const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
+    const regionParam = currentSearchParams.get("locations")?.split(",") || [];
+    const fuelTypeParam = currentSearchParams.get("energies")?.split(",") || [];
+    const operatorParam =
+      currentSearchParams.get("operators")?.split(",") || [];
+    const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
+    const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
+
     setFilteredPowerStations(
-      powerStations.filter((station) =>
-        station.name.toLowerCase().includes(nameParam)
+      powerStations.filter(
+        (station) =>
+          station.name.toLowerCase().includes(nameParam) &&
+          (regionParam.length === 0 ||
+            regionParam.includes(station.region.name)) &&
+          (fuelTypeParam.length === 0 ||
+            fuelTypeParam.includes(station.fuelType.shorthand)) &&
+          (operatorParam.length === 0 ||
+            operatorParam.includes(station.operator?.name || "")) &&
+          (!powerParam ||
+            !station.powerOutput ||
+            (station.powerOutput >= powerParam[0] &&
+              station.powerOutput <= powerParam[1])) &&
+          (!ageParam ||
+            (station.age.years >= ageParam[0] &&
+              station.age.years <= ageParam[1]))
       )
     );
   }, [currentSearchParams, powerStations, setFilteredPowerStations]);
@@ -274,39 +296,71 @@ function Component(props: Props) {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/power-stations`
       );
-      const data = await res.json();
-      setPowerStations(data.powerStations);
+      const powerStationsData = await res.json();
+      setPowerStations(powerStationsData.powerStations);
 
-      const energyTypesData = {
-        coal: { label: "Coal" },
-        solar: { label: "Solar" },
-        wind: { label: "Wind" },
-      } as ItemLabel;
+      const energyTypesData = powerStationsData.powerStations.reduce(
+        (acc: ItemLabel, cur: PowerStation) => {
+          if (cur.fuelType) {
+            acc[cur.fuelType.shorthand] = { label: cur.fuelType.name };
+          }
+          return acc;
+        },
+        {} as ItemLabel
+      );
       setEnergyTypes(energyTypesData);
 
-      const operatorsData = {
-        eskom: { label: "Eskom" },
-        dingan: { label: "Dingan" },
-        matt: { label: "Matt's Energy" },
-      } as ItemLabel;
+      const operatorsData = powerStationsData.powerStations.reduce(
+        (acc: ItemLabel, cur: PowerStation) => {
+          if (cur.operator) {
+            acc[cur.operator.name] = { label: cur.operator.name };
+          }
+          return acc;
+        },
+        {} as ItemLabel
+      );
       setOperators(operatorsData);
 
-      const locationsData = {
-        kzn: { label: "KwaZulu-Natal" },
-        fs: { label: "Free State" },
-        gp: { label: "Gauteng" },
-      } as ItemLabel;
+      const locationsData = powerStationsData.powerStations.reduce(
+        (acc: ItemLabel, cur: PowerStation) => {
+          if (cur.region) {
+            acc[cur.region.name] = { label: cur.region.name };
+          }
+          return acc;
+        },
+        {} as ItemLabel
+      );
       setLocations(locationsData);
 
+      const minPowerOutput = Math.min(
+        ...powerStationsData.powerStations.map(
+          (station: PowerStation) => station.powerOutput
+        )
+      );
+      const maxPowerOutput = Math.max(
+        ...powerStationsData.powerStations.map(
+          (station: PowerStation) => station.powerOutput
+        )
+      );
       const powerOutputMarksData = [
-        { value: 0, label: "0" },
-        { value: 2000, label: "2000" },
+        { value: minPowerOutput, label: minPowerOutput.toString() },
+        { value: maxPowerOutput, label: maxPowerOutput.toString() },
       ];
       setPowerOutputMarks(powerOutputMarksData);
 
+      const minAge = Math.min(
+        ...powerStationsData.powerStations.map(
+          (station: PowerStation) => station.age?.years || 0
+        )
+      );
+      const maxAge = Math.max(
+        ...powerStationsData.powerStations.map(
+          (station: PowerStation) => station.age?.years || 0
+        )
+      );
       const ageMarksData = [
-        { value: 10, label: "10" },
-        { value: 40, label: "40" },
+        { value: minAge, label: minAge.toString() },
+        { value: maxAge, label: maxAge.toString() },
       ];
       ageMarksDefault.current = ageMarksData;
       setAgeMarks(ageMarksData);

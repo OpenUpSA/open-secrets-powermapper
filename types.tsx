@@ -4,11 +4,26 @@ export type Position = {
 };
 
 export type PowerStation = {
-  name: any;
-  fuelType: string;
+  id: string;
+  name: string;
+  fuelType: FuelType;
   country: string;
-  region: string;
+  region: Region;
   position: Position;
+  powerOutput?: number;
+  operator?: Entity;
+  age: Age;
+};
+
+export type Region = {
+  id: string;
+  name: string;
+};
+
+export type FuelType = {
+  id: string;
+  name: string;
+  shorthand: string;
 };
 
 export type PowerStationMarker = {
@@ -23,4 +38,17 @@ export type Marks = {
 
 export type ItemLabel = {
   [key: string]: { label: string };
+};
+
+export type Entity = {
+  id: string;
+  name: string;
+};
+
+export type Age = {
+  commissionStart?: Date;
+  commissionEnd: Date;
+  decommissionStart?: Date;
+  decommissionEnd?: Date;
+  years: number;
 };

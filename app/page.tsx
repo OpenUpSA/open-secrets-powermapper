@@ -22,7 +22,10 @@ export default function Page() {
     <Grid container spacing={0}>
       <Grid xs={2}>
         <Suspense>
-          <FilterPanel setFilteredPowerStations={setFilteredPowerStations} />
+          <FilterPanel
+            setFilteredPowerStations={setFilteredPowerStations}
+            filteredPowerStations={filteredPowerStations}
+          />
         </Suspense>
       </Grid>
       <Grid xs={10} className="mapContainer">
