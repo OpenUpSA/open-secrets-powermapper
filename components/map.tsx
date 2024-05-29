@@ -3,9 +3,12 @@ import {
   Map,
   AdvancedMarker,
   MapCameraChangedEvent,
+  InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
 import { useState } from "react";
+
+import { PowerStationMarker } from "@/components/powerStationMarker/index";
 
 function Component({ powerStations }: { powerStations: PowerStation[] }) {
   const defaultCenter = { lat: -29.01886710220426, lng: 26.096035496567033 };
@@ -25,9 +28,9 @@ function Component({ powerStations }: { powerStations: PowerStation[] }) {
         onCenterChanged={centerChanged}
       >
         {powerStations.map((powerStation) => (
-          <AdvancedMarker
-            key={powerStation.name}
-            position={powerStation.position}
+          <PowerStationMarker
+            key={powerStation.id}
+            powerStation={powerStation}
           />
         ))}
       </Map>
