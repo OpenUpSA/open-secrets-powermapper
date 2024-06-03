@@ -32,7 +32,7 @@ export async function GET(req: Request) {
 
   const fuelTypesTable = base("Fuel Type (Ref)").select({
     view: "Grid view",
-    fields: ["Name", "Shorthand"],
+    fields: ["Name", "Shorthand", "RGB Color"],
   });
   const fuelTypes: FuelType[] = [];
 
@@ -58,6 +58,7 @@ export async function GET(req: Request) {
           id: id as FuelType["id"],
           name: fields.Name as FuelType["name"],
           shorthand: fields.Shorthand as FuelType["shorthand"],
+          rGBColor: fields["RGB Color"] as FuelType["rGBColor"],
         });
       });
       processNextPage();

@@ -1,3 +1,4 @@
+import "./map.scss";
 import {
   APIProvider,
   Map,
@@ -6,39 +7,40 @@ import {
   ControlPosition,
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { PowerStationMarker } from "@/components/powerStationMarker/index";
+import { useSearchParams } from "next/navigation";
 
-function Component({ powerStations }: { powerStations: PowerStation[] }) {
+type Props = {
+  powerStations: PowerStation[];
+};
+
+function Component({ powerStations }: Props) {
   const defaultCenter = { lat: -29.01886710220426, lng: 26.096035496567033 };
   const [center, setCenter] = useState(defaultCenter);
+  const currentSearchParams = useSearchParams();
+
+  const [fuelTypes, setFuelTypes] = useState<PowerStation["fuelType"][]>([]);
+
+  // Unique list of fuel types with Name and RGB Color
+  useEffect(() => {
+    const fuelTypes = powerStations
+      .map((powerStation) => powerStation.fuelType)
+      .filter((fuelType, index, self) => {
+        return (
+          index ===
+          self.findIndex(
+            (t) => t.id === fuelType.id && t.name === fuelType.name
+          )
+        );
+      });
+
+    setFuelTypes(fuelTypes);
+  }, [powerStations]);
 
   const centerChanged = (event: MapCameraChangedEvent) => {
     setCenter(event.detail.center);
-  };
-
-  const powerStationFuelTypeColor = (fuelType: string, opacity: number) => {
-    switch (fuelType) {
-      case "Coal":
-        return `rgba(151, 151, 151, ${opacity})`;
-      case "PSH":
-        return `rgba(131, 74, 255, ${opacity})`;
-      case "Hydro":
-        return `rgba(38, 184, 255, ${opacity})`;
-      case "OCGT":
-        return `rgba(237, 61, 198, ${opacity})`;
-      case "Nuclear":
-        return `rgba(255, 255, 255, ${opacity})`;
-      case "Wind":
-        return `rgba(87, 219, 91, ${opacity})`;
-      case "CSP":
-        return `rgba(255, 85, 31, ${opacity})`;
-      case "Solar PV":
-        return `rgba(255, 204, 20, ${opacity})`;
-      default:
-        return `rgba(0, 0, 0, ${opacity})`;
-    }
   };
 
   return (
@@ -60,9 +62,25 @@ function Component({ powerStations }: { powerStations: PowerStation[] }) {
           <PowerStationMarker
             key={powerStation.id}
             powerStation={powerStation}
-            powerStationFuelTypeColor={powerStationFuelTypeColor}
           />
         ))}
+
+        <MapControl position={ControlPosition.LEFT_BOTTOM}>
+          <div className="fuelTypeLegend">
+          <div className="legendTitle">Legend</div>
+            {fuelTypes.map((fuelType) => (
+              <div className="legendItem" key={fuelType.shorthand}>
+                <div
+                  className="legendColor"
+                  style={{
+                    background: `rgba(${fuelType.rGBColor}, ${currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1})`,
+                  }}
+                ></div>
+                <div className="legendLabel">{fuelType.name}</div>
+              </div>
+            ))}
+          </div>
+        </MapControl>
       </Map>
     </APIProvider>
   );

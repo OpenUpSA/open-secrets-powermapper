@@ -15,12 +15,10 @@ import { useSearchParams } from "next/navigation";
 
 type Props = {
   powerStation: PowerStation;
-  powerStationFuelTypeColor: Function;
 };
 
 export function PowerStationMarker({
   powerStation,
-  powerStationFuelTypeColor,
 }: Props) {
   const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
   const currentSearchParams = useSearchParams();
@@ -81,11 +79,9 @@ export function PowerStationMarker({
             position: "absolute",
             top: 0,
             left: 0,
-            background: powerStationFuelTypeColor(
-              powerStation.fuelType.shorthand,
+            background: `rgba(${powerStation.fuelType.rGBColor}, ${
               currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1
-            ),
-
+            })`,
             borderRadius: "50%",
             transform: "translate(-50%, -50%)",
             boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",

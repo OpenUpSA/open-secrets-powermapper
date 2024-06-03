@@ -252,7 +252,6 @@ function Component(props: Props) {
           .get("operators")
           ?.split(",")
           .filter((item) => item !== filter[1]);
-        console.log(newOperators);
         if (newOperators && newOperators.length > 0) {
           newParams.set("operators", newOperators.join(","));
         } else {

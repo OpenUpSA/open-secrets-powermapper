@@ -24,6 +24,7 @@ export type FuelType = {
   id: string;
   name: string;
   shorthand: string;
+  rGBColor: string;
 };
 
 export type PowerStationMarker = {

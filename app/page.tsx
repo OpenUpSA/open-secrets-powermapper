@@ -29,7 +29,9 @@ export default function Page() {
         </Suspense>
       </Grid>
       <Grid xs={10} className="mapContainer">
-        <Map powerStations={filteredPowerStations} />
+        <Suspense>
+          <Map powerStations={filteredPowerStations} />
+        </Suspense>
       </Grid>
     </Grid>
   );
