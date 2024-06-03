@@ -15,9 +15,13 @@ import { useSearchParams } from "next/navigation";
 
 type Props = {
   powerStation: PowerStation;
+  powerStationFuelTypeColor: Function;
 };
 
-export function PowerStationMarker({ powerStation }: Props) {
+export function PowerStationMarker({
+  powerStation,
+  powerStationFuelTypeColor,
+}: Props) {
   const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
   const currentSearchParams = useSearchParams();
 
@@ -55,29 +59,6 @@ export function PowerStationMarker({ powerStation }: Props) {
     return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 5), 100);
   };
 
-  const powerStationFuelTypeColor = (fuelType: string, opacity: number) => {
-    switch (fuelType) {
-      case "Coal":
-        return `rgba(151, 151, 151, ${opacity})`;
-      case "PSH":
-        return `rgba(131, 74, 255, ${opacity})`;
-      case "Hydro":
-        return `rgba(38, 184, 255, ${opacity})`;
-      case "OCGT":
-        return `rgba(237, 61, 198, ${opacity})`;
-      case "Nuclear":
-        return `rgba(255, 255, 255, ${opacity})`;
-      case "Wind":
-        return `rgba(87, 219, 91, ${opacity})`;
-      case "CSP":
-        return `rgba(255, 85, 31, ${opacity})`;
-      case "Solar PV":
-        return `rgba(255, 204, 20, ${opacity})`;
-      default:
-        return `rgba(0, 0, 0, ${opacity})`;
-    }
-  };
-
   return (
     <>
       <AdvancedMarker
@@ -102,11 +83,12 @@ export function PowerStationMarker({ powerStation }: Props) {
             left: 0,
             background: powerStationFuelTypeColor(
               powerStation.fuelType.shorthand,
-              0.9
+              currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1
             ),
-            border: `2px solid rgba(255, 255, 255, 0.25)`,
+
             borderRadius: "50%",
             transform: "translate(-50%, -50%)",
+            boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",
           }}
         ></div>
       </AdvancedMarker>

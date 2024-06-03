@@ -18,6 +18,29 @@ function Component({ powerStations }: { powerStations: PowerStation[] }) {
     setCenter(event.detail.center);
   };
 
+  const powerStationFuelTypeColor = (fuelType: string, opacity: number) => {
+    switch (fuelType) {
+      case "Coal":
+        return `rgba(151, 151, 151, ${opacity})`;
+      case "PSH":
+        return `rgba(131, 74, 255, ${opacity})`;
+      case "Hydro":
+        return `rgba(38, 184, 255, ${opacity})`;
+      case "OCGT":
+        return `rgba(237, 61, 198, ${opacity})`;
+      case "Nuclear":
+        return `rgba(255, 255, 255, ${opacity})`;
+      case "Wind":
+        return `rgba(87, 219, 91, ${opacity})`;
+      case "CSP":
+        return `rgba(255, 85, 31, ${opacity})`;
+      case "Solar PV":
+        return `rgba(255, 204, 20, ${opacity})`;
+      default:
+        return `rgba(0, 0, 0, ${opacity})`;
+    }
+  };
+
   return (
     <APIProvider apiKey="AIzaSyAYcsm0xB834bBAKu0GGjCu2Xzp2qLWx0o">
       <Map
@@ -37,6 +60,7 @@ function Component({ powerStations }: { powerStations: PowerStation[] }) {
           <PowerStationMarker
             key={powerStation.id}
             powerStation={powerStation}
+            powerStationFuelTypeColor={powerStationFuelTypeColor}
           />
         ))}
       </Map>
