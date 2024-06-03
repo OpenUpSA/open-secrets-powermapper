@@ -1,14 +1,12 @@
 import "./index.scss";
 import {
-  Marker,
-  AdvancedMarkerRef,
   InfoWindow,
-  useMarkerRef,
   AdvancedMarker,
   useAdvancedMarkerRef,
+  Pin,
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -20,7 +18,6 @@ type Props = {
 };
 
 export function PowerStationMarker({ powerStation }: Props) {
-  const [markerRef, marker] = useMarkerRef();
   const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
   const currentSearchParams = useSearchParams();
 
@@ -55,51 +52,75 @@ export function PowerStationMarker({ powerStation }: Props) {
   };
 
   const calcPowerStationSize = (factor: number, powerOutput?: number) => {
-    return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 10), 100);
+    return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 5), 100);
+  };
+
+  const powerStationFuelTypeColor = (fuelType: string, opacity: number) => {
+    switch (fuelType) {
+      case "Coal":
+        return `rgba(151, 151, 151, ${opacity})`;
+      case "PSH":
+        return `rgba(131, 74, 255, ${opacity})`;
+      case "Hydro":
+        return `rgba(38, 184, 255, ${opacity})`;
+      case "OCGT":
+        return `rgba(237, 61, 198, ${opacity})`;
+      case "Nuclear":
+        return `rgba(255, 255, 255, ${opacity})`;
+      case "Wind":
+        return `rgba(87, 219, 91, ${opacity})`;
+      case "CSP":
+        return `rgba(255, 85, 31, ${opacity})`;
+      case "Solar PV":
+        return `rgba(255, 204, 20, ${opacity})`;
+      default:
+        return `rgba(0, 0, 0, ${opacity})`;
+    }
   };
 
   return (
     <>
-      {currentSearchParams.get("show-by-power") ? (
-        <AdvancedMarker
-          position={powerStation.position}
-          onClick={toggleMoreInfoWindow}
-          ref={advandedMarkerRef}
-        >
-          <div
-            onMouseOver={showHoverInfoWindow}
-            onMouseOut={hideHoverInfoWindow}
-            style={{
-              width: calcPowerStationSize(100, powerStation.powerOutput),
-              height: calcPowerStationSize(100, powerStation.powerOutput),
-              position: "absolute",
-              top: 0,
-              left: 0,
-              background: "rgba(0, 0, 0, 0.5)",
-              border: "2px solid #ccc",
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          ></div>
-        </AdvancedMarker>
-      ) : (
-        <Marker
-          position={powerStation.position}
-          onClick={toggleMoreInfoWindow}
-          ref={markerRef}
+      <AdvancedMarker
+        position={powerStation.position}
+        onClick={toggleMoreInfoWindow}
+        ref={advandedMarkerRef}
+      >
+        <div
           onMouseOver={showHoverInfoWindow}
           onMouseOut={hideHoverInfoWindow}
-        />
-      )}
+          style={{
+            width:
+              currentSearchParams.get("show-by-power") === "true"
+                ? calcPowerStationSize(100, powerStation.powerOutput)
+                : 12,
+            height:
+              currentSearchParams.get("show-by-power") === "true"
+                ? calcPowerStationSize(100, powerStation.powerOutput)
+                : 12,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            background: powerStationFuelTypeColor(
+              powerStation.fuelType.shorthand,
+              0.9
+            ),
+            border: `2px solid rgba(255, 255, 255, 0.25)`,
+            borderRadius: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        ></div>
+      </AdvancedMarker>
 
       {isHoverOpen && (
         <InfoWindow
-          anchor={marker || advancedMarker}
+          anchor={advancedMarker}
           onCloseClick={hideHoverInfoWindow}
           className="powerStationHoverInfo"
           pixelOffset={[
             0,
-            -calcPowerStationSize(200, powerStation.powerOutput),
+            currentSearchParams.get("show-by-power") === "true"
+              ? -calcPowerStationSize(200, powerStation.powerOutput)
+              : -10,
           ]}
         >
           <div>
@@ -120,7 +141,7 @@ export function PowerStationMarker({ powerStation }: Props) {
       )}
       {isMoreOpen && (
         <InfoWindow
-          anchor={marker || advancedMarker}
+          anchor={advancedMarker}
           onCloseClick={hideMoreInfoWindow}
           className="powerStationMoreInfo"
           pixelOffset={[

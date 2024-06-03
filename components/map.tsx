@@ -1,9 +1,9 @@
 import {
   APIProvider,
   Map,
-  AdvancedMarker,
   MapCameraChangedEvent,
-  InfoWindow,
+  MapControl,
+  ControlPosition,
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
 import { useState } from "react";
@@ -26,6 +26,12 @@ function Component({ powerStations }: { powerStations: PowerStation[] }) {
         mapId="2090f822becfb038"
         center={center}
         onCenterChanged={centerChanged}
+        streetViewControl={false}
+        fullscreenControl={false}
+        mapTypeControl={false}
+        zoomControlOptions={{
+          position: 9,
+        }}
       >
         {powerStations.map((powerStation) => (
           <PowerStationMarker
