@@ -1,11 +1,19 @@
 import "./index.scss";
-import { Marker, InfoWindow, useMarkerRef } from "@vis.gl/react-google-maps";
+import {
+  Marker,
+  AdvancedMarkerRef,
+  InfoWindow,
+  useMarkerRef,
+  AdvancedMarker,
+  useAdvancedMarkerRef,
+} from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
 import { useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   powerStation: PowerStation;
@@ -13,6 +21,8 @@ type Props = {
 
 export function PowerStationMarker({ powerStation }: Props) {
   const [markerRef, marker] = useMarkerRef();
+  const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
+  const currentSearchParams = useSearchParams();
 
   const [isHoverOpen, setHoverIsOpen] = useState(false);
   const [isMoreOpen, setMoreIsOpen] = useState(false);
@@ -32,24 +42,65 @@ export function PowerStationMarker({ powerStation }: Props) {
     setMoreIsOpen(true);
   };
 
+  const toggleMoreInfoWindow = () => {
+    if (isMoreOpen) {
+      hideMoreInfoWindow();
+    } else {
+      showMoreInfoWindow();
+    }
+  };
+
   const hideMoreInfoWindow = () => {
     setMoreIsOpen(false);
   };
 
+  const calcPowerStationSize = (factor: number, powerOutput?: number) => {
+    return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 10), 100);
+  };
+
   return (
     <>
-      <Marker
-        ref={markerRef}
-        position={powerStation.position}
-        onMouseOver={showHoverInfoWindow}
-        onMouseOut={hideHoverInfoWindow}
-        onClick={showMoreInfoWindow}
-      />
+      {currentSearchParams.get("show-by-power") ? (
+        <AdvancedMarker
+          position={powerStation.position}
+          onClick={toggleMoreInfoWindow}
+          ref={advandedMarkerRef}
+        >
+          <div
+            onMouseOver={showHoverInfoWindow}
+            onMouseOut={hideHoverInfoWindow}
+            style={{
+              width: calcPowerStationSize(100, powerStation.powerOutput),
+              height: calcPowerStationSize(100, powerStation.powerOutput),
+              position: "absolute",
+              top: 0,
+              left: 0,
+              background: "rgba(0, 0, 0, 0.5)",
+              border: "2px solid #ccc",
+              borderRadius: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          ></div>
+        </AdvancedMarker>
+      ) : (
+        <Marker
+          position={powerStation.position}
+          onClick={toggleMoreInfoWindow}
+          ref={markerRef}
+          onMouseOver={showHoverInfoWindow}
+          onMouseOut={hideHoverInfoWindow}
+        />
+      )}
+
       {isHoverOpen && (
         <InfoWindow
-          anchor={marker}
+          anchor={marker || advancedMarker}
           onCloseClick={hideHoverInfoWindow}
           className="powerStationHoverInfo"
+          pixelOffset={[
+            0,
+            -calcPowerStationSize(200, powerStation.powerOutput),
+          ]}
         >
           <div>
             <Typography variant="h1" component="h1">
@@ -69,9 +120,13 @@ export function PowerStationMarker({ powerStation }: Props) {
       )}
       {isMoreOpen && (
         <InfoWindow
-          anchor={marker}
+          anchor={marker || advancedMarker}
           onCloseClick={hideMoreInfoWindow}
           className="powerStationMoreInfo"
+          pixelOffset={[
+            0,
+            -(powerStation.powerOutput ? powerStation.powerOutput : 0) / 200,
+          ]}
         >
           <div>
             <Stack alignItems="center" direction="row" gap={2}>
@@ -108,10 +163,12 @@ export function PowerStationMarker({ powerStation }: Props) {
                     {powerStation.position.lat}, {powerStation.position.lng}
                   </td>
                 </tr>
-                <tr>
-                  <td>Operator:</td>
-                  <td>{powerStation.operator?.name}</td>
-                </tr>
+                {powerStation.operator && (
+                  <tr>
+                    <td>Operator:</td>
+                    <td>{powerStation.operator?.name}</td>
+                  </tr>
+                )}
                 <tr>
                   <td>Power Output:</td>
                   <td>{powerStation.powerOutput} MW</td>

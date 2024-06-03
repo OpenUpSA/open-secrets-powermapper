@@ -8,6 +8,10 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputAdornment from "@mui/material/InputAdornment";
 import Slider from "@mui/material/Slider";
@@ -156,6 +160,19 @@ function Component(props: Props) {
       newParams.delete("power");
     } else {
       newParams.set("power", String(newValue));
+    }
+    window.history.pushState(null, "", `?${newParams.toString()}`);
+  };
+
+  const handleShowByPowerChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    if (checked) {
+      newParams.set("show-by-power", "true");
+    } else {
+      newParams.delete("show-by-power");
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
@@ -586,6 +603,18 @@ function Component(props: Props) {
           marks={ageMarks}
         />
       </FormControl>
+
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={currentSearchParams.get("show-by-power") === "true"}
+              onChange={handleShowByPowerChange}
+            />
+          }
+          label="Show by power output"
+        />
+      </FormGroup>
     </Stack>
   );
 }
