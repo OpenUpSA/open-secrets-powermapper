@@ -19,7 +19,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { Typography } from "@mui/material";
-import Image from 'next/image'
+import Image from "next/image";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import logo from "@/public/images/logo.png";
 
@@ -98,7 +99,13 @@ function Component({ powerStations }: Props) {
         ))}
 
         <MapControl position={ControlPosition.TOP_LEFT}>
-          <Image src={logo} alt="logo" className="logo" width={204} height={34} />
+          <Image
+            src={logo}
+            alt="logo"
+            className="logo"
+            width={204}
+            height={34}
+          />
         </MapControl>
 
         <MapControl position={ControlPosition.LEFT_BOTTOM}>
@@ -198,7 +205,7 @@ function Component({ powerStations }: Props) {
                 </div>
               </>
             ) : (
-              <div>Loading...</div>
+              <LinearProgress />
             )}
           </Box>
         </Slide>
