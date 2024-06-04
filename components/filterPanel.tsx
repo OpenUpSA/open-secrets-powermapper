@@ -439,8 +439,8 @@ function Component(props: Props) {
   return (
     <Stack spacing={2} className="filterPanel">
       <Stack alignItems="center" direction="row" gap={2}>
-        <FilterAltIcon />
-        <Typography variant="h1" component="h2" fontSize={14}>
+        <FilterAltIcon color="primary" />
+        <Typography variant="h1" component="h2" fontSize={14} fontWeight={600}>
           Filter and search
         </Typography>
       </Stack>

@@ -138,6 +138,7 @@ function Component({ powerStations }: Props) {
                     className="closeButton"
                     variant="contained"
                     onClick={closeSidePanel}
+                    color="secondary"
                   >
                     X
                   </Button>

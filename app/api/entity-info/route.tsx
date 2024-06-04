@@ -102,7 +102,6 @@ export async function GET(request: NextRequest) {
   )[0];
 
   entityRoles.forEach((entityRole) => {
-    console.log(entityRole);
     if (
       entityRole.entity_id[0] === entityToExpandId &&
       entityRole.personPolitician

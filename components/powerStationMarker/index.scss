@@ -19,12 +19,35 @@
     margin: 1em 0 10px 0;
   }
 
+  button.moreInfoWindowCloseButton {
+    color: #333;
+    text-align: right!important;
+    display: inline-block;
+    margin-left: auto;
+  }
+
   table {
     width: 100%;
     tbody {
       tr {
         td {
           padding: 0 0 5px 0;
+
+          button.operatorButton {
+            display: inline;
+            color: inherit;
+            text-transform: none;
+            padding: 0;
+            text-decoration: underline !important;
+            font-weight: normal;
+            font-size: 1em;
+            margin: 0;
+            text-align: right;
+            width: auto;
+            &:hover {
+              color: #333;
+            }
+          }
         }
         td:nth-child(2) {
           text-align: right;

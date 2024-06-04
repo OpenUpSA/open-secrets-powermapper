@@ -129,9 +129,9 @@ export function PowerStationMarker({
                 {powerStation.name}
               </Typography>
               <Button
+                className="moreInfoWindowCloseButton"
                 size="small"
                 onClick={hideMoreInfoWindow}
-                sx={{ marginLeft: "auto" }}
               >
                 X
               </Button>
@@ -166,6 +166,7 @@ export function PowerStationMarker({
                         onClick={() =>
                           setSidePanelEntity(powerStation.operator)
                         }
+                        className="operatorButton"
                       >
                         {powerStation.operator?.name}
                       </Button>
