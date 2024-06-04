@@ -51,8 +51,8 @@ export type Entity = {
   id: string;
   name: string;
   controversies?: string;
-  role_id: string;
-  country_id: string;
+  role_id: string[];
+  country_id?: string[];
   leadership?: Entity[];
   entityType?: string;
   role?: string;

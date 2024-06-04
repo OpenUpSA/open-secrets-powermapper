@@ -181,8 +181,12 @@ function Component({ powerStations }: Props) {
                     </>
                   )}
 
-                  <h3>Controversies</h3>
-                  <p>{sidePanelEntityInfo.controversies}</p>
+                  {sidePanelEntityInfo.controversies && (
+                    <>
+                      <h3>Controversies</h3>
+                      <p>{sidePanelEntityInfo.controversies}</p>
+                    </>
+                  )}
                 </div>
               </>
             ) : (

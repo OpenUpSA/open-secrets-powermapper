@@ -155,7 +155,7 @@ export function PowerStationMarker({
                 <tr>
                   <td>GPS:</td>
                   <td>
-                    {powerStation.position.lat}, {powerStation.position.lng}
+                    {powerStation.position.lat.toFixed(5)}, {powerStation.position.lng.toFixed(5)}
                   </td>
                 </tr>
                 {powerStation.operator && (

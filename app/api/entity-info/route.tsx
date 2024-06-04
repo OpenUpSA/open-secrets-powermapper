@@ -101,8 +101,8 @@ export async function GET(request: NextRequest) {
     (entity) => entity.id === entityToExpandId
   )[0];
 
-  // Find entityRole with entity id of entityToExpandId
   entityRoles.forEach((entityRole) => {
+    console.log(entityRole);
     if (
       entityRole.entity_id[0] === entityToExpandId &&
       entityRole.personPolitician
@@ -116,10 +116,13 @@ export async function GET(request: NextRequest) {
     }
   });
 
-  // Hydrate responseEntity.country from countries
   responseEntity.country = countries.find(
-    (country) => country.id === responseEntity.country_id[0]
-  ) as Country;
+    (country) =>
+      country.id ===
+      (responseEntity.country_id &&
+        responseEntity.country_id.length > 0 &&
+        responseEntity.country_id[0])
+  );
 
   return NextResponse.json(responseEntity, {
     status: 200,
