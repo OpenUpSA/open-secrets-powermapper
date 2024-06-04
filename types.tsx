@@ -20,6 +20,11 @@ export type Region = {
   name: string;
 };
 
+export type Country = {
+  id: string;
+  name: string;
+};
+
 export type FuelType = {
   id: string;
   name: string;
@@ -45,6 +50,16 @@ export type ItemLabel = {
 export type Entity = {
   id: string;
   name: string;
+  controversies?: string;
+  role_id: string;
+  country_id: string;
+  leadership?: Entity[];
+  entityType?: string;
+  role?: string;
+  country?: Country;
+  image?: string;
+  details?: string;
+  established?: Date;
 };
 
 export type Age = {
@@ -53,4 +68,13 @@ export type Age = {
   decommissionStart?: Date;
   decommissionEnd?: Date;
   years: number;
+};
+
+export type EntityRole = {
+  id: string;
+  role: string;
+  entity_id: string;
+  entity?: Entity;
+  personPolitician_id: string;
+  personPolitician?: Entity;
 };

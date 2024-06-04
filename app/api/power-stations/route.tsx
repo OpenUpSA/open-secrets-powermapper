@@ -69,6 +69,8 @@ export async function GET(req: Request) {
         entities.push({
           id: id as Entity["id"],
           name: fields.Name as Entity["name"],
+          role_id: fields.Role as Entity["role_id"],
+          country_id: fields.Country as Entity["country_id"],
         });
       });
       processNextPage();
