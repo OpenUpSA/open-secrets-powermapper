@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const base = Airtable.base("appZdj1pFZQOBMn4E");
 
   const powerStationsTable = base("Power Stations").select({
-    view: "Grid view",
+    view: "Published",
     fields: [
       "Name",
       "Fuel Type",
@@ -74,6 +74,7 @@ export async function GET(req: Request) {
     });
     await powerStationsTable.eachPage((records, processNextPage) => {
       records.forEach(({ fields, id }) => {
+        console.log(fields["Fuel Type"]);
         const powerStation: PowerStation = {
           id: id as PowerStation["id"],
           name: fields.Name as PowerStation["name"],
