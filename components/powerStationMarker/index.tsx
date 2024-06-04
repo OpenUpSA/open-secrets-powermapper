@@ -14,9 +14,13 @@ import { useSearchParams } from "next/navigation";
 
 type Props = {
   powerStation: PowerStation;
+  setSidePanelEntity: Function;
 };
 
-export function PowerStationMarker({ powerStation }: Props) {
+export function PowerStationMarker({
+  powerStation,
+  setSidePanelEntity,
+}: Props) {
   const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
   const currentSearchParams = useSearchParams();
 
@@ -157,7 +161,15 @@ export function PowerStationMarker({ powerStation }: Props) {
                 {powerStation.operator && (
                   <tr>
                     <td>Operator:</td>
-                    <td>{powerStation.operator?.name}</td>
+                    <td>
+                      <Button
+                        onClick={() =>
+                          setSidePanelEntity(powerStation.operator)
+                        }
+                      >
+                        {powerStation.operator?.name}
+                      </Button>
+                    </td>
                   </tr>
                 )}
                 <tr>

@@ -42,6 +42,85 @@
   }
 }
 
+.sidePanel {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 330px;
+  bottom: 30px;
+  background-color: #ffffff;
+  color: #333;
+  padding: 1em;
+  z-index: 1000;
+  border-radius: 8px;
+  font-size: 0.8em;
+  line-height: 1.25em;
+  justify-content: space-between;
+  overflow: hidden;
+
+  .buffer {
+    margin: 1em 0 0.5em 0;
+  }
+
+  .title {
+    font-size: 1.25em;
+    font-weight: normal;
+  }
+
+  .subTitle {
+    font-size: 1em;
+    font-weight: normal;
+  }
+
+  .closeButton {
+    margin-left: auto;
+  }
+
+  .content {
+    overflow-y: auto;
+
+    p,
+    table,
+    h2,
+    h3 {
+      margin-bottom: 1em;
+      margin-top: 1em;
+    }
+
+    h2,
+    h3 {
+      font-size: 1em;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      tr {
+        td {
+          padding: 0 0 5px 0;
+        }
+        td:nth-child(2) {
+          text-align: right;
+        }
+      }
+    }
+
+    .leadership {
+      background-color: #efefef;
+      border-radius: 8px;
+      padding: 1em;
+      font-size: 1em;
+      font-weight: bold;
+
+      .role {
+        display: block;
+        font-size: 0.8em;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
 // Hide Google logo, will put it elsewhere
 div:has(> a[href*="maps.google.com"]) {
   display: none !important;
@@ -58,6 +137,5 @@ div:has(> div > .gm-style-cc) {
 }
 
 .gm-bundled-control-on-bottom {
-  outline: 1px solid red;
-  bottom: 85px!important;
+  bottom: 150px !important;
 }
