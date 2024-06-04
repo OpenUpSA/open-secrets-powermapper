@@ -3,10 +3,9 @@ import {
   InfoWindow,
   AdvancedMarker,
   useAdvancedMarkerRef,
-  Pin,
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -17,9 +16,7 @@ type Props = {
   powerStation: PowerStation;
 };
 
-export function PowerStationMarker({
-  powerStation,
-}: Props) {
+export function PowerStationMarker({ powerStation }: Props) {
   const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
   const currentSearchParams = useSearchParams();
 

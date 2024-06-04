@@ -1,3 +1,4 @@
+import "./filterPanel.scss";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
@@ -457,19 +458,7 @@ function Component(props: Props) {
           Clear all
         </Button>
       </Stack>
-      <List
-        sx={{
-          display: "flex",
-          justifyContent: "left",
-          flexWrap: "wrap",
-          listStyle: "none",
-          p: 0.5,
-          m: 0,
-          minHeight: "5em",
-          transition: "height 1s ease",
-        }}
-        component="ul"
-      >
+      <List className="chipList" component="ul">
         {chipFilters().map((filter, index) => (
           <ListItem key={index}>
             <Chip
@@ -497,17 +486,21 @@ function Component(props: Props) {
         value={currentSearchParams.get("name") || ""}
         onChange={changeNameValue}
         placeholder="Enter a station name"
+        size="small"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon />
+              <SearchIcon fontSize="small" />
             </InputAdornment>
           ),
         }}
       />
       <FormControl fullWidth>
-        <InputLabel id="energies-label">Energy type</InputLabel>
+        <InputLabel size="small" id="energies-label">
+          Energy type
+        </InputLabel>
         <Select
+          size="small"
           labelId="energies-label"
           id="energies"
           label="Energy type"
@@ -525,8 +518,11 @@ function Component(props: Props) {
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel id="operators-label">Operator</InputLabel>
+        <InputLabel id="operators-label" size="small">
+          Operator
+        </InputLabel>
         <Select
+          size="small"
           labelId="operators-label"
           id="operators"
           label="Energy type"
@@ -544,8 +540,11 @@ function Component(props: Props) {
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel id="locations-label">Location</InputLabel>
+        <InputLabel size="small" id="locations-label">
+          Location
+        </InputLabel>
         <Select
+          size="small"
           labelId="locations-label"
           id="locations"
           value={currentSearchParams.get("locations")?.split(",") || [""]}
@@ -564,10 +563,13 @@ function Component(props: Props) {
       </FormControl>
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
-          <BoltIcon />
-          <Typography gutterBottom>Filter by power output (MW):</Typography>
+          <BoltIcon fontSize="small" />
+          <Typography fontSize="small" gutterBottom>
+            Filter by power output (MW):
+          </Typography>
         </Stack>
         <Slider
+          size="small"
           id="power-output"
           value={
             currentSearchParams.get("power")?.split(",").map(Number) || [
@@ -584,10 +586,13 @@ function Component(props: Props) {
       </FormControl>
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
-          <EventIcon />
-          <Typography gutterBottom>Filter by age:</Typography>
+          <EventIcon fontSize="small" />
+          <Typography fontSize="small" gutterBottom>
+            Filter by age:
+          </Typography>
         </Stack>
         <Slider
+          size="small"
           id="age"
           value={
             currentSearchParams.get("age")?.split(",").map(Number) || [
@@ -605,13 +610,14 @@ function Component(props: Props) {
 
       <FormGroup>
         <FormControlLabel
+          label={<Typography fontSize={12}>Show by power output</Typography>}
           control={
             <Switch
+              size="small"
               checked={currentSearchParams.get("show-by-power") === "true"}
               onChange={handleShowByPowerChange}
             />
           }
-          label="Show by power output"
         />
       </FormGroup>
     </Stack>

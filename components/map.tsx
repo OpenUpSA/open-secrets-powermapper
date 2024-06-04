@@ -23,7 +23,6 @@ function Component({ powerStations }: Props) {
 
   const [fuelTypes, setFuelTypes] = useState<PowerStation["fuelType"][]>([]);
 
-  // Unique list of fuel types with Name and RGB Color
   useEffect(() => {
     const fuelTypes = powerStations
       .map((powerStation) => powerStation.fuelType)
@@ -67,13 +66,17 @@ function Component({ powerStations }: Props) {
 
         <MapControl position={ControlPosition.LEFT_BOTTOM}>
           <div className="fuelTypeLegend">
-          <div className="legendTitle">Legend</div>
+            <div className="legendTitle">Legend</div>
             {fuelTypes.map((fuelType) => (
               <div className="legendItem" key={fuelType.shorthand}>
                 <div
                   className="legendColor"
                   style={{
-                    background: `rgba(${fuelType.rGBColor}, ${currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1})`,
+                    background: `rgba(${fuelType.rGBColor}, ${
+                      currentSearchParams.get("show-by-power") === "true"
+                        ? 0.6
+                        : 1
+                    })`,
                   }}
                 ></div>
                 <div className="legendLabel">{fuelType.name}</div>
