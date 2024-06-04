@@ -62,6 +62,7 @@ export function PowerStationMarker({ powerStation }: Props) {
         ref={advandedMarkerRef}
       >
         <div
+          className="powerStationMarker"
           onMouseOver={showHoverInfoWindow}
           onMouseOut={hideHoverInfoWindow}
           style={{
@@ -73,15 +74,9 @@ export function PowerStationMarker({ powerStation }: Props) {
               currentSearchParams.get("show-by-power") === "true"
                 ? calcPowerStationSize(100, powerStation.powerOutput)
                 : 12,
-            position: "absolute",
-            top: 0,
-            left: 0,
             background: `rgba(${powerStation.fuelType.rGBColor}, ${
               currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1
             })`,
-            borderRadius: "50%",
-            transform: "translate(-50%, -50%)",
-            boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",
           }}
         ></div>
       </AdvancedMarker>
