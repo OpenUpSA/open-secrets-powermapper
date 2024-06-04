@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { PowerStationMarker } from "@/components/powerStationMarker/index";
 import { useSearchParams } from "next/navigation";
 
+import SVG from "react-inlinesvg";
+
 type Props = {
   powerStations: PowerStation[];
 };
@@ -78,7 +80,9 @@ function Component({ powerStations }: Props) {
                         : 1
                     })`,
                   }}
-                ></div>
+                >
+                  <SVG src={fuelType.icon} className="legendIcon" />
+                </div>
                 <div className="legendLabel">{fuelType.name}</div>
               </div>
             ))}

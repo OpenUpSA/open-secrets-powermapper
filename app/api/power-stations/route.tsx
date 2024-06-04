@@ -32,7 +32,7 @@ export async function GET(req: Request) {
 
   const fuelTypesTable = base("Fuel Type (Ref)").select({
     view: "Grid view",
-    fields: ["Name", "Shorthand", "RGB Color"],
+    fields: ["Name", "Shorthand", "RGB Color", "Icon"],
   });
   const fuelTypes: FuelType[] = [];
 
@@ -59,6 +59,7 @@ export async function GET(req: Request) {
           name: fields.Name as FuelType["name"],
           shorthand: fields.Shorthand as FuelType["shorthand"],
           rGBColor: fields["RGB Color"] as FuelType["rGBColor"],
+          icon: fields.Icon as FuelType["icon"],
         });
       });
       processNextPage();
@@ -74,7 +75,6 @@ export async function GET(req: Request) {
     });
     await powerStationsTable.eachPage((records, processNextPage) => {
       records.forEach(({ fields, id }) => {
-        console.log(fields["Fuel Type"]);
         const powerStation: PowerStation = {
           id: id as PowerStation["id"],
           name: fields.Name as PowerStation["name"],
