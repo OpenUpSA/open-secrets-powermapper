@@ -10,6 +10,8 @@
   color: #ccc;
   align-items: center;
   justify-content: center;
+  height: 46px;
+  box-sizing: border-box;
 
   .legendTitle {
     color: #fff;
@@ -143,4 +145,9 @@ div:has(> div > .gm-style-cc) {
 
 .gm-bundled-control-on-bottom {
   bottom: 150px !important;
+}
+
+.logo {
+  margin: 30px;
+  pointer-events: none;
 }

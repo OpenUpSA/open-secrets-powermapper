@@ -19,6 +19,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { Typography } from "@mui/material";
+import Image from 'next/image'
+
+import logo from "@/public/images/logo.png";
 
 type Props = {
   powerStations: PowerStation[];
@@ -93,6 +96,10 @@ function Component({ powerStations }: Props) {
             setSidePanelEntity={setSidePanelEntity}
           />
         ))}
+
+        <MapControl position={ControlPosition.TOP_LEFT}>
+          <Image src={logo} alt="logo" className="logo" width={204} height={34} />
+        </MapControl>
 
         <MapControl position={ControlPosition.LEFT_BOTTOM}>
           <div className="fuelTypeLegend">
