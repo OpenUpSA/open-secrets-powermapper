@@ -125,6 +125,14 @@ export async function GET(req: Request) {
               filename: image.filename,
               type: image.type,
             },
+            full: {
+              id: image.id,
+              url: image.thumbnails.full.url,
+              width: image.thumbnails.full.width,
+              height: image.thumbnails.full.height,
+              filename: image.filename,
+              type: image.type,
+            },
           };
         }
 

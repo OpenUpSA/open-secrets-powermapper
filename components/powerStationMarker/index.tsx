@@ -103,13 +103,14 @@ export function PowerStationMarker({
             }`}
           >
             <Stack alignItems="center" direction="row" gap={1}>
-              {powerStation.images && powerStation.images.small && (
+              {powerStation.images && powerStation.images.large && (
                 <Image
-                  src={powerStation.images.small.url}
+                  src={powerStation.images.large.url}
                   alt={powerStation.name}
                   width="48"
                   height="48"
                   className="photograph"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               )}
               <div>
@@ -143,13 +144,13 @@ export function PowerStationMarker({
             -(powerStation.powerOutput ? powerStation.powerOutput : 0) / 200,
           ]}
         >
-          {powerStation.images && powerStation.images.large && (
+          {powerStation.images && powerStation.images.full && (
             <Image
               className="photograph"
-              src={powerStation.images.large.url}
+              src={powerStation.images.full.url}
               alt={powerStation.name}
-              width={powerStation.images.large.width}
-              height={powerStation.images.large.height}
+              width={powerStation.images.full.width}
+              height={powerStation.images.full.height}
             />
           )}
           <div

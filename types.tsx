@@ -18,6 +18,7 @@ export type PowerStation = {
   images?: {
     small: Image;
     large: Image;
+    full: Image;
   };
 };
 
