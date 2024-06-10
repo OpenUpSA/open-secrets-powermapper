@@ -15,6 +15,7 @@ export async function GET(req: Request) {
       "Latitude",
       "Longitude",
       "Operator",
+      "Owner",
       "Output (MW)",
       "Commission start",
       "Commission end",
@@ -105,6 +106,12 @@ export async function GET(req: Request) {
         if (fields.Operator) {
           powerStation.operator = entities.find(
             (entity) => entity.id === (fields.Operator as readonly string[])[0]
+          ) as Entity;
+        }
+
+        if (fields.Owner) {
+          powerStation.owner = entities.find(
+            (entity) => entity.id === (fields.Owner as readonly string[])[0]
           ) as Entity;
         }
 

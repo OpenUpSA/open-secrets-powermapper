@@ -12,6 +12,7 @@ export type PowerStation = {
   position: Position;
   powerOutput?: number;
   operator?: Entity;
+  owner?: Entity;
   age: Age;
 };
 

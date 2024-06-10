@@ -54,6 +54,7 @@ function Component(props: Props) {
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
   const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
   const [operators, setOperators] = useState<ItemLabel>();
+  const [owners, setOwners] = useState<ItemLabel>();
   const [locations, setLocations] = useState<ItemLabel>();
 
   const ageMarksDefault = useRef([
@@ -149,6 +150,21 @@ function Component(props: Props) {
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
+  const handleOwnersChange = (event: SelectChangeEvent<string[]>) => {
+    const newValue = (
+      typeof event.target.value === "string"
+        ? event.target.value.split(",")
+        : event.target.value
+    ).filter((n) => n);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    if (newValue.length === 0) {
+      newParams.delete("owners");
+    } else {
+      newParams.set("owners", newValue.join(",") as string);
+    }
+    window.history.pushState(null, "", `?${newParams.toString()}`);
+  };
+
   const handlePowerOutputChange = (
     event: Event,
     newValue: number | number[]
@@ -194,6 +210,7 @@ function Component(props: Props) {
     const fuelTypeParam = currentSearchParams.get("energies")?.split(",") || [];
     const operatorParam =
       currentSearchParams.get("operators")?.split(",") || [];
+    const ownerParam = currentSearchParams.get("owners")?.split(",") || [];
     const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
     const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
 
@@ -207,6 +224,8 @@ function Component(props: Props) {
             fuelTypeParam.includes(station.fuelType.shorthand)) &&
           (operatorParam.length === 0 ||
             operatorParam.includes(station.operator?.name || "")) &&
+          (ownerParam.length === 0 ||
+            ownerParam.includes(station.owner?.name || "")) &&
           (!powerParam ||
             !station.powerOutput ||
             (station.powerOutput >= powerParam[0] &&
@@ -224,6 +243,7 @@ function Component(props: Props) {
     newParams.delete("locations");
     newParams.delete("energies");
     newParams.delete("operators");
+    newParams.delete("owners");
     newParams.delete("age");
     newParams.delete("power");
     window.history.pushState(null, "", `?${newParams.toString()}`);
@@ -257,6 +277,17 @@ function Component(props: Props) {
           newParams.set("operators", newOperators.join(","));
         } else {
           newParams.delete("operators");
+        }
+        break;
+      case "owner":
+        const newOwners = currentSearchParams
+          .get("owners")
+          ?.split(",")
+          .filter((item) => item !== filter[1]);
+        if (newOwners && newOwners.length > 0) {
+          newParams.set("owners", newOwners.join(","));
+        } else {
+          newParams.delete("owners");
         }
         break;
 
@@ -295,6 +326,8 @@ function Component(props: Props) {
         return operators
           ? operators[filter[1] as keyof typeof operators].label
           : "";
+      case "owner":
+        return owners ? owners[filter[1] as keyof typeof owners].label : "";
       case "location":
         return locations
           ? locations[filter[1] as keyof typeof locations].label
@@ -338,6 +371,17 @@ function Component(props: Props) {
         {} as ItemLabel
       );
       setOperators(operatorsData);
+
+      const ownersData = powerStationsData.powerStations.reduce(
+        (acc: ItemLabel, cur: PowerStation) => {
+          if (cur.owner) {
+            acc[cur.owner.name] = { label: cur.owner.name };
+          }
+          return acc;
+        },
+        {} as ItemLabel
+      );
+      setOwners(ownersData);
 
       const locationsData = powerStationsData.powerStations.reduce(
         (acc: ItemLabel, cur: PowerStation) => {
@@ -410,6 +454,14 @@ function Component(props: Props) {
       .filter((operator) => operator !== "")
       .forEach((operator) => {
         newFilters.push(["operator", operator]);
+      });
+
+    currentSearchParams
+      .get("owners")
+      ?.split(",")
+      .filter((owner) => owner !== "")
+      .forEach((owner) => {
+        newFilters.push(["owner", owner]);
       });
 
     currentSearchParams
@@ -533,6 +585,28 @@ function Component(props: Props) {
           <MenuItem value={""}>Select operator(s)</MenuItem>
           {operators &&
             Object.entries(operators).map(([value, { label }]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="owners-label" size="small">
+          Owner
+        </InputLabel>
+        <Select
+          size="small"
+          labelId="owners-label"
+          id="owners"
+          label="Owners"
+          value={currentSearchParams.get("owners")?.split(",") || [""]}
+          onChange={handleOwnersChange}
+          multiple
+        >
+          <MenuItem value={""}>Select owner(s)</MenuItem>
+          {owners &&
+            Object.entries(owners).map(([value, { label }]) => (
               <MenuItem key={value} value={value}>
                 {label}
               </MenuItem>

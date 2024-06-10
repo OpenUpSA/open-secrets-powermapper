@@ -111,7 +111,12 @@ export function PowerStationMarker({
                 {powerStation.powerOutput} MW
               </p>
             )}
-            <p>{powerStation.operator?.name}</p>
+            {powerStation.operator && <p>{powerStation.operator.name}</p>}
+            {powerStation.owner &&
+              powerStation.operator &&
+              powerStation.operator.name !== powerStation.owner.name && (
+                <p>{powerStation.owner.name}</p>
+              )}
           </div>
         </InfoWindow>
       )}
@@ -169,9 +174,22 @@ export function PowerStationMarker({
                         onClick={() =>
                           setSidePanelEntity(powerStation.operator)
                         }
-                        className="operatorButton"
+                        className="entityButton"
                       >
-                        {powerStation.operator?.name}
+                        {powerStation.operator.name}
+                      </Button>
+                    </td>
+                  </tr>
+                )}
+                {powerStation.owner && (
+                  <tr>
+                    <td>Owner:</td>
+                    <td>
+                      <Button
+                        onClick={() => setSidePanelEntity(powerStation.owner)}
+                        className="entityButton"
+                      >
+                        {powerStation.owner.name}
                       </Button>
                     </td>
                   </tr>
