@@ -52,9 +52,9 @@
   bottom: 30px;
   background-color: #ffffff;
   color: #333;
-  padding: 1em;
+  padding: 1.5em;
   z-index: 1000;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 0.8em;
   line-height: 1.25em;
   justify-content: space-between;
@@ -81,6 +81,24 @@
 
   .closeButton {
     margin-left: auto;
+    cursor: pointer;
+    color: #333;
+    margin: 0;
+    margin-left: auto;
+    background: #efefef;
+    border-radius: 8px;
+    padding: 0;
+    display: flex;
+    width: 44px;
+    height: 44px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    &:hover {
+      color: #000;
+      background: #dfdfdf;
+    }
   }
 
   .content {
@@ -114,7 +132,7 @@
 
     .leadership {
       background-color: #efefef;
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 1em;
       font-size: 1em;
       font-weight: bold;

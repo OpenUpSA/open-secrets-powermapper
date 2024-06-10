@@ -21,6 +21,7 @@ import Divider from "@mui/material/Divider";
 import { Typography } from "@mui/material";
 import Image from "next/image";
 import LinearProgress from "@mui/material/LinearProgress";
+import CloseIcon from "@mui/icons-material/Close";
 
 import logo from "@/public/images/logo.png";
 
@@ -148,14 +149,9 @@ function Component({ powerStations }: Props) {
                       {sidePanelEntityInfo.entityType}
                     </Typography>
                   </Typography>
-                  <Button
-                    className="closeButton"
-                    variant="contained"
-                    onClick={closeSidePanel}
-                    color="secondary"
-                  >
-                    X
-                  </Button>
+                  <button className="closeButton" onClick={closeSidePanel}>
+                    <CloseIcon fontSize="medium" />
+                  </button>
                 </Stack>
                 <Divider className="buffer" />
                 <div className="content">
