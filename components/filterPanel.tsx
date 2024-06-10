@@ -322,23 +322,23 @@ function Component(props: Props) {
       case "energy":
         return energyTypes
           ? energyTypes[filter[1] as keyof typeof energyTypes].label
-          : "";
+          : "...";
       case "operator":
         return operators
           ? operators[filter[1] as keyof typeof operators].label
-          : "";
+          : "...";
       case "owner":
-        return owners ? owners[filter[1] as keyof typeof owners].label : "";
+        return owners ? owners[filter[1] as keyof typeof owners].label : "...";
       case "location":
         return locations
           ? locations[filter[1] as keyof typeof locations].label
-          : "";
+          : "...";
       case "power":
         return `Output: ${filter[1]} MW`;
       case "age":
         return `Age: ${filter[1]} years`;
       default:
-        return "";
+        return "...";
     }
   };
 
@@ -524,6 +524,7 @@ function Component(props: Props) {
       <div className="chipList">
         {chipFilters().map((filter, index) => (
           <div
+            key={index}
             className="chipFilter"
             title={getLabelForFilter(filter)}
             onClick={() => {
