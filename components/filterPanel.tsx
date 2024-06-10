@@ -351,14 +351,14 @@ function Component(props: Props) {
       setLocations(locationsData);
 
       const minPowerOutput = Math.min(
-        ...powerStationsData.powerStations.map(
-          (station: PowerStation) => station.powerOutput
-        )
+        ...powerStationsData.powerStations
+          .filter((station: PowerStation) => station.powerOutput)
+          .map((station: PowerStation) => station.powerOutput)
       );
       const maxPowerOutput = Math.max(
-        ...powerStationsData.powerStations.map(
-          (station: PowerStation) => station.powerOutput
-        )
+        ...powerStationsData.powerStations
+          .filter((station: PowerStation) => station.powerOutput)
+          .map((station: PowerStation) => station.powerOutput)
       );
       const powerOutputMarksData = [
         { value: minPowerOutput, label: minPowerOutput.toString() },
