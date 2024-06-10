@@ -10,10 +10,15 @@ export type PowerStation = {
   country: string;
   region: Region;
   position: Position;
+  age: Age;
+  description?: string;
   powerOutput?: number;
   operator?: Entity;
   owner?: Entity;
-  age: Age;
+  images?: {
+    small: Image;
+    large: Image;
+  };
 };
 
 export type Region = {
@@ -78,4 +83,13 @@ export type EntityRole = {
   entity?: Entity;
   personPolitician_id: string;
   personPolitician?: Entity;
+};
+
+export type Image = {
+  id: string;
+  url: string;
+  filename: string;
+  width: number;
+  height: number;
+  type: string;
 };

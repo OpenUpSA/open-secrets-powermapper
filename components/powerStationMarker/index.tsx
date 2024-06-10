@@ -6,11 +6,11 @@ import {
 } from "@vis.gl/react-google-maps";
 import { PowerStation } from "@/types";
 import { useState } from "react";
-import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { useSearchParams } from "next/navigation";
+import CloseIcon from "@mui/icons-material/Close";
+import Image from "next/image";
 
 type Props = {
   powerStation: PowerStation;
@@ -97,26 +97,39 @@ export function PowerStationMarker({
               : -10,
           ]}
         >
-          <div>
-            <Typography variant="h1" component="h1">
-              {powerStation.name}
-            </Typography>
-            {powerStation.powerOutput && (
-              <p>
-                <Chip
-                  label={powerStation.fuelType.name}
-                  variant="filled"
-                  size="small"
+          <div
+            className={`infowindowContent ${
+              powerStation.images ? "" : "noImage"
+            }`}
+          >
+            <Stack alignItems="center" direction="row" gap={1}>
+              {powerStation.images && powerStation.images.small && (
+                <Image
+                  src={powerStation.images.small.url}
+                  alt={powerStation.name}
+                  width="48"
+                  height="48"
+                  className="photograph"
                 />
-                {powerStation.powerOutput} MW
-              </p>
-            )}
-            {powerStation.operator && <p>{powerStation.operator.name}</p>}
-            {powerStation.owner &&
-              powerStation.operator &&
-              powerStation.operator.name !== powerStation.owner.name && (
-                <p>{powerStation.owner.name}</p>
               )}
+              <div>
+                <h1 className="name">{powerStation.name}</h1>
+                {powerStation.powerOutput && (
+                  <p>
+                    <span className="fuelType">
+                      {powerStation.fuelType.name}
+                    </span>
+                    {powerStation.powerOutput} MW
+                  </p>
+                )}
+                {powerStation.operator && <p>{powerStation.operator.name}</p>}
+                {powerStation.owner &&
+                  powerStation.operator &&
+                  powerStation.operator.name !== powerStation.owner.name && (
+                    <p>{powerStation.owner.name}</p>
+                  )}
+              </div>
+            </Stack>
           </div>
         </InfoWindow>
       )}
@@ -130,30 +143,36 @@ export function PowerStationMarker({
             -(powerStation.powerOutput ? powerStation.powerOutput : 0) / 200,
           ]}
         >
-          <div>
+          {powerStation.images && powerStation.images.large && (
+            <Image
+              className="photograph"
+              src={powerStation.images.large.url}
+              alt={powerStation.name}
+              width={powerStation.images.large.width}
+              height={powerStation.images.large.height}
+            />
+          )}
+          <div
+            className={`infowindowContent ${
+              powerStation.images ? "" : "noImage"
+            }`}
+          >
             <Stack alignItems="center" direction="row" gap={2}>
-              <Typography variant="h1" component="h1">
+              <Typography className="name" variant="h1" component="h1">
                 {powerStation.name}
               </Typography>
-              <Button
+              <button
                 className="moreInfoWindowCloseButton"
-                size="small"
                 onClick={hideMoreInfoWindow}
               >
-                X
-              </Button>
+                <CloseIcon fontSize="medium" />
+              </button>
             </Stack>
             <table>
               <tbody>
                 <tr>
                   <td>Type:</td>
-                  <td>
-                    <Chip
-                      label={powerStation.fuelType.name}
-                      variant="filled"
-                      size="small"
-                    />
-                  </td>
+                  <td>{powerStation.fuelType.name}</td>
                 </tr>
                 <tr>
                   <td>Location:</td>
@@ -170,14 +189,14 @@ export function PowerStationMarker({
                   <tr>
                     <td>Operator:</td>
                     <td>
-                      <Button
+                      <a
                         onClick={() =>
                           setSidePanelEntity(powerStation.operator)
                         }
                         className="entityButton"
                       >
                         {powerStation.operator.name}
-                      </Button>
+                      </a>
                     </td>
                   </tr>
                 )}
@@ -185,12 +204,12 @@ export function PowerStationMarker({
                   <tr>
                     <td>Owner:</td>
                     <td>
-                      <Button
+                      <a
                         onClick={() => setSidePanelEntity(powerStation.owner)}
                         className="entityButton"
                       >
                         {powerStation.owner.name}
-                      </Button>
+                      </a>
                     </td>
                   </tr>
                 )}
@@ -207,8 +226,8 @@ export function PowerStationMarker({
                       <td>
                         {new Date(
                           powerStation.age.commissionStart
-                        ).getFullYear()}{" "}
-                        -
+                        ).getFullYear()}
+                        &ndash;
                         {new Date(powerStation.age.commissionEnd).getFullYear()}
                       </td>
                     </tr>
@@ -220,14 +239,21 @@ export function PowerStationMarker({
                       <td>
                         {new Date(
                           powerStation.age.decommissionStart
-                        ).getFullYear()}{" "}
-                        -
+                        ).getFullYear()}
+                        &ndash;
                         {new Date(
                           powerStation.age.decommissionEnd
                         ).getFullYear()}
                       </td>
                     </tr>
                   )}
+                {powerStation.description && (
+                  <tr>
+                    <td colSpan={2} className="description">
+                      {powerStation.description}
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
