@@ -77,7 +77,7 @@ export default function Page() {
     <AppRouterCacheProvider>
       <ThemeProvider theme={theme}>
         <Grid container spacing={0}>
-          <Grid xs={2}>
+          <Grid xs={2.5}>
             <Suspense>
               <FilterPanel
                 setFilteredPowerStations={setFilteredPowerStations}
@@ -85,7 +85,7 @@ export default function Page() {
               />
             </Suspense>
           </Grid>
-          <Grid xs={10} className="mapContainer">
+          <Grid xs={9.5} className="mapContainer">
             <Suspense>
               <Map powerStations={filteredPowerStations} />
             </Suspense>

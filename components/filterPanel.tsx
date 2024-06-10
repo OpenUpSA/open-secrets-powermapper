@@ -17,13 +17,14 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputAdornment from "@mui/material/InputAdornment";
 import Slider from "@mui/material/Slider";
 
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
 import EventIcon from "@mui/icons-material/Event";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import List from "@mui/material/List";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
 
@@ -491,45 +492,62 @@ function Component(props: Props) {
   return (
     <Stack spacing={2} className="filterPanel">
       <Stack alignItems="center" direction="row" gap={2}>
-        <FilterAltIcon color="primary" />
-        <Typography variant="h1" component="h2" fontSize={14} fontWeight={600}>
+        <FilterAltOutlinedIcon color="primary" />
+        <Typography
+          className="title"
+          variant="h1"
+          component="h2"
+          fontSize={14}
+          fontWeight={600}
+        >
           Filter and search
         </Typography>
       </Stack>
       <Divider />
       <Stack alignItems="center" direction="row" gap={2}>
-        <Typography variant="h2" component="h3" fontSize={12}>
+        <Typography
+          className="currentlyActiveFiltersTitle"
+          variant="h2"
+          component="h3"
+          fontSize={12}
+        >
           Currently active filters
         </Typography>
-        <Button
-          size="small"
+        <button
           onClick={clearFilters}
           disabled={chipFilters().length === 0}
-          sx={{ textDecoration: "underline", marginLeft: "auto" }}
+          className="clearAllButton"
         >
           Clear all
-        </Button>
+        </button>
       </Stack>
-      <List className="chipList" component="ul">
+      <div className="chipList">
         {chipFilters().map((filter, index) => (
-          <ListItem key={index}>
-            <Chip
-              label={truncateString(getLabelForFilter(filter), 35)}
-              variant="outlined"
-              size="small"
-              onDelete={() => {
-                removeFilter(filter);
-              }}
-            />
-          </ListItem>
+          <div
+            className="chipFilter"
+            title={getLabelForFilter(filter)}
+            onClick={() => {
+              removeFilter(filter);
+            }}
+          >
+            <Stack alignItems="center" direction="row" gap={0.5}>
+              <span className="chipTitle">{truncateString(getLabelForFilter(filter), 35)}</span>
+              <CloseIcon className="closeIcon" fontSize="small" />
+            </Stack>
+          </div>
         ))}
         {chipFilters().length === 0 && (
           <ListItem>
             <Chip label="No filters applied" variant="outlined" size="small" />
           </ListItem>
         )}
-      </List>
-      <Typography variant="h2" component="h3" fontSize={12}>
+      </div>
+      <Typography
+        className="filerOptionsTitle"
+        variant="h2"
+        component="h3"
+        fontSize={12}
+      >
         Filter options
       </Typography>
       <TextField
