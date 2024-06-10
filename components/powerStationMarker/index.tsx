@@ -101,14 +101,16 @@ export function PowerStationMarker({
             <Typography variant="h1" component="h1">
               {powerStation.name}
             </Typography>
-            <p>
-              <Chip
-                label={powerStation.fuelType.name}
-                variant="filled"
-                size="small"
-              />
-              {powerStation.powerOutput} MW
-            </p>
+            {powerStation.powerOutput && (
+              <p>
+                <Chip
+                  label={powerStation.fuelType.name}
+                  variant="filled"
+                  size="small"
+                />
+                {powerStation.powerOutput} MW
+              </p>
+            )}
             <p>{powerStation.operator?.name}</p>
           </div>
         </InfoWindow>
@@ -155,7 +157,8 @@ export function PowerStationMarker({
                 <tr>
                   <td>GPS:</td>
                   <td>
-                    {powerStation.position.lat.toFixed(5)}, {powerStation.position.lng.toFixed(5)}
+                    {powerStation.position.lat.toFixed(5)},{" "}
+                    {powerStation.position.lng.toFixed(5)}
                   </td>
                 </tr>
                 {powerStation.operator && (
@@ -173,10 +176,12 @@ export function PowerStationMarker({
                     </td>
                   </tr>
                 )}
-                <tr>
-                  <td>Power Output:</td>
-                  <td>{powerStation.powerOutput} MW</td>
-                </tr>
+                {powerStation.powerOutput && (
+                  <tr>
+                    <td>Power Output:</td>
+                    <td>{powerStation.powerOutput} MW</td>
+                  </tr>
+                )}
                 {powerStation.age.commissionStart &&
                   powerStation.age.commissionEnd && (
                     <tr>
