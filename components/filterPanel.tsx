@@ -532,15 +532,19 @@ function Component(props: Props) {
             }}
           >
             <Stack alignItems="center" direction="row" gap={0.5}>
-              <span className="chipTitle">{truncateString(getLabelForFilter(filter), 35)}</span>
+              <span className="chipTitle">
+                {truncateString(getLabelForFilter(filter), 35)}
+              </span>
               <CloseIcon className="closeIcon" fontSize="small" />
             </Stack>
           </div>
         ))}
         {chipFilters().length === 0 && (
-          <ListItem>
-            <Chip label="No filters applied" variant="outlined" size="small" />
-          </ListItem>
+          <div className="chipFilter">
+            <Stack alignItems="center" direction="row" gap={0.5}>
+              <span className="chipTitle">No filters applied</span>
+            </Stack>
+          </div>
         )}
       </div>
       <Typography
