@@ -366,23 +366,25 @@ function Component(props: Props) {
       case "energy":
         return energyTypes
           ? energyTypes[filter[1] as keyof typeof energyTypes].label
-          : "...";
+          : filter[1];
       case "operator":
         return operators
           ? operators[filter[1] as keyof typeof operators].label
-          : "...";
+          : filter[1];
       case "owner":
-        return owners ? owners[filter[1] as keyof typeof owners].label : "...";
+        return owners
+          ? owners[filter[1] as keyof typeof owners].label
+          : filter[1];
       case "location":
         return locations
           ? locations[filter[1] as keyof typeof locations].label
-          : "...";
+          : filter[1];
       case "power":
         return `Output: ${filter[1]} MW`;
       case "age":
         return `Age: ${filter[1]} years`;
       default:
-        return "...";
+        return filter[1];
     }
   };
 
@@ -631,7 +633,7 @@ function Component(props: Props) {
               primary={
                 selected
                   .map((value) => {
-                    return energyTypes?.[value]?.label;
+                    return energyTypes?.[value]?.label || value;
                   })
                   .join(", ") || "Select energy type(s)"
               }
@@ -640,15 +642,17 @@ function Component(props: Props) {
           multiple
         >
           {energyTypes &&
-            Object.entries(energyTypes).map(([value, { label }]) => (
-              <MenuItem key={value} value={value}>
-                <ListItemText primary={label} />
-                {currentSearchParams
-                  .get("energies")
-                  ?.split(",")
-                  .includes(value) && <CheckIcon />}
-              </MenuItem>
-            ))}
+            Object.entries(energyTypes)
+              .sort((a, b) => a[1].label.localeCompare(b[1].label))
+              .map(([value, { label }]) => (
+                <MenuItem key={value} value={value}>
+                  <ListItemText primary={label} />
+                  {currentSearchParams
+                    .get("energies")
+                    ?.split(",")
+                    .includes(value) && <CheckIcon />}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -667,7 +671,7 @@ function Component(props: Props) {
               primary={
                 selected
                   .map((value) => {
-                    return operators?.[value]?.label;
+                    return operators?.[value]?.label || value;
                   })
                   .join(", ") || "Select operator(s)"
               }
@@ -676,15 +680,17 @@ function Component(props: Props) {
           multiple
         >
           {operators &&
-            Object.entries(operators).map(([value, { label }]) => (
-              <MenuItem key={value} value={value}>
-                <ListItemText primary={label} />
-                {currentSearchParams
-                  .get("operators")
-                  ?.split(",")
-                  .includes(value) && <CheckIcon />}
-              </MenuItem>
-            ))}
+            Object.entries(operators)
+              .sort((a, b) => a[1].label.localeCompare(b[1].label))
+              .map(([value, { label }]) => (
+                <MenuItem key={value} value={value}>
+                  <ListItemText primary={label} />
+                  {currentSearchParams
+                    .get("operators")
+                    ?.split(",")
+                    .includes(value) && <CheckIcon />}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -703,7 +709,7 @@ function Component(props: Props) {
               primary={
                 selected
                   .map((value) => {
-                    return owners?.[value]?.label;
+                    return owners?.[value]?.label || value;
                   })
                   .join(", ") || "Select owner(s)"
               }
@@ -712,15 +718,17 @@ function Component(props: Props) {
           multiple
         >
           {owners &&
-            Object.entries(owners).map(([value, { label }]) => (
-              <MenuItem key={value} value={value}>
-                <ListItemText primary={label} />
-                {currentSearchParams
-                  .get("owners")
-                  ?.split(",")
-                  .includes(value) && <CheckIcon />}
-              </MenuItem>
-            ))}
+            Object.entries(owners)
+              .sort((a, b) => a[1].label.localeCompare(b[1].label))
+              .map(([value, { label }]) => (
+                <MenuItem key={value} value={value}>
+                  <ListItemText primary={label} />
+                  {currentSearchParams
+                    .get("owners")
+                    ?.split(",")
+                    .includes(value) && <CheckIcon />}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -738,7 +746,7 @@ function Component(props: Props) {
               primary={
                 selected
                   .map((value) => {
-                    return locations?.[value]?.label;
+                    return locations?.[value]?.label || value;
                   })
                   .join(", ") || "Select province(s)"
               }
@@ -748,15 +756,17 @@ function Component(props: Props) {
           label="Select province(s)"
         >
           {locations &&
-            Object.entries(locations).map(([value, { label }]) => (
-              <MenuItem key={value} value={value}>
-                <ListItemText primary={label} />
-                {currentSearchParams
-                  .get("locations")
-                  ?.split(",")
-                  .includes(value) && <CheckIcon />}
-              </MenuItem>
-            ))}
+            Object.entries(locations)
+              .sort((a, b) => a[1].label.localeCompare(b[1].label))
+              .map(([value, { label }]) => (
+                <MenuItem key={value} value={value}>
+                  <ListItemText primary={label} />
+                  {currentSearchParams
+                    .get("locations")
+                    ?.split(",")
+                    .includes(value) && <CheckIcon />}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <FormControl fullWidth>

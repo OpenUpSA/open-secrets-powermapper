@@ -94,7 +94,7 @@ export function PowerStationMarker({
             0,
             currentSearchParams.get("show-by-power") === "true"
               ? -calcPowerStationSize(200, powerStation.powerOutput)
-              : 0,
+              : -4,
           ]}
         >
           <div
