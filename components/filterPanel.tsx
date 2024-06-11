@@ -563,6 +563,7 @@ function Component(props: Props) {
         placeholder="Enter a station name"
         size="small"
         InputProps={{
+          className: "is-padding-0-5em",
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon fontSize="small" />
@@ -575,7 +576,7 @@ function Component(props: Props) {
           Energy type
         </InputLabel>
         <Select
-          size="small"
+          
           labelId="energies-label"
           id="energies"
           label="Energy type"
@@ -597,7 +598,6 @@ function Component(props: Props) {
           Operator
         </InputLabel>
         <Select
-          size="small"
           labelId="operators-label"
           id="operators"
           label="Energy type"
@@ -619,7 +619,6 @@ function Component(props: Props) {
           Owner
         </InputLabel>
         <Select
-          size="small"
           labelId="owners-label"
           id="owners"
           label="Owners"
@@ -641,7 +640,6 @@ function Component(props: Props) {
           Location
         </InputLabel>
         <Select
-          size="small"
           labelId="locations-label"
           id="locations"
           value={currentSearchParams.get("locations")?.split(",") || [""]}
