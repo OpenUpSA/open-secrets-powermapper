@@ -74,6 +74,25 @@
     font-weight: 400;
     line-height: 16.41px;
     text-align: left;
+    margin: 1em 0;
+  }
+
+  .sliderValues {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.41px;
+    color: #1a202799;
+    width: 2em;
+
+    &.first {
+      margin-left: 4px;
+    }
+
+    &.last {
+      text-align: right;
+      margin-right: 4px;
+    }
   }
 }
 

@@ -21,9 +21,6 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
 import EventIcon from "@mui/icons-material/Event";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
-import List from "@mui/material/List";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
@@ -32,6 +29,50 @@ type Props = {
   setFilteredPowerStations: Function;
   filteredPowerStations: PowerStation[];
 };
+
+const StyledSlider = styled(Slider)({
+  color: "#dFdFdF",
+  height: 16,
+  "& .MuiSlider-track": {
+    border: "none",
+    color: "#FFCB14",
+    borderRadius: 0,
+  },
+  "& .MuiSlider-thumb": {
+    height: 44,
+    width: 12,
+    borderRadius: 6,
+    border: "none",
+    backgroundColor: "#FFCB14",
+    borderRight: "solid 4px #fff",
+    borderLeft: "solid 4px #fff",
+    "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+      boxShadow: "inherit",
+    },
+    "&::before": {
+      display: "none",
+    },
+  },
+  "& .MuiSlider-valueLabel": {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: "unset",
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: "50% 50% 50% 0",
+    backgroundColor: "#52af77",
+    transformOrigin: "bottom left",
+    transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
+    "&::before": { display: "none" },
+    "&.MuiSlider-valueLabelOpen": {
+      transform: "translate(50%, -100%) rotate(-45deg) scale(1)",
+    },
+    "& > *": {
+      transform: "rotate(45deg)",
+    },
+  },
+});
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -576,7 +617,6 @@ function Component(props: Props) {
           Energy type
         </InputLabel>
         <Select
-          
           labelId="energies-label"
           id="energies"
           label="Energy type"
@@ -663,21 +703,30 @@ function Component(props: Props) {
             Filter by power output (MW):
           </Typography>
         </Stack>
-        <Slider
-          size="small"
-          id="power-output"
-          value={
-            currentSearchParams.get("power")?.split(",").map(Number) || [
-              powerOutputMarks[0].value,
-              powerOutputMarks[powerOutputMarks.length - 1].value,
-            ]
-          }
-          onChange={handlePowerOutputChange}
-          min={powerOutputValueDefault(powerOutputMarks)[0]}
-          max={powerOutputValueDefault(powerOutputMarks)[1]}
-          step={100}
-          marks={powerOutputMarks}
-        />
+        <Stack alignItems="center" direction="row" gap={2}>
+          <div className="sliderValues first">
+            {currentSearchParams.get("power")?.split(",").map(Number)[0] ||
+              powerOutputMarks[0].value}
+          </div>
+          <StyledSlider
+            size="small"
+            id="power-output"
+            value={
+              currentSearchParams.get("power")?.split(",").map(Number) || [
+                powerOutputMarks[0].value,
+                powerOutputMarks[powerOutputMarks.length - 1].value,
+              ]
+            }
+            onChange={handlePowerOutputChange}
+            min={powerOutputValueDefault(powerOutputMarks)[0]}
+            max={powerOutputValueDefault(powerOutputMarks)[1]}
+            step={100}
+          />
+          <div className="sliderValues last">
+            {currentSearchParams.get("power")?.split(",").map(Number)[1] ||
+              powerOutputMarks[1].value}
+          </div>
+        </Stack>
       </FormControl>
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
@@ -686,21 +735,30 @@ function Component(props: Props) {
             Filter by age:
           </Typography>
         </Stack>
-        <Slider
-          size="small"
-          id="age"
-          value={
-            currentSearchParams.get("age")?.split(",").map(Number) || [
-              ageMarks[0].value,
-              ageMarks[ageMarks.length - 1].value,
-            ]
-          }
-          onChange={handleAgeChange}
-          min={ageValueDefault(ageMarks)[0]}
-          max={ageValueDefault(ageMarks)[1]}
-          step={5}
-          marks={ageMarks}
-        />
+        <Stack alignItems="center" direction="row" gap={2}>
+          <div className="sliderValues first">
+            {currentSearchParams.get("age")?.split(",").map(Number)[0] ||
+              ageMarks[0].value}
+          </div>
+          <StyledSlider
+            size="small"
+            id="age"
+            value={
+              currentSearchParams.get("age")?.split(",").map(Number) || [
+                ageMarks[0].value,
+                ageMarks[ageMarks.length - 1].value,
+              ]
+            }
+            onChange={handleAgeChange}
+            min={ageValueDefault(ageMarks)[0]}
+            max={ageValueDefault(ageMarks)[1]}
+            step={5}
+          />
+          <div className="sliderValues last">
+            {currentSearchParams.get("age")?.split(",").map(Number)[1] ||
+              ageMarks[1].value}
+          </div>
+        </Stack>
       </FormControl>
 
       <FormGroup>
