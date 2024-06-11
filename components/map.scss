@@ -13,6 +13,10 @@
   height: 46px;
   box-sizing: border-box;
 
+  &.noFuelTypes {
+    opacity: 0.5;
+  }
+
   .legendTitle {
     color: #fff;
     margin-right: 0.5em;

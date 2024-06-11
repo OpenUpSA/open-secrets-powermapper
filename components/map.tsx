@@ -110,8 +110,14 @@ function Component({ powerStations }: Props) {
         </MapControl>
 
         <MapControl position={ControlPosition.LEFT_BOTTOM}>
-          <div className="fuelTypeLegend">
-            <div className="legendTitle">Legend</div>
+          <div
+            className={`fuelTypeLegend ${
+              fuelTypes.length === 0 ? "noFuelTypes" : ""
+            }`}
+          >
+            <div className="legendTitle">
+              {fuelTypes.length === 0 ? "No matching power stations" : "Legend"}
+            </div>
             {fuelTypes.map((fuelType) => (
               <div className="legendItem" key={fuelType.shorthand}>
                 <div
