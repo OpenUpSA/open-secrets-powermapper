@@ -12,7 +12,9 @@ import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
+import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputAdornment from "@mui/material/InputAdornment";
 import Slider from "@mui/material/Slider";
@@ -22,6 +24,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
 import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
 
@@ -622,13 +625,28 @@ function Component(props: Props) {
           label="Energy type"
           value={currentSearchParams.get("energies")?.split(",") || [""]}
           onChange={handleEnergiesChange}
+          renderValue={(selected) => (
+            <ListItemText
+              className="overflowElipsisHidden"
+              primary={
+                selected
+                  .map((value) => {
+                    return energyTypes?.[value]?.label;
+                  })
+                  .join(", ") || "Select energy type(s)"
+              }
+            />
+          )}
           multiple
         >
-          <MenuItem value={""}>Select energy type(s)</MenuItem>
           {energyTypes &&
             Object.entries(energyTypes).map(([value, { label }]) => (
               <MenuItem key={value} value={value}>
-                {label}
+                <ListItemText primary={label} />
+                {currentSearchParams
+                  .get("energies")
+                  ?.split(",")
+                  .includes(value) && <CheckIcon />}
               </MenuItem>
             ))}
         </Select>
@@ -640,16 +658,31 @@ function Component(props: Props) {
         <Select
           labelId="operators-label"
           id="operators"
-          label="Energy type"
+          label="Operators"
           value={currentSearchParams.get("operators")?.split(",") || [""]}
           onChange={handleOperatorsChange}
+          renderValue={(selected) => (
+            <ListItemText
+              className="overflowElipsisHidden"
+              primary={
+                selected
+                  .map((value) => {
+                    return operators?.[value]?.label;
+                  })
+                  .join(", ") || "Select operator(s)"
+              }
+            />
+          )}
           multiple
         >
-          <MenuItem value={""}>Select operator(s)</MenuItem>
           {operators &&
             Object.entries(operators).map(([value, { label }]) => (
               <MenuItem key={value} value={value}>
-                {label}
+                <ListItemText primary={label} />
+                {currentSearchParams
+                  .get("operators")
+                  ?.split(",")
+                  .includes(value) && <CheckIcon />}
               </MenuItem>
             ))}
         </Select>
@@ -664,13 +697,28 @@ function Component(props: Props) {
           label="Owners"
           value={currentSearchParams.get("owners")?.split(",") || [""]}
           onChange={handleOwnersChange}
+          renderValue={(selected) => (
+            <ListItemText
+              className="overflowElipsisHidden"
+              primary={
+                selected
+                  .map((value) => {
+                    return owners?.[value]?.label;
+                  })
+                  .join(", ") || "Select owner(s)"
+              }
+            />
+          )}
           multiple
         >
-          <MenuItem value={""}>Select owner(s)</MenuItem>
           {owners &&
             Object.entries(owners).map(([value, { label }]) => (
               <MenuItem key={value} value={value}>
-                {label}
+                <ListItemText primary={label} />
+                {currentSearchParams
+                  .get("owners")
+                  ?.split(",")
+                  .includes(value) && <CheckIcon />}
               </MenuItem>
             ))}
         </Select>
@@ -684,14 +732,29 @@ function Component(props: Props) {
           id="locations"
           value={currentSearchParams.get("locations")?.split(",") || [""]}
           onChange={handleLocationsChange}
+          renderValue={(selected) => (
+            <ListItemText
+              className="overflowElipsisHidden"
+              primary={
+                selected
+                  .map((value) => {
+                    return locations?.[value]?.label;
+                  })
+                  .join(", ") || "Select province(s)"
+              }
+            />
+          )}
           multiple
           label="Select province(s)"
         >
-          <MenuItem value={""}>Select province(s)</MenuItem>
           {locations &&
             Object.entries(locations).map(([value, { label }]) => (
               <MenuItem key={value} value={value}>
-                {label}
+                <ListItemText primary={label} />
+                {currentSearchParams
+                  .get("locations")
+                  ?.split(",")
+                  .includes(value) && <CheckIcon />}
               </MenuItem>
             ))}
         </Select>
