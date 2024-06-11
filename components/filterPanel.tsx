@@ -659,7 +659,7 @@ function Component(props: Props) {
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
           <BoltIcon fontSize="small" />
-          <Typography fontSize="small" gutterBottom>
+          <Typography className="sliderTitle" fontSize="small">
             Filter by power output (MW):
           </Typography>
         </Stack>
@@ -682,7 +682,7 @@ function Component(props: Props) {
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
           <EventIcon fontSize="small" />
-          <Typography fontSize="small" gutterBottom>
+          <Typography className="sliderTitle" fontSize="small">
             Filter by age:
           </Typography>
         </Stack>
