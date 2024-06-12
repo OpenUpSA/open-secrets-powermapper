@@ -30,7 +30,12 @@ export default function Page() {
   return (
     <>
       <Grid container spacing={0}>
-        <Grid xs={currentSearchParams.get("full") ? 0 : 2.5}>
+        <Grid
+          xs={2.5}
+          sx={{
+            display: currentSearchParams.get("full") ? "none" : "block",
+          }}
+        >
           <FilterPanel
             setFilteredPowerStations={setFilteredPowerStations}
             filteredPowerStations={filteredPowerStations}
