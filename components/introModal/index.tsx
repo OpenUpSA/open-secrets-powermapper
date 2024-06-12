@@ -1,10 +1,6 @@
 import "./index.scss";
 import intro from "@/public/images/intro.png";
 
-import { getCookie, setCookie } from "cookies-next";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-
 import { Modal } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -15,26 +11,16 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-export function IntroModal() {
-  const currentSearchParams = useSearchParams();
-  const seenIntroModal = getCookie("seenIntroModal");
+type Props = {
+  introModalOpen: boolean;
+  closeIntroModal: Function;
+};
 
-  console.log(seenIntroModal);
-
-  // If any URL params are set do not show modal on load
-  const [modalOpen, setModalOpen] = useState(
-    !seenIntroModal && currentSearchParams.toString() === ""
-  );
-
-  const closeModal = () => {
-    setCookie("seenIntroModal", "true");
-    setModalOpen(false);
-  };
-
+export function IntroModal({ introModalOpen, closeIntroModal }: Props) {
   return (
     <Modal
-      open={modalOpen}
-      onClose={closeModal}
+      open={introModalOpen}
+      onClose={() => closeIntroModal()}
       style={{
         display: "flex",
         alignItems: "center",
@@ -74,7 +60,7 @@ export function IntroModal() {
             className="primary"
             size="small"
             variant="contained"
-            onClick={closeModal}
+            onClick={() => closeIntroModal()}
           >
             Use the tool
           </Button>
@@ -97,7 +83,7 @@ export function IntroModal() {
             </svg>
             <div>Download the report</div>
           </a>
-          <button className="closeModal" onClick={closeModal}>
+          <button className="closeModal" onClick={() => closeIntroModal()}>
             <CloseIcon fontSize="medium" />
           </button>
         </CardActions>

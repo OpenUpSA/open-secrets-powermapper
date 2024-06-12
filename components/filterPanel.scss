@@ -99,6 +99,23 @@
       margin-right: 4px;
     }
   }
+
+  .aboutThisTool {
+    color: #48454f;
+    text-transform: none;
+    text-decoration: underline;
+    text-align: left;
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    font-weight: 400;
+    cursor: pointer;
+
+    &:hover {
+      color: #000;
+      text-decoration: underline;
+    }
+  }
 }
 
 .is-padding-0-5em {
