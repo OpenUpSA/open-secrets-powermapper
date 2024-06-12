@@ -26,6 +26,7 @@ import { Typography } from "@mui/material";
 import Image from "next/image";
 import LinearProgress from "@mui/material/LinearProgress";
 import CloseIcon from "@mui/icons-material/Close";
+import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 
 import logo from "@/public/images/logo.png";
 
@@ -46,11 +47,13 @@ const StyledSwitch = styled(Switch)(() => ({
 
 type Props = {
   powerStations: PowerStation[];
+  panelOpen: boolean;
+  setPanelOpen: Function;
 };
 
 const defaultCenter = { lat: -29.01886710220426, lng: 26.096035496567033 };
 
-function Component({ powerStations }: Props) {
+function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
   const currentSearchParams = useSearchParams();
   const [center, setCenter] = useState({
     lat: Number(currentSearchParams.get("lat")) || defaultCenter.lat,
@@ -210,6 +213,12 @@ function Component({ powerStations }: Props) {
             width={215}
             height={45}
           />
+          <button
+            className="toggleFilterPanel"
+            onClick={() => setPanelOpen(!panelOpen)}
+          >
+            <MenuOpenOutlinedIcon fontSize="small" />
+          </button>
         </MapControl>
 
         <MapControl position={ControlPosition.LEFT_BOTTOM}>
@@ -219,7 +228,7 @@ function Component({ powerStations }: Props) {
             }`}
           >
             <FormGroup className="showBySize">
-              <FormControlLabel                
+              <FormControlLabel
                 label={
                   <Typography fontSize={12}>
                     Size points by power output

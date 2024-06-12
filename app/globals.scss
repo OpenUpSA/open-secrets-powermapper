@@ -10,14 +10,97 @@ html {
   background: #555555;
   overflow: hidden;
   font-family: roboto;
-}
-
-.mapContainer {
-  height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
 .filterPanel {
   background-color: #ffffff;
   padding: 1em;
   height: 100vh;
+}
+
+.flexGrid {
+  display: flex;
+
+  @media (max-width: 1325px) {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  .filterPanel {
+    flex: 1;
+    @media (max-width: 1325px) {
+      flex: unset;
+      position: fixed;
+      width: 350px;
+      z-index: 1;
+
+      &.closed {
+        left: -1000px;
+      }
+    }
+
+    .toggleFilterPanel {
+      cursor: pointer;
+      color: #333;
+      background: #eee;
+      border-radius: 8px;
+      padding: 0;
+      margin: 0;
+      display: none;
+      width: 34px;
+      height: 34px;
+      border: none;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        color: #000;
+        background: #ddd;
+      }
+
+      @media (max-width: 1325px) {
+        display: flex;
+      }
+    }
+  }
+
+  .mapContainer {
+    flex: 4;
+
+    .toggleFilterPanel {
+      display: none;
+    }
+
+    @media (max-width: 1325px) {
+      height: 100%;
+      width: 100%;
+      flex: unset;
+
+      .toggleFilterPanel {
+        cursor: pointer;
+        color: #ccc;
+        background: transparent;
+        border-radius: 8px;
+        padding: 0;
+        margin: 0;
+        display: block;
+        width: 34px;
+        height: 34px;
+        border: none;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        position: absolute;
+        top: 28px;
+        left: 5px;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
 }

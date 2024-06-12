@@ -25,7 +25,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import PersonIcon from "@mui/icons-material/Person";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import ExploreIcon from "@mui/icons-material/Explore";
-import InfoIcon from "@mui/icons-material/Info";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
 import Button from "@mui/material/Button";
@@ -34,6 +35,8 @@ type Props = {
   setIntroModalOpen: Function;
   setFilteredPowerStations: Function;
   filteredPowerStations: PowerStation[];
+  panelOpen: boolean;
+  setPanelOpen: Function;
 };
 
 const StyledSlider = styled(Slider)({
@@ -92,7 +95,12 @@ function Component(props: Props) {
   const currentSearchParams = useSearchParams();
 
   const initialized = useRef(false);
-  const { setFilteredPowerStations, setIntroModalOpen } = props;
+  const {
+    setFilteredPowerStations,
+    setIntroModalOpen,
+    setPanelOpen,
+    panelOpen,
+  } = props;
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
   const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
   const [operators, setOperators] = useState<ItemLabel>();
@@ -520,7 +528,7 @@ function Component(props: Props) {
   };
 
   return (
-    <Stack spacing={2} className="filterPanel">
+    <Stack spacing={2} className={`filterPanel ${panelOpen ? "" : "closed"}`}>
       <Stack alignItems="center" direction="row" gap={2}>
         <FilterAltOutlinedIcon color="primary" />
         <Typography
@@ -532,6 +540,20 @@ function Component(props: Props) {
         >
           Filter and search
         </Typography>
+        <button
+          onClick={() => setIntroModalOpen(true)}
+          className="aboutThisToolMobile"
+        >
+          <Stack alignItems="center" direction="row" gap={1}>
+            <InfoOutlinedIcon fontSize="small" />
+          </Stack>
+        </button>
+        <button
+          onClick={() => setPanelOpen(!panelOpen)}
+          className="toggleFilterPanel"
+        >
+          <CloseIcon fontSize="small" />
+        </button>
       </Stack>
       <Divider />
       <Stack alignItems="center" direction="row" gap={2}>

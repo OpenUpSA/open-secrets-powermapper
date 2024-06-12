@@ -126,6 +126,35 @@
       color: #000;
       text-decoration: underline;
     }
+
+    @media (max-width: 1325px) {
+      display: none;
+    }
+  }
+
+  .aboutThisToolMobile {
+    cursor: pointer;
+    color: #333;
+    background: #eee;
+    border-radius: 8px;
+    padding: 0;
+    margin: 0;
+    display: none;
+    width: 34px;
+    height: 34px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+
+    &:hover {
+      color: #000;
+      background: #ddd;
+    }
+
+    @media (max-width: 1325px) {
+      display: flex;
+    }
   }
 }
 
