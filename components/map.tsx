@@ -9,10 +9,10 @@ import {
 } from "@vis.gl/react-google-maps";
 import { Entity, PowerStation } from "@/types";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { styled } from "@mui/material/styles";
 
 import { PowerStationMarker } from "@/components/powerStationMarker/index";
-import { useSearchParams } from "next/navigation";
 
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -48,15 +48,23 @@ type Props = {
   powerStations: PowerStation[];
 };
 
+const defaultCenter = { lat: -29.01886710220426, lng: 26.096035496567033 };
+
 function Component({ powerStations }: Props) {
-  const defaultCenter = { lat: -29.01886710220426, lng: 26.096035496567033 };
-  const [center, setCenter] = useState(defaultCenter);
   const currentSearchParams = useSearchParams();
+  const [center, setCenter] = useState({
+    lat: Number(currentSearchParams.get("lat")) || defaultCenter.lat,
+    lng: Number(currentSearchParams.get("lng")) || defaultCenter.lng,
+  });
   const [sidePanelEntity, setSidePanelEntity] = useState<Entity | null>(null);
   const [sidePanelEntityInfo, setSidePanelEntityInfo] = useState<Entity | null>(
     null
   );
   const [fuelTypes, setFuelTypes] = useState<PowerStation["fuelType"][]>([]);
+  const [mapTypeId, setMapTypeId] = useState(
+    currentSearchParams.get("map") || "roadmap"
+  );
+  const [zoom, setZoom] = useState(currentSearchParams.get("zoom") || 6);
 
   const closeSidePanel = () => {
     setSidePanelEntity(null);
@@ -104,17 +112,48 @@ function Component({ powerStations }: Props) {
     setFuelTypes(fuelTypes);
   }, [powerStations]);
 
+  const setZoomAndCenterParams = (event: MapCameraChangedEvent) => {
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    const newCenter = event.map.getCenter();
+    if (newCenter) {
+      setCenter({ lat: newCenter.lat(), lng: newCenter.lng() });
+      newParams.set("lat", newCenter.lat().toString());
+      newParams.set("lng", newCenter.lng().toString());
+    }
+
+    const newZoom = event.map.getZoom();
+    if (newZoom) {
+      newParams.set("zoom", newZoom.toString());
+      setZoom(newZoom);
+    }
+    window.history.pushState(null, "", `?${newParams.toString()}`);
+  };
+
   const centerChanged = (event: MapCameraChangedEvent) => {
-    setCenter(event.detail.center);
+    setZoomAndCenterParams(event);
+  };
+
+  const zoomChanged = (event: any) => {
+    setZoomAndCenterParams(event);
+  };
+
+  const mapTypeIdChanged = (event: any) => {
+    if (event.map.mapTypeId) {
+      const newParams = new URLSearchParams(currentSearchParams.toString());
+      newParams.set("map", event.map.mapTypeId);
+      setMapTypeId(event.detail.mapTypeId);
+      window.history.pushState(null, "", `?${newParams.toString()}`);
+    }
   };
 
   return (
     <APIProvider apiKey="AIzaSyAYcsm0xB834bBAKu0GGjCu2Xzp2qLWx0o">
       <Map
-        defaultCenter={defaultCenter}
+        defaultCenter={center}
         defaultZoom={6}
+        zoom={Number(zoom)}
         mapId="2090f822becfb038"
-        center={center}
+        mapTypeId={mapTypeId}
         onCenterChanged={centerChanged}
         streetViewControl={false}
         fullscreenControl={false}
@@ -126,6 +165,8 @@ function Component({ powerStations }: Props) {
         zoomControlOptions={{
           position: ControlPosition.LEFT_BOTTOM,
         }}
+        onMapTypeIdChanged={mapTypeIdChanged}
+        onZoomChanged={zoomChanged}
       >
         {powerStations.map((powerStation) => (
           <PowerStationMarker
