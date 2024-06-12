@@ -18,7 +18,7 @@ import Slider from "@mui/material/Slider";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
+import SpeedIcon from "@mui/icons-material/Speed";
 import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
@@ -563,11 +563,11 @@ function Component(props: Props) {
           >
             <Stack alignItems="center" direction="row" gap={0.5}>
               {filter[0] === "name" && <SearchIcon fontSize="small" />}
-              {filter[0] === "energy" && <AcUnitIcon fontSize="small" />}
+              {filter[0] === "energy" && <BoltIcon fontSize="small" />}
               {filter[0] === "operator" && <EngineeringIcon fontSize="small" />}
               {filter[0] === "owner" && <PersonIcon fontSize="small" />}
               {filter[0] === "location" && <ExploreIcon fontSize="small" />}
-              {filter[0] === "power" && <BoltIcon fontSize="small" />}
+              {filter[0] === "power" && <SpeedIcon fontSize="small" />}
               {filter[0] === "age" && <EventIcon fontSize="small" />}
               <span className="chipTitle">
                 {truncateString(getLabelForFilter(filter), 35)}
@@ -621,7 +621,7 @@ function Component(props: Props) {
           onChange={handleEnergiesChange}
           renderValue={(selected) => (
             <Stack alignItems="center" direction="row" gap={1}>
-              <AcUnitIcon fontSize="small" />
+              <BoltIcon fontSize="small" />
               <ListItemText
                 className="overflowElipsisHidden"
                 primary={
@@ -778,7 +778,7 @@ function Component(props: Props) {
       </FormControl>
       <FormControl fullWidth>
         <Stack alignItems="center" direction="row" gap={2}>
-          <BoltIcon fontSize="small" />
+          <SpeedIcon fontSize="small" />
           <Typography className="sliderTitle" fontSize="small">
             Filter by power output (MW):
           </Typography>
