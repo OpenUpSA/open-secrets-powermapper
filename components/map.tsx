@@ -118,7 +118,11 @@ function Component({ powerStations }: Props) {
         onCenterChanged={centerChanged}
         streetViewControl={false}
         fullscreenControl={false}
-        mapTypeControl={false}
+        mapTypeControl={true}
+        mapTypeControlOptions={{
+          position: ControlPosition.TOP_RIGHT,
+          mapTypeIds: ["roadmap", "satellite"],
+        }}
         zoomControlOptions={{
           position: ControlPosition.LEFT_BOTTOM,
         }}
@@ -136,8 +140,8 @@ function Component({ powerStations }: Props) {
             src={logo}
             alt="logo"
             className="logo"
-            width={204}
-            height={34}
+            width={215}
+            height={45}
           />
         </MapControl>
 
