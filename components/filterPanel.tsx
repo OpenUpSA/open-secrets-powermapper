@@ -1,5 +1,5 @@
 import "./filterPanel.scss";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -9,9 +9,6 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 
 import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -21,12 +18,12 @@ import Slider from "@mui/material/Slider";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
-import AcUnitIcon from '@mui/icons-material/AcUnit';
+import AcUnitIcon from "@mui/icons-material/AcUnit";
 import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-import PersonIcon from '@mui/icons-material/Person';
-import EngineeringIcon from '@mui/icons-material/Engineering';
+import PersonIcon from "@mui/icons-material/Person";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 import ExploreIcon from "@mui/icons-material/Explore";
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
@@ -80,10 +77,6 @@ const StyledSlider = styled(Slider)({
   },
 });
 
-const ListItem = styled("li")(({ theme }) => ({
-  margin: theme.spacing(0.5),
-}));
-
 function truncateString(str: string, num: number) {
   if (str.length > num) {
     return str.slice(0, num) + "...";
@@ -93,12 +86,10 @@ function truncateString(str: string, num: number) {
 }
 
 function Component(props: Props) {
-  const initialized = useRef(false);
-  const { setFilteredPowerStations, filteredPowerStations } = props;
-
-  const router = useRouter();
   const currentSearchParams = useSearchParams();
 
+  const initialized = useRef(false);
+  const { setFilteredPowerStations } = props;
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
   const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
   const [operators, setOperators] = useState<ItemLabel>();
@@ -225,19 +216,6 @@ function Component(props: Props) {
       newParams.delete("power");
     } else {
       newParams.set("power", String(newValue));
-    }
-    window.history.pushState(null, "", `?${newParams.toString()}`);
-  };
-
-  const handleShowByPowerChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    const newParams = new URLSearchParams(currentSearchParams.toString());
-    if (checked) {
-      newParams.set("show-by-power", "true");
-    } else {
-      newParams.delete("show-by-power");
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
@@ -859,19 +837,6 @@ function Component(props: Props) {
           </div>
         </Stack>
       </FormControl>
-
-      <FormGroup>
-        <FormControlLabel
-          label={<Typography fontSize={12}>Show by power output</Typography>}
-          control={
-            <Switch
-              size="small"
-              checked={currentSearchParams.get("show-by-power") === "true"}
-              onChange={handleShowByPowerChange}
-            />
-          }
-        />
-      </FormGroup>
     </Stack>
   );
 }

@@ -9,14 +9,18 @@ import {
 } from "@vis.gl/react-google-maps";
 import { Entity, PowerStation } from "@/types";
 import { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
 
 import { PowerStationMarker } from "@/components/powerStationMarker/index";
 import { useSearchParams } from "next/navigation";
 
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+
 import SVG from "react-inlinesvg";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { Typography } from "@mui/material";
 import Image from "next/image";
@@ -24,6 +28,21 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CloseIcon from "@mui/icons-material/Close";
 
 import logo from "@/public/images/logo.png";
+
+const StyledSwitch = styled(Switch)(() => ({
+  "& .MuiSwitch-switchBase": {
+    color: "#80660a",
+  },
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#FFCB14",
+  },
+  "& .MuiSwitch-track": {
+    backgroundColor: "#999",
+  },
+  "& .MuiSwitch-track.Mui-checked": {
+    backgroundColor: "#FFCB14",
+  },
+}));
 
 type Props = {
   powerStations: PowerStation[];
@@ -41,6 +60,19 @@ function Component({ powerStations }: Props) {
 
   const closeSidePanel = () => {
     setSidePanelEntity(null);
+  };
+
+  const handleShowByPowerChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    if (checked) {
+      newParams.set("show-by-power", "true");
+    } else {
+      newParams.delete("show-by-power");
+    }
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   useEffect(() => {
@@ -115,6 +147,23 @@ function Component({ powerStations }: Props) {
               fuelTypes.length === 0 ? "noFuelTypes" : ""
             }`}
           >
+            <FormGroup>
+              <FormControlLabel
+                label={
+                  <Typography fontSize={12}>Show by power output</Typography>
+                }
+                labelPlacement="start"
+                control={
+                  <StyledSwitch
+                    size="small"
+                    checked={
+                      currentSearchParams.get("show-by-power") === "true"
+                    }
+                    onChange={handleShowByPowerChange}
+                  />
+                }
+              />
+            </FormGroup>
             <div className="legendTitle">
               {fuelTypes.length === 0 ? "No matching power stations" : "Legend"}
             </div>
