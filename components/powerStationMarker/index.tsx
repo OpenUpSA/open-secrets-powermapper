@@ -55,7 +55,7 @@ export function PowerStationMarker({
   };
 
   const calcPowerStationSize = (factor: number, powerOutput?: number) => {
-    return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 5), 100);
+    return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 8), 100);
   };
 
   return (
@@ -66,7 +66,9 @@ export function PowerStationMarker({
         ref={advandedMarkerRef}
       >
         <div
-          className="powerStationMarker"
+          className={`powerStationMarker ${
+            currentSearchParams.get("show-by-power") === "true" && "byPower"
+          }`}
           onMouseOver={showHoverInfoWindow}
           onMouseOut={hideHoverInfoWindow}
           style={{
