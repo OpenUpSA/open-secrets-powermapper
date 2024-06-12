@@ -12,7 +12,6 @@ import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import OutlinedInput from "@mui/material/OutlinedInput";
 
 import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -22,9 +21,13 @@ import Slider from "@mui/material/Slider";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
+import AcUnitIcon from '@mui/icons-material/AcUnit';
 import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import PersonIcon from '@mui/icons-material/Person';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import ExploreIcon from "@mui/icons-material/Explore";
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
 
@@ -380,9 +383,9 @@ function Component(props: Props) {
           ? locations[filter[1] as keyof typeof locations].label
           : filter[1];
       case "power":
-        return `Output: ${filter[1]} MW`;
+        return `${filter[1]} MW`;
       case "age":
-        return `Age: ${filter[1]} years`;
+        return `${filter[1]} years`;
       default:
         return filter[1];
     }
@@ -578,6 +581,13 @@ function Component(props: Props) {
             }}
           >
             <Stack alignItems="center" direction="row" gap={0.5}>
+              {filter[0] === "name" && <SearchIcon fontSize="small" />}
+              {filter[0] === "energy" && <AcUnitIcon fontSize="small" />}
+              {filter[0] === "operator" && <EngineeringIcon fontSize="small" />}
+              {filter[0] === "owner" && <PersonIcon fontSize="small" />}
+              {filter[0] === "location" && <ExploreIcon fontSize="small" />}
+              {filter[0] === "power" && <BoltIcon fontSize="small" />}
+              {filter[0] === "age" && <EventIcon fontSize="small" />}
               <span className="chipTitle">
                 {truncateString(getLabelForFilter(filter), 35)}
               </span>
@@ -586,7 +596,7 @@ function Component(props: Props) {
           </div>
         ))}
         {chipFilters().length === 0 && (
-          <div className="chipFilter">
+          <div className="chipFilter noFiltersApplied">
             <Stack alignItems="center" direction="row" gap={0.5}>
               <span className="chipTitle">No filters applied</span>
             </Stack>
@@ -622,22 +632,26 @@ function Component(props: Props) {
           Energy type
         </InputLabel>
         <Select
+          size="small"
           labelId="energies-label"
           id="energies"
           label="Energy type"
           value={currentSearchParams.get("energies")?.split(",") || [""]}
           onChange={handleEnergiesChange}
           renderValue={(selected) => (
-            <ListItemText
-              className="overflowElipsisHidden"
-              primary={
-                selected
-                  .map((value) => {
-                    return energyTypes?.[value]?.label || value;
-                  })
-                  .join(", ") || "Select energy type(s)"
-              }
-            />
+            <Stack alignItems="center" direction="row" gap={1}>
+              <AcUnitIcon fontSize="small" />
+              <ListItemText
+                className="overflowElipsisHidden"
+                primary={
+                  selected
+                    .map((value) => {
+                      return energyTypes?.[value]?.label || value;
+                    })
+                    .join(", ") || "Select energy type(s)"
+                }
+              />
+            </Stack>
           )}
           multiple
         >
@@ -660,22 +674,26 @@ function Component(props: Props) {
           Operator
         </InputLabel>
         <Select
+          size="small"
           labelId="operators-label"
           id="operators"
           label="Operators"
           value={currentSearchParams.get("operators")?.split(",") || [""]}
           onChange={handleOperatorsChange}
           renderValue={(selected) => (
-            <ListItemText
-              className="overflowElipsisHidden"
-              primary={
-                selected
-                  .map((value) => {
-                    return operators?.[value]?.label || value;
-                  })
-                  .join(", ") || "Select operator(s)"
-              }
-            />
+            <Stack alignItems="center" direction="row" gap={2}>
+              <EngineeringIcon fontSize="small" />
+              <ListItemText
+                className="overflowElipsisHidden"
+                primary={
+                  selected
+                    .map((value) => {
+                      return operators?.[value]?.label || value;
+                    })
+                    .join(", ") || "Select operator(s)"
+                }
+              />
+            </Stack>
           )}
           multiple
         >
@@ -698,22 +716,26 @@ function Component(props: Props) {
           Owner
         </InputLabel>
         <Select
+          size="small"
           labelId="owners-label"
           id="owners"
           label="Owners"
           value={currentSearchParams.get("owners")?.split(",") || [""]}
           onChange={handleOwnersChange}
           renderValue={(selected) => (
-            <ListItemText
-              className="overflowElipsisHidden"
-              primary={
-                selected
-                  .map((value) => {
-                    return owners?.[value]?.label || value;
-                  })
-                  .join(", ") || "Select owner(s)"
-              }
-            />
+            <Stack alignItems="center" direction="row" gap={2}>
+              <PersonIcon fontSize="small" />
+              <ListItemText
+                className="overflowElipsisHidden"
+                primary={
+                  selected
+                    .map((value) => {
+                      return owners?.[value]?.label || value;
+                    })
+                    .join(", ") || "Select owner(s)"
+                }
+              />
+            </Stack>
           )}
           multiple
         >
@@ -736,21 +758,25 @@ function Component(props: Props) {
           Location
         </InputLabel>
         <Select
+          size="small"
           labelId="locations-label"
           id="locations"
           value={currentSearchParams.get("locations")?.split(",") || [""]}
           onChange={handleLocationsChange}
           renderValue={(selected) => (
-            <ListItemText
-              className="overflowElipsisHidden"
-              primary={
-                selected
-                  .map((value) => {
-                    return locations?.[value]?.label || value;
-                  })
-                  .join(", ") || "Select province(s)"
-              }
-            />
+            <Stack alignItems="center" direction="row" gap={2}>
+              <ExploreIcon fontSize="small" />
+              <ListItemText
+                className="overflowElipsisHidden"
+                primary={
+                  selected
+                    .map((value) => {
+                      return locations?.[value]?.label || value;
+                    })
+                    .join(", ") || "Select province(s)"
+                }
+              />
+            </Stack>
           )}
           multiple
           label="Select province(s)"
