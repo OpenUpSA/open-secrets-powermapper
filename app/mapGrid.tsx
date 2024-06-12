@@ -30,14 +30,17 @@ export default function Page() {
   return (
     <>
       <Grid container spacing={0}>
-        <Grid xs={2.5}>
+        <Grid xs={currentSearchParams.get("full") ? 0 : 2.5}>
           <FilterPanel
             setFilteredPowerStations={setFilteredPowerStations}
             filteredPowerStations={filteredPowerStations}
             setIntroModalOpen={setIntroModalOpen}
           />
         </Grid>
-        <Grid xs={9.5} className="mapContainer">
+        <Grid
+          xs={currentSearchParams.get("full") ? 12 : 9.5}
+          className="mapContainer"
+        >
           <Map powerStations={filteredPowerStations} />
         </Grid>
       </Grid>
