@@ -31,7 +31,8 @@ export default function Page() {
     <>
       <Grid container spacing={0}>
         <Grid
-          xs={2.5}
+          md={2.5}
+          xs={4}
           sx={{
             display: currentSearchParams.get("full") ? "none" : "block",
           }}
@@ -43,7 +44,10 @@ export default function Page() {
           />
         </Grid>
         <Grid
-          xs={currentSearchParams.get("full") ? 12 : 9.5}
+          md={currentSearchParams.get("full") ? 12 : 9.5}
+          xs={
+            currentSearchParams.get("full") ? 12 : 8
+          }
           className="mapContainer"
         >
           <Map powerStations={filteredPowerStations} />

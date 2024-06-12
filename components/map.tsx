@@ -218,8 +218,8 @@ function Component({ powerStations }: Props) {
               fuelTypes.length === 0 ? "noFuelTypes" : ""
             }`}
           >
-            <FormGroup>
-              <FormControlLabel
+            <FormGroup className="showBySize">
+              <FormControlLabel                
                 label={
                   <Typography fontSize={12}>
                     Size points by power output
@@ -228,6 +228,7 @@ function Component({ powerStations }: Props) {
                 labelPlacement="start"
                 control={
                   <StyledSwitch
+                    className="showBySizeSwitch"
                     size="small"
                     checked={
                       currentSearchParams.get("show-by-power") === "true"
