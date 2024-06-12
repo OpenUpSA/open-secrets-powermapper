@@ -14,12 +14,12 @@ import Image from "next/image";
 
 type Props = {
   powerStation: PowerStation;
-  setSidePanelEntity: Function;
+  showSidePanelEntity: Function;
 };
 
 export function PowerStationMarker({
   powerStation,
-  setSidePanelEntity,
+  showSidePanelEntity,
 }: Props) {
   const [advandedMarkerRef, advancedMarker] = useAdvancedMarkerRef();
   const currentSearchParams = useSearchParams();
@@ -215,7 +215,7 @@ export function PowerStationMarker({
                     <td>
                       <a
                         onClick={() =>
-                          setSidePanelEntity(powerStation.operator)
+                          showSidePanelEntity(powerStation.operator?.id)
                         }
                         className="entityButton"
                       >
@@ -229,7 +229,9 @@ export function PowerStationMarker({
                     <td>Owner:</td>
                     <td>
                       <a
-                        onClick={() => setSidePanelEntity(powerStation.owner)}
+                        onClick={() =>
+                          showSidePanelEntity(powerStation.owner?.id)
+                        }
                         className="entityButton"
                       >
                         {powerStation.owner.name}

@@ -56,7 +56,17 @@ function Component({ powerStations }: Props) {
     lat: Number(currentSearchParams.get("lat")) || defaultCenter.lat,
     lng: Number(currentSearchParams.get("lng")) || defaultCenter.lng,
   });
-  const [sidePanelEntity, setSidePanelEntity] = useState<Entity | null>(null);
+
+  // Get all entities from powerStation.owner and powerStation.operator
+  const entities = powerStations
+    .map((powerStation) => [powerStation.owner, powerStation.operator])
+    .flat()
+    .filter((entity) => entity !== null)
+    .filter((entity) => entity !== undefined) as Entity[];
+
+  const [sidePanelEntity, setSidePanelEntity] = useState<string | null>(
+    currentSearchParams.get("eip") || null
+  );
   const [sidePanelEntityInfo, setSidePanelEntityInfo] = useState<Entity | null>(
     null
   );
@@ -68,7 +78,37 @@ function Component({ powerStations }: Props) {
 
   const closeSidePanel = () => {
     setSidePanelEntity(null);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    newParams.delete("eip");
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
+
+  const showSidePanelEntity = (id: string) => {
+    setSidePanelEntity(id);
+    async function getData() {
+      if (sidePanelEntity) {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_URL}/api/entity-info?id=${sidePanelEntity}`
+        );
+        const entityInfoData = await res.json();
+        setSidePanelEntityInfo(entityInfoData);
+      }
+    }
+    setSidePanelEntityInfo(null);
+    getData();
+
+    if (entities.length > 0) {
+      const newParams = new URLSearchParams(currentSearchParams.toString());
+      newParams.set("eip", id || "");
+      window.history.pushState(null, "", `?${newParams.toString()}`);
+    }
+  };
+
+  useEffect(() => {
+    if (sidePanelEntity) {
+      showSidePanelEntity(sidePanelEntity);
+    }
+  }, [sidePanelEntity]);
 
   const handleShowByPowerChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -82,20 +122,6 @@ function Component({ powerStations }: Props) {
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
-
-  useEffect(() => {
-    async function getData() {
-      if (sidePanelEntity) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}/api/entity-info?id=${sidePanelEntity.id}`
-        );
-        const entityInfoData = await res.json();
-        setSidePanelEntityInfo(entityInfoData);
-      }
-    }
-    setSidePanelEntityInfo(null);
-    getData();
-  }, [sidePanelEntity]);
 
   useEffect(() => {
     const fuelTypes = powerStations
@@ -172,7 +198,7 @@ function Component({ powerStations }: Props) {
           <PowerStationMarker
             key={powerStation.id}
             powerStation={powerStation}
-            setSidePanelEntity={setSidePanelEntity}
+            showSidePanelEntity={showSidePanelEntity}
           />
         ))}
 
@@ -195,7 +221,9 @@ function Component({ powerStations }: Props) {
             <FormGroup>
               <FormControlLabel
                 label={
-                  <Typography fontSize={12}>Size points by power output</Typography>
+                  <Typography fontSize={12}>
+                    Size points by power output
+                  </Typography>
                 }
                 labelPlacement="start"
                 control={
@@ -209,7 +237,11 @@ function Component({ powerStations }: Props) {
                 }
               />
             </FormGroup>
-            <Divider className="verticalDivider" orientation="vertical" flexItem />
+            <Divider
+              className="verticalDivider"
+              orientation="vertical"
+              flexItem
+            />
             <div className="legendTitle">
               {fuelTypes.length === 0
                 ? "No matching power stations"
@@ -244,7 +276,7 @@ function Component({ powerStations }: Props) {
             {sidePanelEntityInfo ? (
               <>
                 <Stack direction="row" spacing={2}>
-                  <Typography>
+                  <Typography component="div">
                     <Typography className="title">
                       {sidePanelEntityInfo.name}
                     </Typography>
@@ -261,26 +293,28 @@ function Component({ powerStations }: Props) {
                   <h3>{sidePanelEntityInfo.role}</h3>
                   <p>{sidePanelEntityInfo.details}</p>
                   <table>
-                    <tr>
-                      <td>Type:</td>
-                      <td>{sidePanelEntityInfo.entityType}</td>
-                    </tr>
-                    {sidePanelEntityInfo.country && (
+                    <tbody>
                       <tr>
-                        <td>Country:</td>
-                        <td>{sidePanelEntityInfo.country.name}</td>
+                        <td>Type:</td>
+                        <td>{sidePanelEntityInfo.entityType}</td>
                       </tr>
-                    )}
-                    {sidePanelEntityInfo.established && (
-                      <tr>
-                        <td>Established:</td>
-                        <td>
-                          {new Date(
-                            sidePanelEntityInfo.established
-                          ).getFullYear()}
-                        </td>
-                      </tr>
-                    )}
+                      {sidePanelEntityInfo.country && (
+                        <tr>
+                          <td>Country:</td>
+                          <td>{sidePanelEntityInfo.country.name}</td>
+                        </tr>
+                      )}
+                      {sidePanelEntityInfo.established && (
+                        <tr>
+                          <td>Established:</td>
+                          <td>
+                            {new Date(
+                              sidePanelEntityInfo.established
+                            ).getFullYear()}
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
                   </table>
 
                   {sidePanelEntityInfo.leadership && (
