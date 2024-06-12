@@ -18,10 +18,15 @@
     pointer-events: none;
   }
 
+  .verticalDivider {
+    background-color: #343434;
+    margin-left: 1.5em;
+  }
+
   .legendTitle {
     color: #fff;
     margin-right: 0.5em;
-    margin-left: 1.5em;
+    margin-left: 1em;
   }
 
   .legendItem {

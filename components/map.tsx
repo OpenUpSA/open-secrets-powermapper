@@ -195,7 +195,7 @@ function Component({ powerStations }: Props) {
             <FormGroup>
               <FormControlLabel
                 label={
-                  <Typography fontSize={12}>Show by power output</Typography>
+                  <Typography fontSize={12}>Size points by power output</Typography>
                 }
                 labelPlacement="start"
                 control={
@@ -209,8 +209,11 @@ function Component({ powerStations }: Props) {
                 }
               />
             </FormGroup>
+            <Divider className="verticalDivider" orientation="vertical" flexItem />
             <div className="legendTitle">
-              {fuelTypes.length === 0 ? "No matching power stations" : "Legend"}
+              {fuelTypes.length === 0
+                ? "No matching power stations"
+                : "Legend:"}
             </div>
             {fuelTypes.map((fuelType) => (
               <div className="legendItem" key={fuelType.shorthand}>

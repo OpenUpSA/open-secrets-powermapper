@@ -1,7 +1,7 @@
 import "./index.scss";
-
 import intro from "@/public/images/intro.png";
 
+import { getCookie, setCookie } from "cookies-next";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -17,13 +17,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export function IntroModal() {
   const currentSearchParams = useSearchParams();
+  const seenIntroModal = getCookie("seenIntroModal");
+
+  console.log(seenIntroModal);
 
   // If any URL params are set do not show modal on load
   const [modalOpen, setModalOpen] = useState(
-    currentSearchParams.toString() === ""
+    !seenIntroModal && currentSearchParams.toString() === ""
   );
 
   const closeModal = () => {
+    setCookie("seenIntroModal", "true");
     setModalOpen(false);
   };
 
