@@ -25,7 +25,9 @@ export function PowerStationMarker({
   const currentSearchParams = useSearchParams();
 
   const [isHoverOpen, setHoverIsOpen] = useState(false);
-  const [isMoreOpen, setMoreIsOpen] = useState(false);
+  const [isMoreOpen, setMoreIsOpen] = useState(
+    currentSearchParams.get("psiw")?.split(",").includes(powerStation.id)
+  );
 
   const showHoverInfoWindow = () => {
     if (!isMoreOpen) {
@@ -40,6 +42,13 @@ export function PowerStationMarker({
   const showMoreInfoWindow = () => {
     hideHoverInfoWindow();
     setMoreIsOpen(true);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    const powerStationIds = newParams.get("psiw")?.split(",");
+    const newPowerStationIds = powerStationIds
+      ? [...powerStationIds, powerStation.id]
+      : [powerStation.id];
+    newParams.set("psiw", newPowerStationIds.join(","));
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const toggleMoreInfoWindow = () => {
@@ -52,6 +61,18 @@ export function PowerStationMarker({
 
   const hideMoreInfoWindow = () => {
     setMoreIsOpen(false);
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    const powerStationIds = newParams.get("psiw")?.split(",");
+    const newPowerStationIds = powerStationIds?.filter(
+      (id) => id !== powerStation.id
+    );
+
+    if (newPowerStationIds && newPowerStationIds.length > 0) {
+      newParams.set("psiw", newPowerStationIds.join(","));
+    } else {
+      newParams.delete("psiw");
+    }
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const calcPowerStationSize = (factor: number, powerOutput?: number) => {
