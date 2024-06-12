@@ -66,6 +66,15 @@
     font-weight: 400;
     line-height: 16.41px;
     color: #797c80;
+
+    &:hover {
+      color: #000;
+    }
+
+    &[disabled] {
+      color: #d1d1d1;
+      cursor: not-allowed;
+    }
   }
 
   .filerOptionsTitle {
