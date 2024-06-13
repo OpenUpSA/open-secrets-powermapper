@@ -36,6 +36,7 @@ html {
       position: fixed;
       width: 350px;
       z-index: 1;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
       &.closed {
         left: -1000px;
