@@ -95,13 +95,8 @@ function Component(props: Props) {
   const currentSearchParams = useSearchParams();
 
   const initialized = useRef(false);
-  const {
-    setFilteredPowerStations,
-    setIntroModalOpen,
-    setPanelOpen,
-    panelOpen,
-    showIntroModal,
-  } = props;
+  const { setFilteredPowerStations, setPanelOpen, panelOpen, showIntroModal } =
+    props;
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
   const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
   const [operators, setOperators] = useState<ItemLabel>();
@@ -542,7 +537,7 @@ function Component(props: Props) {
           Filter and search
         </Typography>
         <button
-          onClick={() => setIntroModalOpen(true)}
+          onClick={() => showIntroModal(false)}
           className="aboutThisToolMobile"
         >
           <Stack alignItems="center" direction="row" gap={1}>

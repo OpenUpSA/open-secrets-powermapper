@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.scss";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+
 
 export const metadata: Metadata = {
   title: "Open Secrets PowerMapper",
@@ -13,6 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body>{children}</body>
     </html>
   );
