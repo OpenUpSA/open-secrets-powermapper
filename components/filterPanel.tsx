@@ -25,14 +25,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import PersonIcon from "@mui/icons-material/Person";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import ExploreIcon from "@mui/icons-material/Explore";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import InfoIcon from '@mui/icons-material/Info';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import InfoIcon from "@mui/icons-material/Info";
 
 import { ItemLabel, Marks, PowerStation } from "@/types";
 import Button from "@mui/material/Button";
 
 type Props = {
-  setIntroModalOpen: Function;
+  showIntroModal: Function;
   setFilteredPowerStations: Function;
   filteredPowerStations: PowerStation[];
   panelOpen: boolean;
@@ -100,6 +100,7 @@ function Component(props: Props) {
     setIntroModalOpen,
     setPanelOpen,
     panelOpen,
+    showIntroModal,
   } = props;
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
   const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
@@ -862,7 +863,7 @@ function Component(props: Props) {
           </div>
         </Stack>
       </FormControl>
-      <Button onClick={() => setIntroModalOpen(true)} className="aboutThisTool">
+      <Button onClick={() => showIntroModal(false)} className="aboutThisTool">
         <Stack alignItems="center" direction="row" gap={1}>
           <InfoIcon fontSize="small" />
           <div>About this tool</div>

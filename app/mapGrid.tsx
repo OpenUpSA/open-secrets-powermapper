@@ -20,12 +20,19 @@ export default function Page() {
     setIntroModalOpen(false);
   };
 
+  const showIntroModal = (showUseToolButton: boolean) => {
+    setIntroModalOpen(true);
+    setShowUseToolButton(showUseToolButton);
+  };
+
   const [introModalOpen, setIntroModalOpen] = useState(
     !seenIntroModal && currentSearchParams.toString() === ""
   );
   const [filteredPowerStations, setFilteredPowerStations] = useState<
     PowerStation[]
   >([]);
+
+  const [showUseToolButton, setShowUseToolButton] = useState(true);
 
   const [panelOpen, setPanelOpen] = useState(false);
 
@@ -35,7 +42,7 @@ export default function Page() {
         <FilterPanel
           setFilteredPowerStations={setFilteredPowerStations}
           filteredPowerStations={filteredPowerStations}
-          setIntroModalOpen={setIntroModalOpen}
+          showIntroModal={showIntroModal}
           panelOpen={panelOpen}
           setPanelOpen={setPanelOpen}
         />
@@ -50,6 +57,7 @@ export default function Page() {
       <IntroModal
         introModalOpen={introModalOpen}
         closeIntroModal={closeIntroModal}
+        showUseToolButton={showUseToolButton}
       />
     </>
   );

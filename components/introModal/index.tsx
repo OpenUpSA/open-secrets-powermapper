@@ -14,9 +14,14 @@ import CloseIcon from "@mui/icons-material/Close";
 type Props = {
   introModalOpen: boolean;
   closeIntroModal: Function;
+  showUseToolButton: boolean;
 };
 
-export function IntroModal({ introModalOpen, closeIntroModal }: Props) {
+export function IntroModal({
+  introModalOpen,
+  closeIntroModal,
+  showUseToolButton,
+}: Props) {
   return (
     <Modal
       open={introModalOpen}
@@ -56,14 +61,16 @@ export function IntroModal({ introModalOpen, closeIntroModal }: Props) {
           </Typography>
         </CardContent>
         <CardActions className="actions">
-          <Button
-            className="primary"
-            size="small"
-            variant="contained"
-            onClick={() => closeIntroModal()}
-          >
-            Use the tool
-          </Button>
+          {showUseToolButton && (
+            <Button
+              className="primary"
+              size="small"
+              variant="contained"
+              onClick={() => closeIntroModal()}
+            >
+              Use the tool
+            </Button>
+          )}
           <a
             href="https://openup.org.za"
             target="_blank"
