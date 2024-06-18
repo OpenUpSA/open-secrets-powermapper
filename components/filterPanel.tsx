@@ -103,22 +103,6 @@ function Component(props: Props) {
   const [owners, setOwners] = useState<ItemLabel>();
   const [locations, setLocations] = useState<ItemLabel>();
 
-  const ageMarksDefault = useRef([
-    {
-      value: 11,
-      label: "10",
-    },
-    {
-      value: 62,
-      label: "60",
-    },
-  ] as Marks[]);
-  const [ageMarks, setAgeMarks] = useState<Marks[]>(ageMarksDefault.current);
-
-  const ageValueDefault = (ages: Marks[]) => {
-    return [ages[0].value, ages[ages.length - 1].value];
-  };
-
   const powerOutputMarksDefault = useRef([
     {
       value: 100,
@@ -136,18 +120,6 @@ function Component(props: Props) {
 
   const powerOutputValueDefault = (powerOutputs: Marks[]) => {
     return [powerOutputs[0].value, powerOutputs[powerOutputs.length - 1].value];
-  };
-
-  const handleAgeChange = (event: Event, newValue: number | number[]) => {
-    const newParams = new URLSearchParams(currentSearchParams.toString());
-    if (
-      (newValue as number[]).join("-") === ageValueDefault(ageMarks).join("-")
-    ) {
-      newParams.delete("age");
-    } else {
-      newParams.set("age", String(newValue));
-    }
-    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   const handleEnergiesChange = (event: SelectChangeEvent<string[]>) => {
@@ -245,7 +217,6 @@ function Component(props: Props) {
       currentSearchParams.get("operators")?.split(",") || [];
     const ownerParam = currentSearchParams.get("owners")?.split(",") || [];
     const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
-    const ageParam = currentSearchParams.get("age")?.split(",").map(Number);
 
     setFilteredPowerStations(
       powerStations.filter(
@@ -262,10 +233,7 @@ function Component(props: Props) {
           (!powerParam ||
             !station.powerOutput ||
             (station.powerOutput >= powerParam[0] &&
-              station.powerOutput <= powerParam[1])) &&
-          (!ageParam ||
-            (station.age.years >= ageParam[0] &&
-              station.age.years <= ageParam[1]))
+              station.powerOutput <= powerParam[1]))
       )
     );
   }, [currentSearchParams, powerStations, setFilteredPowerStations]);
@@ -277,7 +245,6 @@ function Component(props: Props) {
     newParams.delete("energies");
     newParams.delete("operators");
     newParams.delete("owners");
-    newParams.delete("age");
     newParams.delete("power");
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
@@ -340,9 +307,6 @@ function Component(props: Props) {
         newParams.delete("power");
         break;
 
-      case "age":
-        newParams.delete("age");
-        break;
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
@@ -369,8 +333,6 @@ function Component(props: Props) {
           : filter[1];
       case "power":
         return `${filter[1]} MW`;
-      case "age":
-        return `${filter[1]} years`;
       default:
         return filter[1];
     }
@@ -444,23 +406,6 @@ function Component(props: Props) {
         { value: maxPowerOutput, label: maxPowerOutput.toString() },
       ];
       setPowerOutputMarks(powerOutputMarksData);
-
-      const minAge = Math.min(
-        ...powerStationsData.powerStations.map(
-          (station: PowerStation) => station.age?.years || 0
-        )
-      );
-      const maxAge = Math.max(
-        ...powerStationsData.powerStations.map(
-          (station: PowerStation) => station.age?.years || 0
-        )
-      );
-      const ageMarksData = [
-        { value: minAge, label: minAge.toString() },
-        { value: maxAge, label: maxAge.toString() },
-      ];
-      ageMarksDefault.current = ageMarksData;
-      setAgeMarks(ageMarksData);
     }
 
     if (!initialized.current) {
@@ -514,12 +459,6 @@ function Component(props: Props) {
       ]);
     }
 
-    if (currentSearchParams.get("age")) {
-      newFilters.push([
-        "age",
-        currentSearchParams.get("age")?.split(",").join(" - ") as string,
-      ]);
-    }
     return newFilters;
   };
 
@@ -586,7 +525,6 @@ function Component(props: Props) {
               {filter[0] === "owner" && <PersonIcon fontSize="small" />}
               {filter[0] === "location" && <ExploreIcon fontSize="small" />}
               {filter[0] === "power" && <SpeedIcon fontSize="small" />}
-              {filter[0] === "age" && <EventIcon fontSize="small" />}
               <span className="chipTitle">
                 {truncateString(getLabelForFilter(filter), 35)}
               </span>
@@ -823,38 +761,6 @@ function Component(props: Props) {
           <div className="sliderValues last">
             {currentSearchParams.get("power")?.split(",").map(Number)[1] ||
               powerOutputMarks[1].value}
-          </div>
-        </Stack>
-      </FormControl>
-      <FormControl fullWidth>
-        <Stack alignItems="center" direction="row" gap={2}>
-          <EventIcon fontSize="small" />
-          <Typography className="sliderTitle" fontSize="small">
-            Filter by age:
-          </Typography>
-        </Stack>
-        <Stack alignItems="center" direction="row" gap={2}>
-          <div className="sliderValues first">
-            {currentSearchParams.get("age")?.split(",").map(Number)[0] ||
-              ageMarks[0].value}
-          </div>
-          <StyledSlider
-            size="small"
-            id="age"
-            value={
-              currentSearchParams.get("age")?.split(",").map(Number) || [
-                ageMarks[0].value,
-                ageMarks[ageMarks.length - 1].value,
-              ]
-            }
-            onChange={handleAgeChange}
-            min={ageValueDefault(ageMarks)[0]}
-            max={ageValueDefault(ageMarks)[1]}
-            step={5}
-          />
-          <div className="sliderValues last">
-            {currentSearchParams.get("age")?.split(",").map(Number)[1] ||
-              ageMarks[1].value}
           </div>
         </Stack>
       </FormControl>
