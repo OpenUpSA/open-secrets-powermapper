@@ -48,7 +48,7 @@ export function IntroModal({
             Meet South Africa&#8217;s energy profiteers
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            The PowerMapper Is an interactive database which maps and profiles
+            The PowerMapper is an interactive database which maps and profiles
             the &#8216;power players&#8217; who benefit from the climate crisis and the
             transition to renewables. The database uses the conceptual framework
             developed in Open Secrets&#8217; Who Has the Power? South Africa&#8217;s Energy
