@@ -45,19 +45,21 @@ export function IntroModal({
             component="h1"
             className="title"
           >
-            Welcome to the Open Secrets Power Mapper
+            Meet South Africa&#8217;s energy profiteers
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-            ultricies rhoncus augue ut efficitur. Sed consectetur consectetur
-            enim, in ornare quam. Phasellus lobortis ante quis dui mattis, vitae
-            molestie metus gravida. In mattis pulvinar arcu et porttitor.
-            Suspendisse eros libero, porta quis tristique eu, porttitor
-            malesuada leo. Vivamus congue imperdiet mi, quis sagittis quam
-            tincidunt non. Sed pretium lectus vitae turpis blandit, vitae congue
-            elit interdum. Nunc condimentum at dolor non semper. Donec tellus
-            arcu, condimentum in mi eget, imperdiet fermentum tortor. Nam ut
-            mattis dui, a dapibus mi.
+            The PowerMapper Is an interactive database which maps and profiles
+            the &#8216;power players&#8217; who benefit from the climate crisis and the
+            transition to renewables. The database uses the conceptual framework
+            developed in Open Secrets&#8217; Who Has the Power? South Africa&#8217;s Energy
+            Profiteers investigative report. The report shows who holds the
+            power in South Africa&#8217;s energy sector and spotlights the key private
+            players in the coal, gas, oil and renewable energy industries—who we
+            call &#8216;energy profiteers&#8217;. We identify the private corporations that
+            stand to benefit from maintaining the status quo, i.e. a reliance on
+            fossil fuels, in South Africa&#8217;s energy sector. We also identify the
+            corporations that stand to benefit from South Africa&#8217;s transition to
+            new energy sources.
           </Typography>
         </CardContent>
         <CardActions className="actions">
