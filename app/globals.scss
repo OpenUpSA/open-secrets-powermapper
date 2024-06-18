@@ -4,52 +4,104 @@
   box-sizing: border-box;
 }
 
-body, html {
-  background: #333;
-}
-
-aside {
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
-
-.mapContainer {
-  height: 100vh;
-  width: 60vw;
-  float: right;
-  position: sticky;
-  top: 0;
-}
-
-table {
+body,
+html {
+  color: #7a747f;
+  background: #555555;
+  overflow: hidden;
+  font-family: roboto;
+  height: 100%;
   width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
+}
 
-  thead {
-    tr {
-      th {
-        text-align: left;
-        border-bottom: 1px solid #fff;
-        position: sticky;
-        top: 0;
-        padding: 10px 5px;
-        background: #333;
+.filterPanel {
+  background-color: #ffffff;
+  padding: 1em;
+  height: 100vh;
+}
+
+.flexGrid {
+  display: flex;
+
+  @media (max-width: 1325px) {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  .filterPanel {
+    flex: 1;
+    @media (max-width: 1325px) {
+      flex: unset;
+      position: fixed;
+      width: 350px;
+      z-index: 1;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
+      &.closed {
+        left: -1000px;
+      }
+    }
+
+    .toggleFilterPanel {
+      cursor: pointer;
+      color: #333;
+      background: #eee;
+      border-radius: 8px;
+      padding: 0;
+      margin: 0;
+      display: none;
+      width: 34px;
+      height: 34px;
+      border: none;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        color: #000;
+        background: #ddd;
+      }
+
+      @media (max-width: 1325px) {
+        display: flex;
       }
     }
   }
-  tbody {
-    tr {
-      td {
-        padding: 5px;
-      }
+
+  .mapContainer {
+    flex: 4;
+
+    .toggleFilterPanel {
+      display: none;
     }
 
-    // Zebra stripe the table
-    tr:nth-child(even) {
-      background: #444;
+    @media (max-width: 1325px) {
+      height: 100%;
+      width: 100%;
+      flex: unset;
+
+      .toggleFilterPanel {
+        cursor: pointer;
+        color: #ccc;
+        background: transparent;
+        border-radius: 8px;
+        padding: 0;
+        margin: 0;
+        display: block;
+        width: 34px;
+        height: 34px;
+        border: none;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        position: absolute;
+        top: 28px;
+        left: 5px;
+
+        &:hover {
+          color: #fff;
+        }
+      }
     }
   }
 }

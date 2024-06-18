@@ -1,0 +1,221 @@
+.fuelTypeLegend {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 1em;
+  border-radius: 4px;
+  background-color: #1b1b1b;
+  padding: 1em 1em 1em 0em;
+  color: #ccc;
+  align-items: center;
+  height: 46px;
+  box-sizing: border-box;
+
+  @media (max-width: 925px) {
+    padding: 0;
+    height: 40px;
+  }
+
+  &.noFuelTypes {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .showBySize {
+    @media (max-width: 1525px) {
+      .MuiTypography-root {
+        display: none;
+      }
+
+      .MuiFormControlLabel-root {
+        margin-left: 4px;
+      }
+    }
+  }
+
+  .verticalDivider {
+    background-color: #343434;
+    margin-left: 1.5em;
+
+    @media (max-width: 1125px) {
+      margin-left: 1em;
+    }
+  }
+
+  .legendTitle {
+    color: #fff;
+    margin-right: 0.5em;
+    margin-left: 1em;
+
+    @media (max-width: 1465px) {
+      display: none;
+    }
+  }
+
+  .legendItem {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    flex: 0 0 auto;
+
+    @media (max-width: 925px) {
+      margin-right: 0.45em;
+      margin-left: 0.45em;
+    }
+
+    .legendLabel {
+      @media (max-width: 1400px) {
+        display: none;
+      }
+    }
+
+    .legendColor {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.5em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: 1125px) {
+        margin-right: 0;
+      }
+
+      .legendIcon {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.sidePanel {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 330px;
+  bottom: 30px;
+  background-color: #ffffff;
+  color: #333;
+  padding: 1.5em;
+  z-index: 1000;
+  border-radius: 12px;
+  font-size: 0.8em;
+  line-height: 1.25em;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
+  .buffer {
+    margin: 1em 0 0.5em 0;
+  }
+
+  .title {
+    font-size: 1.25em;
+    font-weight: normal;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    line-height: 1em;
+  }
+
+  .subTitle {
+    font-size: 0.8em;
+    font-weight: normal;
+    margin: 0;
+    padding-bottom: 0;
+  }
+
+  .closeButton {
+    margin-left: auto;
+    cursor: pointer;
+    color: #333;
+    margin: 0;
+    margin-left: auto;
+    background: #efefef;
+    border-radius: 8px;
+    padding: 0;
+    display: flex;
+    width: 44px;
+    height: 44px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    &:hover {
+      color: #000;
+      background: #dfdfdf;
+    }
+  }
+
+  .content {
+    overflow-y: auto;
+
+    p,
+    table,
+    h2,
+    h3 {
+      margin-bottom: 1em;
+      margin-top: 1em;
+    }
+
+    h2,
+    h3 {
+      font-size: 1em;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      tr {
+        td {
+          padding: 0 0 5px 0;
+        }
+        td:nth-child(2) {
+          text-align: right;
+        }
+      }
+    }
+
+    .leadership {
+      background-color: #efefef;
+      border-radius: 12px;
+      padding: 1em;
+      font-size: 1em;
+      font-weight: bold;
+
+      .role {
+        display: block;
+        font-size: 0.8em;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+// Hide Google logo, will put it elsewhere
+div:has(> a[href*="maps.google.com"]) {
+  display: none !important;
+}
+
+// With Google logo hidden the LEFT_BOTTON control must shift down
+div:has(.fuelTypeLegend) {
+  bottom: 0px !important;
+}
+
+// Hide CC, will put it elsewhere
+div:has(> div > .gm-style-cc) {
+  display: none !important;
+}
+
+.gm-bundled-control-on-bottom {
+  bottom: 150px !important;
+}
+
+.logo {
+  margin: 30px;
+  pointer-events: none;
+}
