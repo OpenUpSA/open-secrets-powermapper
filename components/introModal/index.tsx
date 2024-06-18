@@ -72,7 +72,8 @@ export function IntroModal({
             </Button>
           )}
           <a
-            href="https://openup.org.za"
+            href="https://www.opensecrets.org.za/energy-profiteers/"
+            rel="noopener"
             target="_blank"
             className="button secondary"
           >
