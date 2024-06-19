@@ -26,7 +26,7 @@ import { Typography } from "@mui/material";
 import Image from "next/image";
 import LinearProgress from "@mui/material/LinearProgress";
 import CloseIcon from "@mui/icons-material/Close";
-import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
+import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 
 import logo from "@/public/images/logo.png";
 
@@ -74,9 +74,6 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
     null
   );
   const [fuelTypes, setFuelTypes] = useState<PowerStation["fuelType"][]>([]);
-  const [mapTypeId, setMapTypeId] = useState(
-    currentSearchParams.get("map") || "roadmap"
-  );
   const [zoom, setZoom] = useState(currentSearchParams.get("zoom") || 6);
 
   const closeSidePanel = () => {
@@ -167,12 +164,9 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
   };
 
   const mapTypeIdChanged = (event: any) => {
-    if (event.map.mapTypeId) {
-      const newParams = new URLSearchParams(currentSearchParams.toString());
-      newParams.set("map", event.map.mapTypeId);
-      setMapTypeId(event.detail.mapTypeId);
-      window.history.pushState(null, "", `?${newParams.toString()}`);
-    }
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    newParams.set("map", event.map.mapTypeId);
+    window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
   return (
@@ -182,7 +176,7 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
         defaultZoom={6}
         zoom={Number(zoom)}
         mapId="2090f822becfb038"
-        mapTypeId={mapTypeId}
+        mapTypeId={currentSearchParams.get("map") || "roadmap"}
         onCenterChanged={centerChanged}
         streetViewControl={false}
         fullscreenControl={false}
