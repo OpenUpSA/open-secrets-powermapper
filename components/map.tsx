@@ -221,7 +221,10 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
               fuelTypes.length === 0 ? "noFuelTypes" : ""
             }`}
           >
-            <FormGroup className="showBySize">
+            <FormGroup
+              className="showBySize"
+              title="Size points by power output"
+            >
               <FormControlLabel
                 label={
                   <Typography fontSize={12}>
