@@ -10,6 +10,7 @@
   align-items: center;
   height: 46px;
   box-sizing: border-box;
+  overflow: hidden;
 
   @media (max-width: 925px) {
     padding: 0;
@@ -22,7 +23,7 @@
   }
 
   .showBySize {
-    @media (max-width: 1525px) {
+    @media (max-width: 1705px) {
       .MuiTypography-root {
         display: none;
       }
@@ -65,7 +66,7 @@
     }
 
     .legendLabel {
-      @media (max-width: 1400px) {
+      @media (max-width: 1500px) {
         display: none;
       }
     }
