@@ -256,8 +256,9 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
                 : "Legend:"}
             </div>
             {fuelTypes.map((fuelType) => (
-              <div className="legendItem" key={fuelType.shorthand} title={fuelType.name}>
+              <div className="legendItem" key={fuelType.shorthand}>
                 <div
+                  title={fuelType.name}
                   className="legendColor"
                   style={{
                     background: `rgba(${fuelType.rGBColor}, ${
