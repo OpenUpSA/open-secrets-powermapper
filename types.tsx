@@ -16,7 +16,6 @@ export type PowerStation = {
   operator?: Entity;
   owner?: Entity;
   images?: {
-    small: Image;
     large: Image;
     full: Image;
   };

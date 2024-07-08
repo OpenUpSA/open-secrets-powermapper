@@ -22,7 +22,7 @@ export async function GET(req: Request) {
       "Decommission start",
       "Decommission end",
       "Thumbnail image",
-      "Short description"
+      "Short description",
     ],
   });
   const powerStations: PowerStation[] = [];
@@ -103,20 +103,14 @@ export async function GET(req: Request) {
             decommissionEnd: new Date(fields["Decommission end"] as string),
             years: 0,
           },
-          description: fields["Short description"] as PowerStation["description"],
+          description: fields[
+            "Short description"
+          ] as PowerStation["description"],
         };
 
         if (fields["Thumbnail image"]) {
           const image: any = (fields["Thumbnail image"] as any)[0];
           powerStation.images = {
-            small: {
-              id: image.id,
-              url: image.thumbnails.small.url,
-              width: image.thumbnails.small.width,
-              height: image.thumbnails.small.height,
-              filename: image.filename,
-              type: image.type,
-            },
             large: {
               id: image.id,
               url: image.thumbnails.large.url,
