@@ -88,7 +88,8 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
     async function getData() {
       if (sidePanelEntity) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}/api/entity-info?id=${sidePanelEntity}`
+          `${process.env.NEXT_PUBLIC_URL}/api/entity-info?id=${sidePanelEntity}`,
+          { next: { revalidate: 3600 } }
         );
         const entityInfoData = await res.json();
         setSidePanelEntityInfo(entityInfoData);

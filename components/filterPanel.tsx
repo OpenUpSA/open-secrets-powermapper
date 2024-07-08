@@ -306,7 +306,6 @@ function Component(props: Props) {
       case "power":
         newParams.delete("power");
         break;
-
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
@@ -342,7 +341,8 @@ function Component(props: Props) {
     async function getData() {
       initialized.current = true;
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/power-stations`
+        `${process.env.NEXT_PUBLIC_URL}/api/power-stations`,
+        { next: { revalidate: 3600 } }
       );
       const powerStationsData = await res.json();
       setPowerStations(powerStationsData.powerStations);
