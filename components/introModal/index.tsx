@@ -36,7 +36,7 @@ export function IntroModal({
         <CardMedia
           className="media"
           image={intro.src}
-          title="Power Mapper by Open Secrets graphic"
+          title="PowerMapper by Open Secrets graphic"
         />
         <CardContent className="content">
           <Typography
