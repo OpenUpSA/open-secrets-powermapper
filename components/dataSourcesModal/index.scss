@@ -1,0 +1,121 @@
+.modalCard {
+  position: relative;
+  max-width: 515px;
+  outline: none;
+  box-shadow: 0px 4px 8px 3px #00000026;
+  border-radius: 12px !important;
+
+  @media (max-width: 1325px) {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0 !important;
+  }
+
+  .media {
+    background-color: #000;
+    height: 205px;
+  }
+
+  .content {
+    padding: 1.5em 1.5em 0 1.5em;
+
+    .title {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 28px;
+      margin-bottom: 0em;
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18px;
+    }
+  }
+
+  .actions {
+    padding: 1em 1.5em;
+  }
+
+  button.primary,
+  .button.secondary {
+    cursor: pointer;
+    border-radius: 100px;
+    background: #ffcb14;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 40px;
+    letter-spacing: 0.10000000149011612px;
+    text-align: center;
+    color: #000;
+    padding: 0 2em;
+    text-transform: none;
+    align-items: center;
+    display: flex;
+    text-decoration: none;
+
+    @media (max-width: 1325px) {
+      font-size: 12px;
+    }
+
+    &:hover {
+      background: #ffdb24;
+    }
+
+    svg {
+      margin-right: 0.5em;
+    }
+  }
+
+  .button.secondary {
+    background: #faf4e0;
+
+    &:hover {
+      background: #eae4d0;
+    }
+  }
+
+  button.closeDatasourcesModalButton {
+    cursor: pointer;
+    color: #333;
+    text-align: right !important;
+    background-color: #efefef;
+    border-radius: 8px;
+    padding: 0;
+    margin: 0 0 0 auto;
+    display: flex;
+    width: 44px;
+    height: 44px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    &:hover {
+      color: #000;
+      background: #dfdfdf;
+    }
+  }
+}
+
+.tabularList {
+  list-style: none;
+  font-size: 12px;
+  li {
+    border-bottom: 1px solid #eee;
+    padding: 1em 0 1em 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    a {
+      text-decoration: none;
+      color: #666;
+
+      &:hover {
+        text-decoration: underline;
+        color: #000;
+      }
+    }
+  }
+}

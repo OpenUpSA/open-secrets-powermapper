@@ -7,6 +7,7 @@ import FilterPanel from "@/components/filterPanel";
 import Stack from "@mui/material/Stack";
 
 import { IntroModal } from "@/components/introModal";
+import { DataSourcesModal } from "@/components/dataSourcesModal";
 
 import { getCookie, setCookie } from "cookies-next";
 import { useSearchParams } from "next/navigation";
@@ -19,15 +20,22 @@ export default function Page() {
     setCookie("seenIntroModal", "true");
     setIntroModalOpen(false);
   };
-
   const showIntroModal = (showUseToolButton: boolean) => {
     setIntroModalOpen(true);
     setShowUseToolButton(showUseToolButton);
   };
-
   const [introModalOpen, setIntroModalOpen] = useState(
     !seenIntroModal && currentSearchParams.toString() === ""
   );
+
+  const closeDataSourcesModal = () => {
+    setDataSourcesModalOpen(false);
+  };
+  const showDataSourcesModal = () => {
+    setDataSourcesModalOpen(true);
+  };
+  const [dataSourcesModalOpen, setDataSourcesModalOpen] = useState(false);
+
   const [filteredPowerStations, setFilteredPowerStations] = useState<
     PowerStation[]
   >([]);
@@ -43,6 +51,7 @@ export default function Page() {
           setFilteredPowerStations={setFilteredPowerStations}
           filteredPowerStations={filteredPowerStations}
           showIntroModal={showIntroModal}
+          showDataSourcesModal={showDataSourcesModal}
           panelOpen={panelOpen}
           setPanelOpen={setPanelOpen}
         />
@@ -58,6 +67,10 @@ export default function Page() {
         introModalOpen={introModalOpen}
         closeIntroModal={closeIntroModal}
         showUseToolButton={showUseToolButton}
+      />
+      <DataSourcesModal
+        dataSourcesModalOpen={dataSourcesModalOpen}
+        closeDataSourcesModal={closeDataSourcesModal}
       />
     </>
   );

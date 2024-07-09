@@ -111,7 +111,7 @@
     }
   }
 
-  .aboutThisTool {
+  .aboutThisTool, .dataSourcesButton {
     color: #48454f;
     text-transform: none;
     text-decoration: underline;
@@ -132,7 +132,11 @@
     }
   }
 
-  .aboutThisToolMobile {
+  .dataSourcesButton {
+    left: 160px;
+  }
+
+  .aboutThisToolMobile, .dataSourcesMobile {
     cursor: pointer;
     color: #333;
     background: #eee;

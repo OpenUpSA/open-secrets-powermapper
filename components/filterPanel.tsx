@@ -16,10 +16,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Slider from "@mui/material/Slider";
 
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import StorageRounded from "@mui/icons-material/StorageRounded";
 import SearchIcon from "@mui/icons-material/Search";
 import BoltIcon from "@mui/icons-material/Bolt";
 import SpeedIcon from "@mui/icons-material/Speed";
-import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import PersonIcon from "@mui/icons-material/Person";
@@ -33,6 +33,7 @@ import Button from "@mui/material/Button";
 
 type Props = {
   showIntroModal: Function;
+  showDataSourcesModal: Function;
   setFilteredPowerStations: Function;
   filteredPowerStations: PowerStation[];
   panelOpen: boolean;
@@ -95,8 +96,13 @@ function Component(props: Props) {
   const currentSearchParams = useSearchParams();
 
   const initialized = useRef(false);
-  const { setFilteredPowerStations, setPanelOpen, panelOpen, showIntroModal } =
-    props;
+  const {
+    setFilteredPowerStations,
+    setPanelOpen,
+    panelOpen,
+    showIntroModal,
+    showDataSourcesModal,
+  } = props;
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
   const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
   const [operators, setOperators] = useState<ItemLabel>();
@@ -484,6 +490,14 @@ function Component(props: Props) {
           </Stack>
         </button>
         <button
+          onClick={() => showDataSourcesModal()}
+          className="dataSourcesMobile"
+        >
+          <Stack alignItems="center" direction="row" gap={1}>
+            <StorageRounded fontSize="small" />
+          </Stack>
+        </button>
+        <button
           onClick={() => setPanelOpen(!panelOpen)}
           className="toggleFilterPanel"
         >
@@ -768,6 +782,15 @@ function Component(props: Props) {
         <Stack alignItems="center" direction="row" gap={1}>
           <InfoIcon fontSize="small" />
           <div>About this tool</div>
+        </Stack>
+      </Button>
+      <Button
+        onClick={() => showDataSourcesModal()}
+        className="dataSourcesButton"
+      >
+        <Stack alignItems="center" direction="row" gap={1}>
+          <StorageRounded fontSize="small" />
+          <div>Data sources</div>
         </Stack>
       </Button>
     </Stack>
