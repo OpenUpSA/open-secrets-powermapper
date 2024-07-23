@@ -12,6 +12,9 @@ jobs:
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          IMGKIT_PRIVATE_KEY: ${{ secrets.IMGKIT_PRIVATE_KEY }}
         with:
           build: yarn build
           start: yarn start
