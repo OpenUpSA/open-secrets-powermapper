@@ -10,8 +10,11 @@ import {
   EntityFieldNameToIdMapping,
 } from "@/airtableFieldMappings";
 
+import { uploadToImgKit } from "@/utils/imgkit";
+
 import Airtable from "airtable";
 import { NextResponse } from "next/server";
+
 
 export async function GET(req: Request) {
   const base = Airtable.base("appZdj1pFZQOBMn4E");
@@ -178,6 +181,19 @@ export async function GET(req: Request) {
               type: image.type,
             },
           };
+          // We cache the Airtable image URLs on Imgkit because Airtable image URLs expire after
+          // 2 hours
+          uploadToImgKit(
+            powerStation.images.large.url,
+            `large_${powerStation.images.large.filename}`,
+            "powerstations"
+          );
+
+          uploadToImgKit(
+            powerStation.images.full.url,
+            `full_${powerStation.images.full.filename}`,
+            "powerstations"
+          );
         }
 
         if (fields[PowerStationFieldNameToIdMapping["Operator"]]) {

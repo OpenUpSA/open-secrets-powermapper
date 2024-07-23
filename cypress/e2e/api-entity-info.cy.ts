@@ -3,7 +3,7 @@ describe("Test Entity Info API endpoint", () => {
     cy.request("http://localhost:3000/api/entity-info?id=rec2SisdBnuMAZZJb").as(
       "entityInfo"
     );
-    cy.get("@entityInfo").should((response) => {
+    cy.get("@entityInfo").should((response: any) => {
       expect(response.body).to.have.property("name");
     });
   });

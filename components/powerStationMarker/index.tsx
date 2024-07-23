@@ -128,7 +128,7 @@ export function PowerStationMarker({
             <Stack alignItems="center" direction="row" gap={1}>
               {powerStation.images && powerStation.images.large && (
                 <Image
-                  src={powerStation.images.large.url}
+                  src={`https://ik.imagekit.io/powermapper/powerstations/large_${powerStation.images.large.filename}`}
                   alt={powerStation.name}
                   width="48"
                   height="48"
@@ -170,7 +170,7 @@ export function PowerStationMarker({
           {powerStation.images && powerStation.images.full && (
             <Image
               className="photograph"
-              src={powerStation.images.full.url}
+              src={`https://ik.imagekit.io/powermapper/powerstations/full_${powerStation.images.full.filename}`}
               alt={powerStation.name}
               width={powerStation.images.full.width}
               height={powerStation.images.full.height}
