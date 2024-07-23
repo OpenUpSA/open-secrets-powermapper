@@ -3,27 +3,43 @@ import { Position, PowerStation, Region, FuelType, Entity } from "@/types";
 import Airtable from "airtable";
 import { NextResponse } from "next/server";
 
+// Column (field) names in Airtable can be changed by users which would break code
+// so use field IDs for retrieval and map them to names that do not change in this
+// code.
+// Get IDs here:
+// https://airtable.com/appZdj1pFZQOBMn4E/api/docs#curl/table:power%20stations:fields
+const powerStationFieldIdToNameMapping = {
+  fldc5VoKdeCbXtKCX: "Name",
+  fld9sbxP5gHs8qcsO: "Fuel Type",
+  fldZ2HLhUsFTg7XSn: "Region",
+  fldaZuTUqYb2YEU15: "Latitude",
+  fldxBXN0c81g4uGK1: "Longitude",
+  fldPmhaZxEMTUcDWs: "Operator",
+  fldghd96iP7HOINzp: "Owner",
+  fldmZ00VzZXiMXThI: "Output (MW)",
+  fldqby1mB9xtP4QuH: "Commission start",
+  fldPx6NI6hAQk8BS1: "Commission end",
+  flduS2NRXXaClldbM: "Decommission start",
+  flddtGBZFMGPR1Vgq: "Decommission end",
+  flddOvnQtlljYZpVw: "Thumbnail image",
+  fldvI25Q57sQFS9RJ: "Short description",
+};
+
+// And inverse as helper
+const PowerStationFieldNameToIdMapping = Object.fromEntries(
+  Object.entries(powerStationFieldIdToNameMapping).map(([id, name]) => [
+    name,
+    id,
+  ])
+);
+
 export async function GET(req: Request) {
   const base = Airtable.base("appZdj1pFZQOBMn4E");
 
   const powerStationsTable = base("Power Stations").select({
     view: "Published",
-    fields: [
-      "Name",
-      "Fuel Type",
-      "Region",
-      "Latitude",
-      "Longitude",
-      "Operator",
-      "Owner",
-      "Output (MW)",
-      "Commission start",
-      "Commission end",
-      "Decommission start",
-      "Decommission end",
-      "Thumbnail image",
-      "Short description",
-    ],
+    fields: Object.keys(powerStationFieldIdToNameMapping),
+    returnFieldsByFieldId: true,
   });
   const powerStations: PowerStation[] = [];
 
@@ -82,18 +98,37 @@ export async function GET(req: Request) {
       records.forEach(({ fields, id }) => {
         const powerStation: PowerStation = {
           id: id as PowerStation["id"],
-          name: fields.Name as PowerStation["name"],
+          name: fields[
+            PowerStationFieldNameToIdMapping["Name"]
+          ] as PowerStation["name"],
           fuelType: fuelTypes.find(
             (fuelType) =>
-              fuelType.id === (fields["Fuel Type"] as readonly string[])[0]
+              fuelType.id ===
+              (
+                fields[
+                  PowerStationFieldNameToIdMapping["Fuel Type"]
+                ] as readonly string[]
+              )[0]
           ) as PowerStation["fuelType"],
-          country: fields.Country as PowerStation["country"],
+          country: fields[
+            PowerStationFieldNameToIdMapping["Country"]
+          ] as PowerStation["country"],
           region: regions.find(
-            (region) => region.id === (fields.Region as readonly string[])[0]
+            (region) =>
+              region.id ===
+              (
+                fields[
+                  PowerStationFieldNameToIdMapping["Region"]
+                ] as readonly string[]
+              )[0]
           ) as PowerStation["region"],
           position: {
-            lat: fields.Latitude as Position["lat"],
-            lng: fields.Longitude as Position["lng"],
+            lat: fields[
+              PowerStationFieldNameToIdMapping["Latitude"]
+            ] as Position["lat"],
+            lng: fields[
+              PowerStationFieldNameToIdMapping["Longitude"]
+            ] as Position["lng"],
           },
           powerOutput: fields["Output (MW)"] as PowerStation["powerOutput"],
           age: {
@@ -130,15 +165,27 @@ export async function GET(req: Request) {
           };
         }
 
-        if (fields.Operator) {
+        if (fields[PowerStationFieldNameToIdMapping["Operator"]]) {
           powerStation.operator = entities.find(
-            (entity) => entity.id === (fields.Operator as readonly string[])[0]
+            (entity) =>
+              entity.id ===
+              (
+                fields[
+                  PowerStationFieldNameToIdMapping["Operator"]
+                ] as readonly string[]
+              )[0]
           ) as Entity;
         }
 
-        if (fields.Owner) {
+        if (fields[PowerStationFieldNameToIdMapping["Owner"]]) {
           powerStation.owner = entities.find(
-            (entity) => entity.id === (fields.Owner as readonly string[])[0]
+            (entity) =>
+              entity.id ===
+              (
+                fields[
+                  PowerStationFieldNameToIdMapping["Owner"]
+                ] as readonly string[]
+              )[0]
           ) as Entity;
         }
 
