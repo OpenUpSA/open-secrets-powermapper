@@ -1,4 +1,12 @@
 import { Entity, EntityRole, Country } from "@/types";
+import {
+  EntityFieldIdToNameMapping,
+  EntityFieldNameToIdMapping,
+  CountryFieldNameToIdMapping,
+  CountryFieldIdToNameMapping,
+  EntityRoleFieldNameToIdMapping,
+  EntityRoleFieldIdToNameMapping,
+} from "@/airtableFieldMappings";
 
 import Airtable from "airtable";
 import { NextResponse, NextRequest } from "next/server";
@@ -8,30 +16,24 @@ export async function GET(request: NextRequest) {
 
   const base = Airtable.base("appZdj1pFZQOBMn4E");
 
-  const countriesTable = base("Country (Ref)").select({
+  const countriesTable = base("tblaY5bXfxdoY7Bxa").select({
     view: "Grid view",
-    fields: ["Name"],
+    fields: Object.keys(CountryFieldIdToNameMapping),
+    returnFieldsByFieldId: true,
   });
   const countries: Country[] = [];
 
-  const entitiesTable = base("Entities").select({
+  const entitiesTable = base("tbliu88eOfPtmIMRO").select({
     view: "All Entities",
-    fields: [
-      "Name",
-      "Role",
-      "Controversies",
-      "Entity Type",
-      "Country",
-      "Image",
-      "Details",
-      "Established",
-    ],
+    fields: Object.keys(EntityFieldIdToNameMapping),
+    returnFieldsByFieldId: true,
   });
   const entities: Entity[] = [];
 
-  const entityRolesTable = base("Entity Roles (Junction)").select({
+  const entityRolesTable = base("tblygJBhM0TzGgit6").select({
     view: "Live",
-    fields: ["Role", "Entity", "Person / Politician"],
+    fields: Object.keys(EntityRoleFieldIdToNameMapping),
+    returnFieldsByFieldId: true,
   });
   const entityRoles: EntityRole[] = [];
 
@@ -40,7 +42,7 @@ export async function GET(request: NextRequest) {
       records.forEach(({ fields, id }) => {
         countries.push({
           id: id as Country["id"],
-          name: fields.Name as Country["name"],
+          name: fields[CountryFieldNameToIdMapping["Name"]] as Country["name"],
         });
       });
       processNextPage();
@@ -49,10 +51,14 @@ export async function GET(request: NextRequest) {
       records.forEach(({ fields, id }) => {
         entityRoles.push({
           id: id as EntityRole["id"],
-          role: fields.Role as EntityRole["role"],
-          entity_id: fields.Entity as EntityRole["entity_id"],
+          role: fields[
+            EntityRoleFieldNameToIdMapping["Role"]
+          ] as EntityRole["role"],
+          entity_id: fields[
+            EntityRoleFieldNameToIdMapping["Entity"]
+          ] as EntityRole["entity_id"],
           personPolitician_id: fields[
-            "Person / Politician"
+            EntityRoleFieldNameToIdMapping["PersonPolitician"]
           ] as EntityRole["personPolitician_id"],
         });
       });
@@ -62,14 +68,26 @@ export async function GET(request: NextRequest) {
       records.forEach(({ fields, id }) => {
         entities.push({
           id: id as Entity["id"],
-          name: fields.Name as Entity["name"],
-          role_id: fields.Role as Entity["role_id"],
-          controversies: fields.Controversies as Entity["controversies"],
-          entityType: fields["Entity Type"] as Entity["entityType"],
-          country_id: fields.Country as Entity["country_id"],
-          image: fields.Image as Entity["image"],
-          details: fields.Details as Entity["details"],
-          established: fields.Established as Entity["established"],
+          name: fields[EntityFieldNameToIdMapping["Name"]] as Entity["name"],
+          role_id: fields[
+            EntityFieldNameToIdMapping["Role"]
+          ] as Entity["role_id"],
+          controversies: fields[
+            EntityFieldNameToIdMapping["Controversies"]
+          ] as Entity["controversies"],
+          entityType: fields[
+            EntityFieldNameToIdMapping["EntityType"]
+          ] as Entity["entityType"],
+          country_id: fields[
+            EntityFieldNameToIdMapping["Country"]
+          ] as Entity["country_id"],
+          image: fields[EntityFieldNameToIdMapping["Image"]] as Entity["image"],
+          details: fields[
+            EntityFieldNameToIdMapping["Details"]
+          ] as Entity["details"],
+          established: fields[
+            EntityFieldNameToIdMapping["Established"]
+          ] as Entity["established"],
         });
       });
       processNextPage();
