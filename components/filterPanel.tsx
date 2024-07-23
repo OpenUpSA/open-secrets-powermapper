@@ -347,8 +347,7 @@ function Component(props: Props) {
     async function getData() {
       initialized.current = true;
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/power-stations`,
-        { next: { revalidate: 3600 } }
+        `${process.env.NEXT_PUBLIC_URL}/api/power-stations`
       );
       const powerStationsData = await res.json();
       setPowerStations(powerStationsData.powerStations);
