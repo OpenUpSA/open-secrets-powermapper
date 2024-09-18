@@ -20,7 +20,7 @@
     "@vis.gl/react-google-maps": "^1.0.0",
     "airtable": "^0.12.2",
     "cookies-next": "^4.2.1",
-    "next": "14.2.3",
+    "next": "14.2.10",
     "react": "^18",
     "react-dom": "^18",
     "react-inlinesvg": "^4.1.3",
