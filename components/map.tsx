@@ -172,6 +172,7 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
   return (
     <APIProvider apiKey="AIzaSyAYcsm0xB834bBAKu0GGjCu2Xzp2qLWx0o">
       <Map
+        disableDefaultUI={true}
         defaultCenter={center}
         defaultZoom={6}
         zoom={Number(zoom)}
@@ -217,9 +218,8 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
 
         <MapControl position={ControlPosition.LEFT_BOTTOM}>
           <div
-            className={`fuelTypeLegend ${
-              fuelTypes.length === 0 ? "noFuelTypes" : ""
-            }`}
+            className={`fuelTypeLegend ${fuelTypes.length === 0 ? "noFuelTypes" : ""
+              }`}
           >
             <FormGroup
               className="showBySize"
@@ -260,11 +260,10 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
                   title={fuelType.name}
                   className="legendColor"
                   style={{
-                    background: `rgba(${fuelType.rGBColor}, ${
-                      currentSearchParams.get("show-by-power") === "true"
+                    background: `rgba(${fuelType.rGBColor}, ${currentSearchParams.get("show-by-power") === "true"
                         ? 0.6
                         : 1
-                    })`,
+                      })`,
                   }}
                 >
                   <SVG src={fuelType.icon} className="legendIcon" />
