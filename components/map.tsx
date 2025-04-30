@@ -172,7 +172,6 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
   return (
     <APIProvider apiKey="AIzaSyAYcsm0xB834bBAKu0GGjCu2Xzp2qLWx0o">
       <Map
-        disableDefaultUI={true}
         defaultCenter={center}
         defaultZoom={6}
         zoom={Number(zoom)}
@@ -181,6 +180,10 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
         onCenterChanged={centerChanged}
         streetViewControl={false}
         fullscreenControl={false}
+        cameraControl={true}
+        cameraControlOptions={{
+          position: ControlPosition.RIGHT_BOTTOM
+        }}
         mapTypeControl={true}
         mapTypeControlOptions={{
           position: ControlPosition.TOP_RIGHT,
