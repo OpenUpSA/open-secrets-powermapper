@@ -134,7 +134,7 @@ export function PowerStationMarker({
                   height="48"
                   className="photograph"
                   loading="eager"
-                  transformation={[{ width: 48, height: 48 }]}
+                  transformation={[{ width: 48, height: 48, quality: 100, format: 'webp' }]}
                   responsive={false}
                 />
               )}
@@ -177,7 +177,7 @@ export function PowerStationMarker({
               alt={powerStation.name}
               width={powerStation.images.full.width}
               height={powerStation.images.full.height}
-              transformation={[{ width: 310 }]}
+              transformation={[{ width: 310, quality: 75, format: 'webp' }]}
               responsive={false}
             />
           )}
