@@ -207,6 +207,7 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
             className="logo"
             width={215}
             height={45}
+            priority={true}
           />
           <button
             className="toggleFilterPanel"
