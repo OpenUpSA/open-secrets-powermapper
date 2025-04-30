@@ -10,7 +10,9 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useSearchParams } from "next/navigation";
 import CloseIcon from "@mui/icons-material/Close";
-import Image from "next/image";
+//import Image from "next/image";
+import { Image } from '@imagekit/next';
+
 
 type Props = {
   powerStation: PowerStation;
@@ -87,9 +89,8 @@ export function PowerStationMarker({
         ref={advandedMarkerRef}
       >
         <div
-          className={`powerStationMarker ${
-            currentSearchParams.get("show-by-power") === "true" && "byPower"
-          }`}
+          className={`powerStationMarker ${currentSearchParams.get("show-by-power") === "true" && "byPower"
+            }`}
           onMouseOver={showHoverInfoWindow}
           onMouseOut={hideHoverInfoWindow}
           style={{
@@ -101,9 +102,8 @@ export function PowerStationMarker({
               currentSearchParams.get("show-by-power") === "true"
                 ? calcPowerStationSize(100, powerStation.powerOutput)
                 : 12,
-            background: `rgba(${powerStation.fuelType.rGBColor}, ${
-              currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1
-            })`,
+            background: `rgba(${powerStation.fuelType.rGBColor}, ${currentSearchParams.get("show-by-power") === "true" ? 0.6 : 1
+              })`,
           }}
         ></div>
       </AdvancedMarker>
@@ -121,19 +121,19 @@ export function PowerStationMarker({
           ]}
         >
           <div
-            className={`infowindowContent ${
-              powerStation.images ? "" : "noImage"
-            }`}
+            className={`infowindowContent ${powerStation.images ? "" : "noImage"
+              }`}
           >
             <Stack alignItems="center" direction="row" gap={1}>
               {powerStation.images && powerStation.images.large && (
                 <Image
-                  src={`https://ik.imagekit.io/powermapper/powerstations/large_${powerStation.images.large.filename}`}
+                  urlEndpoint="https://ik.imagekit.io/powermapper/"
+                  src={`powerstations/full_${powerStation.images.full.filename}?tr=w-96,h-96`}
                   alt={powerStation.name}
                   width="48"
                   height="48"
                   className="photograph"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  loading="eager"
                 />
               )}
               <div>
@@ -170,16 +170,16 @@ export function PowerStationMarker({
           {powerStation.images && powerStation.images.full && (
             <Image
               className="photograph"
-              src={`https://ik.imagekit.io/powermapper/powerstations/full_${powerStation.images.full.filename}`}
+              urlEndpoint="https://ik.imagekit.io/powermapper/"
+              src={`powerstations/full_${powerStation.images.full.filename}?tr=w-310,c-at_max`}
               alt={powerStation.name}
               width={powerStation.images.full.width}
               height={powerStation.images.full.height}
             />
           )}
           <div
-            className={`infowindowContent ${
-              powerStation.images ? "" : "noImage"
-            }`}
+            className={`infowindowContent ${powerStation.images ? "" : "noImage"
+              }`}
           >
             <Stack alignItems="center" direction="row" gap={2}>
               <Typography className="name" variant="h1" component="h1">
