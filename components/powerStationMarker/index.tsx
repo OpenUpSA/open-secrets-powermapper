@@ -128,12 +128,14 @@ export function PowerStationMarker({
               {powerStation.images && powerStation.images.large && (
                 <Image
                   urlEndpoint="https://ik.imagekit.io/powermapper/"
-                  src={`powerstations/full_${powerStation.images.full.filename}?tr=w-96,h-96`}
+                  src={`powerstations/full_${powerStation.images.full.filename}`}
                   alt={powerStation.name}
                   width="48"
                   height="48"
                   className="photograph"
                   loading="eager"
+                  transformation={[{ width: 48, height: 48 }]}
+                  responsive={false}
                 />
               )}
               <div>
@@ -171,10 +173,12 @@ export function PowerStationMarker({
             <Image
               className="photograph"
               urlEndpoint="https://ik.imagekit.io/powermapper/"
-              src={`powerstations/full_${powerStation.images.full.filename}?tr=w-310,c-at_max`}
+              src={`powerstations/full_${powerStation.images.full.filename}`}
               alt={powerStation.name}
               width={powerStation.images.full.width}
               height={powerStation.images.full.height}
+              transformation={[{ width: 310 }]}
+              responsive={false}
             />
           )}
           <div
