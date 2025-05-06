@@ -107,7 +107,36 @@ export function PowerStationMarker({
           }}
         ></div>
       </AdvancedMarker>
-
+      {/* Following preloads the power station thumbnails */}
+      {powerStation.images && powerStation.images.full && (
+        <Image
+          urlEndpoint="https://ik.imagekit.io/powermapper/"
+          src={`powerstations/full_${powerStation.images.full.filename}`}
+          alt={powerStation.name}
+          width="48"
+          height="48"
+          className="photograph"
+          loading="eager"
+          transformation={[{ width: 48, height: 48, quality: 100, format: 'webp' }]}
+          responsive={false}
+          style={{position: "fixed", top: 0, right: 0, pointerEvents: "none", opacity: 0 }}
+        />
+      )}
+      {/* Following preloads the power station larger images */}
+      {powerStation.images && powerStation.images.full && (
+        <Image
+          urlEndpoint="https://ik.imagekit.io/powermapper/"
+          src={`powerstations/full_${powerStation.images.full.filename}`}
+          alt={powerStation.name}
+          className="photograph"
+          loading="eager"
+          width={powerStation.images.full.width}
+          height={powerStation.images.full.height}
+          transformation={[{ width: 310, quality: 75, format: 'webp' }]}
+          responsive={false}
+          style={{position: "fixed", top: 0, right: 0, pointerEvents: "none", opacity: 0 }}
+        />
+      )}
       {isHoverOpen && (
         <InfoWindow
           anchor={advancedMarker}
