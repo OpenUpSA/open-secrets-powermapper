@@ -19,6 +19,8 @@ export const PowerStationFieldIdToNameMapping = {
   flddtGBZFMGPR1Vgq: "DecommissionEnd",
   flddOvnQtlljYZpVw: "ThumbnailImage",
   fldvI25Q57sQFS9RJ: "ShortDescription",
+  fldbClt2TMD7NELna: "Controversies"
+
 };
 
 // And inverse as helper

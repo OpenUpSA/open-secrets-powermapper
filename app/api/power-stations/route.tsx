@@ -157,6 +157,9 @@ export async function GET(req: Request) {
           description: fields[
             PowerStationFieldNameToIdMapping["ShortDescription"]
           ] as PowerStation["description"],
+          controversies: fields[
+            PowerStationFieldNameToIdMapping["Controversies"]
+          ] as PowerStation["controversies"],
         };
 
         if (fields[PowerStationFieldNameToIdMapping["ThumbnailImage"]]) {
