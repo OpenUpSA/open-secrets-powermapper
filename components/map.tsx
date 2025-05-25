@@ -27,6 +27,8 @@ import Image from "next/image";
 import LinearProgress from "@mui/material/LinearProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import LeaderModal from "@/components/leaderModal"
 
 import logo from "@/public/images/logo.png";
 
@@ -59,6 +61,8 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
     lat: Number(currentSearchParams.get("lat")) || defaultCenter.lat,
     lng: Number(currentSearchParams.get("lng")) || defaultCenter.lng,
   });
+  const [selectedLeader, setSelectedLeader] = useState(null);
+const [leaderModalOpen, setLeaderModalOpen] = useState(false);
 
   // Get all entities from powerStation.owner and powerStation.operator
   const entities = powerStations
@@ -169,6 +173,11 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
+  const handleLeaderClick = (leader) => {
+    setSelectedLeader(leader);
+    setLeaderModalOpen(true);
+  };
+
   return (
     <APIProvider apiKey="AIzaSyAYcsm0xB834bBAKu0GGjCu2Xzp2qLWx0o">
       <Map
@@ -261,8 +270,8 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
                   className="legendColor"
                   style={{
                     background: `rgba(${fuelType.rGBColor}, ${currentSearchParams.get("show-by-power") === "true"
-                        ? 0.6
-                        : 1
+                      ? 0.6
+                      : 1
                       })`,
                   }}
                 >
@@ -329,21 +338,36 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
                       <h3>Leadership</h3>
                       {sidePanelEntityInfo.leadership.map((leader) => (
                         <div className="leadership" key={leader.id}>
-                          <div className="leadershipItem">
-                            <img
-                              src={leader.image[0].url}
-                              alt={leader.name}
-                              className="leaderImg"
-                            />
-                            <div>
+                          <div className="leadershipItem"
+                          onClick={() => handleLeaderClick(leader)}
+                          style={{ cursor: "pointer" }}>
+                            <div className="leaderImgWrap">
+                              <img
+                                src={leader.image[0].url}
+                                alt={leader.name}
+                                className="leaderImg"
+                              />
+                            </div>
+                            <div className="leadershipText">
                               <span className="name">{leader.name}</span>
                               <span className="role">{leader.role}</span>
+                              {leader.otherPositions && (
+                                <span className="otherPositions">
+                                  {leader.otherPositions}
+                                </span>
+                              )}
                             </div>
+                            <ArrowForwardIosIcon className="leaderArrow" fontSize="small" />
                           </div>
                         </div>
                       ))}
                     </>
                   )}
+                  <LeaderModal
+  open={leaderModalOpen}
+  leader={selectedLeader}
+  onClose={() => setLeaderModalOpen(false)}
+/>
                   {sidePanelEntityInfo.controversies && (
                     <>
                       <h3>Controversies</h3>
