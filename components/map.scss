@@ -188,6 +188,30 @@
       font-size: 1em;
       font-weight: bold;
 
+      .leadershipItem {
+        display: flex;
+        align-items: center;
+        
+      
+        .leaderImg {
+          width: 60px;
+          height: 60px;
+          object-fit: cover; 
+          border-radius: 5px;
+          margin-right: 1em;
+      
+          @media (max-width: 925px) {
+            margin-right: 0;
+            margin-bottom: 0.5em;
+          }
+        }
+      
+        @media (max-width: 925px) {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
       .role {
         display: block;
         font-size: 0.8em;
@@ -219,4 +243,27 @@ div:has(> div > .gm-style-cc) {
 .logo {
   margin: 30px;
   pointer-events: none;
+}
+
+.sidePanel {
+  max-height: 100vh;
+  overflow-y: auto;
+
+  /* Chrome, Edge, Safari */
+  scrollbar-width: thin;                  /* Firefox */
+  scrollbar-color: #666 #f2f2f2;       /* Firefox */
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: #f2f2f2;
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #FFCB14;
+    border-radius: 8px;
+    border: 2px solid #f2f2f2;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #b28d07;
+  }
 }

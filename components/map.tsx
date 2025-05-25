@@ -279,7 +279,7 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
           mountOnEnter
           unmountOnExit
         >
-          <Box className="sidePanel">
+          <Box className="sidePanel" sx={{ maxHeight: '100vh', overflowY: 'auto' }}>
             {sidePanelEntityInfo ? (
               <>
                 <Stack direction="row" spacing={2}>
@@ -328,14 +328,22 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
                     <>
                       <h3>Leadership</h3>
                       {sidePanelEntityInfo.leadership.map((leader) => (
-                        <p className="leadership" key={leader.id}>
-                          {leader.name}
-                          <span className="role">{leader.role}</span>
-                        </p>
+                        <div className="leadership" key={leader.id}>
+                          <div className="leadershipItem">
+                            <img
+                              src={leader.image[0].url}
+                              alt={leader.name}
+                              className="leaderImg"
+                            />
+                            <div>
+                              <span className="name">{leader.name}</span>
+                              <span className="role">{leader.role}</span>
+                            </div>
+                          </div>
+                        </div>
                       ))}
                     </>
                   )}
-
                   {sidePanelEntityInfo.controversies && (
                     <>
                       <h3>Controversies</h3>
