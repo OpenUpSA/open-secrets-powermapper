@@ -188,6 +188,49 @@
       font-size: 1em;
       font-weight: bold;
 
+      .leadershipItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      
+        .leaderImgWrap {
+          flex-shrink: 0;
+        }
+        .leaderImg {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 5px;
+          margin-right: 1em;
+          background: #ddd;
+        }
+        .leadershipText {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          .name {
+            font-weight: bold;
+            font-size: 1em;
+            color: #222;
+          }
+          .role {
+            font-size: 0.92em;
+            color: #666;
+          }
+          .otherPositions {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 0.2em;
+          }
+        }
+        .leaderArrow {
+          margin-left: 1em;
+          color: #222;
+          opacity: 0.4;
+          flex-shrink: 0;
+        }
+      }
+
       .role {
         display: block;
         font-size: 0.8em;
@@ -219,4 +262,27 @@ div:has(> div > .gm-style-cc) {
 .logo {
   margin: 30px;
   pointer-events: none;
+}
+
+.sidePanel {
+  max-height: 100vh;
+  overflow-y: auto;
+
+  /* Chrome, Edge, Safari */
+  scrollbar-width: thin;                  /* Firefox */
+  scrollbar-color: #666 #f2f2f2;       /* Firefox */
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: #f2f2f2;
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #FFCB14;
+    border-radius: 8px;
+    border: 2px solid #f2f2f2;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #b28d07;
+  }
 }

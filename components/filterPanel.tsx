@@ -9,6 +9,8 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -84,6 +86,21 @@ const StyledSlider = styled(Slider)({
   },
 });
 
+const StyledSwitch = styled(Switch)(() => ({
+  "& .MuiSwitch-switchBase": {
+    color: "#80660a",
+  },
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#FFCB14",
+  },
+  "& .MuiSwitch-track": {
+    backgroundColor: "#999",
+  },
+  "& .MuiSwitch-track.Mui-checked": {
+    backgroundColor: "#FFCB14",
+  },
+}));
+
 function truncateString(str: string, num: number) {
   if (str.length > num) {
     return str.slice(0, num) + "...";
@@ -94,6 +111,9 @@ function truncateString(str: string, num: number) {
 
 function Component(props: Props) {
   const currentSearchParams = useSearchParams();
+
+  const showByControversiesParam = currentSearchParams.get("show-by-controversies") === "true";
+
 
   const initialized = useRef(false);
   const {
@@ -215,19 +235,21 @@ function Component(props: Props) {
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
+
   useEffect(() => {
     const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
     const regionParam = currentSearchParams.get("locations")?.split(",") || [];
     const fuelTypeParam = currentSearchParams.get("energies")?.split(",") || [];
-    const operatorParam =
-      currentSearchParams.get("operators")?.split(",") || [];
+    const operatorParam = currentSearchParams.get("operators")?.split(",") || [];
     const ownerParam = currentSearchParams.get("owners")?.split(",") || [];
     const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
+    
 
     setFilteredPowerStations(
       powerStations.filter(
         (station) =>
           station.name.toLowerCase().includes(nameParam) &&
+          (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&  
           (regionParam.length === 0 ||
             regionParam.includes(station.region.name)) &&
           (fuelTypeParam.length === 0 ||
@@ -252,6 +274,7 @@ function Component(props: Props) {
     newParams.delete("operators");
     newParams.delete("owners");
     newParams.delete("power");
+    newParams.delete("show-by-controversies");
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
@@ -312,6 +335,10 @@ function Component(props: Props) {
       case "power":
         newParams.delete("power");
         break;
+      
+      case "show-by-controversies":
+        newParams.delete("show-by-controversies");
+        break;
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
@@ -338,6 +365,7 @@ function Component(props: Props) {
           : filter[1];
       case "power":
         return `${filter[1]} MW`;
+        
       default:
         return filter[1];
     }
@@ -457,6 +485,8 @@ function Component(props: Props) {
         newFilters.push(["location", location]);
       });
 
+    
+
     if (currentSearchParams.get("power")) {
       newFilters.push([
         "power",
@@ -465,6 +495,19 @@ function Component(props: Props) {
     }
 
     return newFilters;
+  };
+
+  const handleControversiesSwitch = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newParams = new URLSearchParams(currentSearchParams.toString());
+    if (event.target.checked) {
+      newParams.set("show-by-controversies", "true");
+    } else {
+      newParams.delete("show-by-controversies");
+    }
+    window.history.pushState(null, "", `?${newParams.toString()}`);
+    // Optionally, trigger filter update here if not handled by useEffect on search params
   };
 
   return (
@@ -561,6 +604,22 @@ function Component(props: Props) {
       >
         Filter options
       </Typography>
+      <FormControlLabel
+          label={
+            <Typography fontSize={12}>
+              Only show stations with controversies
+            </Typography>
+          }
+          labelPlacement="start"
+          control={
+            <StyledSwitch
+              className="showBySizeSwitch"
+              size="small"
+              checked={showByControversiesParam}
+              onChange={handleControversiesSwitch}
+            />
+          }
+        />
       <TextField
         id="name"
         label="Name search"

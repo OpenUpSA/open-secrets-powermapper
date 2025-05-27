@@ -19,6 +19,7 @@ export const PowerStationFieldIdToNameMapping = {
   flddtGBZFMGPR1Vgq: "DecommissionEnd",
   flddOvnQtlljYZpVw: "ThumbnailImage",
   fldvI25Q57sQFS9RJ: "ShortDescription",
+  fldbClt2TMD7NELna: "Controversies"
 };
 
 // And inverse as helper
@@ -57,6 +58,8 @@ export const EntityFieldIdToNameMapping = {
   fldoXxxYNmcUUlRrw: "Image",
   fld8ZhBjQ9KQf9sqg: "Details",
   fldFyUdwCXbJFyMBO: "Established",
+  fldqLIbivSqHDGFks: "Description"
+
 };
 
 export const EntityFieldNameToIdMapping = Object.fromEntries(

@@ -12,6 +12,7 @@ export type PowerStation = {
   position: Position;
   age: Age;
   description?: string;
+  controversies?: string;
   powerOutput?: number;
   operator?: Entity;
   owner?: Entity;
@@ -63,9 +64,11 @@ export type Entity = {
   entityType?: string;
   role?: string;
   country?: Country;
-  image?: string;
+  image?: { url: string }[];
   details?: string;
   established?: Date;
+  description?: string;
+  otherPositions?: string[];
 };
 
 export type Age = {

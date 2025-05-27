@@ -88,6 +88,9 @@ export async function GET(req: Request) {
           country_id: fields[
             EntityFieldNameToIdMapping["Country"]
           ] as Entity["country_id"],
+          description: fields[
+            EntityFieldNameToIdMapping["Description"]
+          ] as Entity["description"]
         });
       });
       processNextPage();
@@ -157,6 +160,9 @@ export async function GET(req: Request) {
           description: fields[
             PowerStationFieldNameToIdMapping["ShortDescription"]
           ] as PowerStation["description"],
+          controversies: fields[
+            PowerStationFieldNameToIdMapping["Controversies"]
+          ] as PowerStation["controversies"],
         };
 
         if (fields[PowerStationFieldNameToIdMapping["ThumbnailImage"]]) {
