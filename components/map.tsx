@@ -173,7 +173,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
-  const handleLeaderClick = (leader) => {
+  const handleLeaderClick = (leader: Record<string, any>) => {
     setSelectedLeader(leader);
     setLeaderModalOpen(true);
   };
