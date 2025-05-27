@@ -127,6 +127,12 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
+  function handleLegendClick(energyType: string) {
+    const params = new URLSearchParams(currentSearchParams.toString());
+    params.set('energies', energyType);
+    window.history.pushState(null, "", `?${params.toString()}`);
+  }
+
   useEffect(() => {
     const fuelTypes = powerStations
       .map((powerStation) => powerStation.fuelType)
@@ -265,7 +271,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                 : "Legend:"}
             </div>
             {fuelTypes.map((fuelType) => (
-              <div className="legendItem" key={fuelType.shorthand}>
+              <div className="legendItem" key={fuelType.shorthand} onClick={() => handleLegendClick(fuelType.shorthand)}>
                 <div
                   title={fuelType.name}
                   className="legendColor"
