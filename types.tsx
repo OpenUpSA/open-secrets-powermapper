@@ -68,6 +68,7 @@ export type Entity = {
   details?: string;
   established?: Date;
   description?: string;
+  otherPositions?: EntityRole[];
 };
 
 export type Age = {
