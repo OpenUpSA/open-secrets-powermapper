@@ -345,7 +345,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                           style={{ cursor: "pointer" }}>
                             <div className="leaderImgWrap">
                               <img
-                                src={leader.image[0]?.url}
+                                src={leader?.image[0]?.url}
                                 alt={leader.name}
                                 className="leaderImg"
                               />
