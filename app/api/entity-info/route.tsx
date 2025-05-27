@@ -88,6 +88,9 @@ export async function GET(request: NextRequest) {
           established: fields[
             EntityFieldNameToIdMapping["Established"]
           ] as Entity["established"],
+          description: fields[
+            EntityFieldNameToIdMapping["Description"]
+          ] as Entity["description"],
         });
       });
       processNextPage();

@@ -67,6 +67,7 @@ export type Entity = {
   image?: string;
   details?: string;
   established?: Date;
+  description?: string;
 };
 
 export type Age = {

@@ -88,6 +88,9 @@ export async function GET(req: Request) {
           country_id: fields[
             EntityFieldNameToIdMapping["Country"]
           ] as Entity["country_id"],
+          description: fields[
+            EntityFieldNameToIdMapping["Description"]
+          ] as Entity["description"]
         });
       });
       processNextPage();

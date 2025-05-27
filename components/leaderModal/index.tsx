@@ -3,8 +3,6 @@
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const LeaderModal = ({
@@ -13,7 +11,7 @@ const LeaderModal = ({
   onClose,
 }: {
   open: boolean;
-  leader: any;        // (Or use your real Leader type)
+  leader: any; 
   onClose: () => void;
 }) => {
   if (!leader) return null;
@@ -34,12 +32,8 @@ const LeaderModal = ({
         />
       <DialogTitle>{leader.name}</DialogTitle>
       <DialogContent>
-        
         <Typography mb={1}>
           {leader.role}
-        </Typography>
-        <Typography mb={1}>
-          {leader.details}
         </Typography>
         <Typography mb={1}>
           {leader.description}
