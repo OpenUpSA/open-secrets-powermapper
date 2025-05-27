@@ -216,6 +216,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
             className="logo"
             width={215}
             height={45}
+            priority={true}
           />
           <button
             className="toggleFilterPanel"

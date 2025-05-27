@@ -190,12 +190,6 @@ export async function GET(req: Request) {
           // We cache the Airtable image URLs on Imgkit because Airtable image URLs expire after
           // 2 hours
           uploadToImgKit(
-            powerStation.images.large.url,
-            `large_${powerStation.images.large.filename}`,
-            "powerstations"
-          );
-
-          uploadToImgKit(
             powerStation.images.full.url,
             `full_${powerStation.images.full.filename}`,
             "powerstations"
