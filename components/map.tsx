@@ -61,7 +61,7 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
     lat: Number(currentSearchParams.get("lat")) || defaultCenter.lat,
     lng: Number(currentSearchParams.get("lng")) || defaultCenter.lng,
   });
-  const [selectedLeader, setSelectedLeader] = useState(null);
+  const [selectedLeader, setSelectedLeader] = useState<Record<string, any> | null>(null);
 const [leaderModalOpen, setLeaderModalOpen] = useState(false);
 
   // Get all entities from powerStation.owner and powerStation.operator
