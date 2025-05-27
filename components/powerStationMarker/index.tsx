@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+
 import { Image } from '@imagekit/next';
 
 type Props = {

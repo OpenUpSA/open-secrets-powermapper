@@ -338,6 +338,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                     <>
                       <h3>Leadership</h3>
                       {sidePanelEntityInfo.leadership.map((leader) => (
+                        
                         <div className="leadership" key={leader.id}>
                           <div className="leadershipItem"
                           onClick={() => handleLeaderClick(leader)}
