@@ -343,15 +343,11 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                           onClick={() => handleLeaderClick(leader)}
                           style={{ cursor: "pointer" }}>
                             <div className="leaderImgWrap">
-                            {leader.image?.[0]?.url ? (
                               <img
-                                src={leader.image[0].url}
+                                src={leader.image[0]?.url}
                                 alt={leader.name}
                                 className="leaderImg"
                               />
-                            ) : (
-                              <div className="leaderImgPlaceholder" />
-                            )}
                             </div>
                             <div className="leadershipText">
                               <span className="name">{leader.name}</span>
