@@ -287,6 +287,18 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
+"@imagekit/javascript@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@imagekit/javascript/-/javascript-5.0.0.tgz#17d6dca3971d10a7c8bbdea7d656fb3ba944fd3f"
+  integrity sha512-Q4qaVHBXrnNFJ6nw7dQTEeyIZzAbz68Z0Y27D4bkiaW3kjpPNoFJEl6XCIiOulBpkVDMteRzjGuKk5bQzgTRRg==
+
+"@imagekit/next@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@imagekit/next/-/next-2.1.0.tgz#2b810162b41c2c9d1f782f1fc272bc47b957bb2e"
+  integrity sha512-nzwp4aDcIGv7pM1X7r6MSdNSA6Q9u1BeSljR1ZixD4dKSlwmP+dTnWNWMO0h3StqoHZ464XgCCWWjY50LlZ3IA==
+  dependencies:
+    "@imagekit/javascript" "^5.0.0"
+
 "@img/sharp-darwin-arm64@0.33.4":
   version "0.33.4"
   resolved "https://registry.yarnpkg.com/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.33.4.tgz#a1cf4a7febece334f16e0328b9689f05797d7aec"
