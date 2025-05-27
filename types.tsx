@@ -64,7 +64,7 @@ export type Entity = {
   entityType?: string;
   role?: string;
   country?: Country;
-  image?: string;
+  image?: { url: string }[];
   details?: string;
   established?: Date;
   description?: string;
