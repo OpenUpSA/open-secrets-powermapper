@@ -497,7 +497,9 @@ function Component(props: Props) {
     return newFilters;
   };
 
-  const handleControversiesSwitch = (event) => {
+  const handleControversiesSwitch = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newParams = new URLSearchParams(currentSearchParams.toString());
     if (event.target.checked) {
       newParams.set("show-by-controversies", "true");
