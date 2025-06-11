@@ -5,6 +5,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import Typography from "@mui/material/Typography";
 
+import Markdown from 'react-markdown';
+
+
 const LeaderModal = ({
   open,
   leader,
@@ -36,7 +39,7 @@ const LeaderModal = ({
           {leader.role}
         </Typography>
         <Typography mb={1}>
-          {leader.description}
+          <Markdown>{leader.description}</Markdown>
         </Typography>
       </DialogContent>
       
