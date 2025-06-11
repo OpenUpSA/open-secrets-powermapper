@@ -14,6 +14,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
+
 import { Image } from '@imagekit/next';
 
 type Props = {
@@ -266,19 +267,21 @@ export function PowerStationMarker({
                           <tr>
                             <td>Operator:</td>
                             <td>
-                              {powerStation.operator.map(operator => (
-                                <span key={operator.id}>
-                                  <a
-
-                                    onClick={() =>
-                                      showSidePanelEntity(operator?.id)
-                                    }
-                                    className="entityButton"
-                                  >
-                                    {operator.name}
-                                  </a>{operator !== powerStation.operator[powerStation.operator.length - 1] && ", "}
+                              {powerStation.operator && powerStation.operator.length > 0 && (
+                                <span>
+                                  {powerStation.operator.map((operator, idx) => (
+                                    <span key={operator.id}>
+                                      <a
+                                        href="#"
+                                        onClick={() => showSidePanelEntity(operator?.id)}
+                                      >
+                                        {operator.name}
+                                      </a>
+                                      {idx < powerStation.operator.length - 1 && ', '}
+                                    </span>
+                                  ))}
                                 </span>
-                              ))}
+                              )}
                             </td>
                           </tr>
                         )}
@@ -286,19 +289,21 @@ export function PowerStationMarker({
                           <tr>
                             <td>Owner:</td>
                             <td>
-                              {powerStation.owner.map(owner => (
-                                <span key={owner.id}>
-                                  <a
-
-                                    onClick={() =>
-                                      showSidePanelEntity(owner?.id)
-                                    }
-                                    className="entityButton"
-                                  >
-                                    {owner.name}
-                                  </a>{owner !== powerStation.owner[powerStation.owner.length - 1] && ", "}
+                            {powerStation.owner && powerStation.owner.length > 0 && (
+                                <span>
+                                  {powerStation.owner.map((owner, idx) => (
+                                    <span key={owner.id}>
+                                      <a
+                                        href="#"
+                                        onClick={() => showSidePanelEntity(owner?.id)}
+                                      >
+                                        {owner.name}
+                                      </a>
+                                      {idx < powerStation.owner.length - 1 && ', '}
+                                    </span>
+                                  ))}
                                 </span>
-                              ))}
+                              )}
                             </td>
                           </tr>
                         )}
