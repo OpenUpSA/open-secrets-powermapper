@@ -267,9 +267,9 @@ export function PowerStationMarker({
                           <td>Operator:</td>
                           <td>
                             {powerStation.operator.map(operator => (
-                              <>
+                              <span key={operator.id}>
                               <a
-                              key={operator.id}
+                              
                               onClick={() =>
                                 showSidePanelEntity(operator?.id)
                               }
@@ -277,7 +277,7 @@ export function PowerStationMarker({
                             >
                               {operator.name}
                               </a>{operator !== powerStation.operator[powerStation.operator.length - 1] && ", "}
-                              </>
+                              </span>
                             ))}
                           </td>
                         </tr>
@@ -287,9 +287,9 @@ export function PowerStationMarker({
                           <td>Owner:</td>
                           <td>
                             {powerStation.owner.map(owner => (
-                              <>
+                              <span key={owner.id}>
                               <a
-                              key={owner.id}
+                              
                               onClick={() =>
                                 showSidePanelEntity(owner?.id)
                               }
@@ -297,7 +297,7 @@ export function PowerStationMarker({
                             >
                               {owner.name}
                               </a>{owner !== powerStation.owner[powerStation.owner.length - 1] && ", "}
-                              </>
+                              </span>
                             ))}
                           </td>
                         </tr>

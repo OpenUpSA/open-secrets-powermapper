@@ -243,21 +243,25 @@ function Component(props: Props) {
     const operatorParam = currentSearchParams.get("operators")?.split(",") || [];
     const ownerParam = currentSearchParams.get("owners")?.split(",") || [];
     const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
-    
+
 
     setFilteredPowerStations(
       powerStations.filter(
         (station) =>
           station.name.toLowerCase().includes(nameParam) &&
-          (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&  
+          (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&
           (regionParam.length === 0 ||
             regionParam.includes(station.region.name)) &&
           (fuelTypeParam.length === 0 ||
             fuelTypeParam.includes(station.fuelType.shorthand)) &&
-          (operatorParam.length === 0 ||
-            operatorParam.includes(station.operator?.name || "")) &&
-          (ownerParam.length === 0 ||
-            ownerParam.includes(station.owner?.name || "")) &&
+          (
+            operatorParam.length === 0 ||
+            station.operator?.some(op => operatorParam.includes(op.name))
+          ) &&
+          (
+            ownerParam.length === 0 ||
+            station.owner?.some(ow => ownerParam.includes(ow.name))
+          ) &&
           (!powerParam ||
             !station.powerOutput ||
             (station.powerOutput >= powerParam[0] &&
@@ -335,7 +339,7 @@ function Component(props: Props) {
       case "power":
         newParams.delete("power");
         break;
-      
+
       case "show-by-controversies":
         newParams.delete("show-by-controversies");
         break;
@@ -365,7 +369,7 @@ function Component(props: Props) {
           : filter[1];
       case "power":
         return `${filter[1]} MW`;
-        
+
       default:
         return filter[1];
     }
@@ -393,8 +397,12 @@ function Component(props: Props) {
 
       const operatorsData = powerStationsData.powerStations.reduce(
         (acc: ItemLabel, cur: PowerStation) => {
-          if (cur.operator) {
-            acc[cur.operator.name] = { label: cur.operator.name };
+          if (Array.isArray(cur.operator)) {
+            cur.operator.forEach(op => {
+              if (op && op.name) {
+                acc[op.name] = { label: op.name };
+              }
+            });
           }
           return acc;
         },
@@ -404,8 +412,12 @@ function Component(props: Props) {
 
       const ownersData = powerStationsData.powerStations.reduce(
         (acc: ItemLabel, cur: PowerStation) => {
-          if (cur.owner) {
-            acc[cur.owner.name] = { label: cur.owner.name };
+          if (Array.isArray(cur.owner)) {
+            cur.owner.forEach(ow => {
+              if (ow && ow.name) {
+                acc[ow.name] = { label: ow.name };
+              }
+            });
           }
           return acc;
         },
@@ -485,7 +497,7 @@ function Component(props: Props) {
         newFilters.push(["location", location]);
       });
 
-    
+
 
     if (currentSearchParams.get("power")) {
       newFilters.push([
@@ -605,21 +617,21 @@ function Component(props: Props) {
         Filter options
       </Typography>
       <FormControlLabel
-          label={
-            <Typography fontSize={12}>
-              Only show stations with controversies
-            </Typography>
-          }
-          labelPlacement="start"
-          control={
-            <StyledSwitch
-              className="showBySizeSwitch"
-              size="small"
-              checked={showByControversiesParam}
-              onChange={handleControversiesSwitch}
-            />
-          }
-        />
+        label={
+          <Typography fontSize={12}>
+            Only show stations with controversies
+          </Typography>
+        }
+        labelPlacement="start"
+        control={
+          <StyledSwitch
+            className="showBySizeSwitch"
+            size="small"
+            checked={showByControversiesParam}
+            onChange={handleControversiesSwitch}
+          />
+        }
+      />
       <TextField
         id="name"
         label="Name search"
