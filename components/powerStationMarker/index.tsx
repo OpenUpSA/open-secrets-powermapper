@@ -89,7 +89,7 @@ export function PowerStationMarker({
     return Math.min(Math.max(((powerOutput || 100) * 2) / factor, 8), 100);
   };
 
-  
+
 
   return (
     <>
@@ -129,7 +129,7 @@ export function PowerStationMarker({
           loading="eager"
           transformation={[{ width: 48, height: 48, quality: 100, format: 'webp' }]}
           responsive={false}
-          style={{position: "fixed", top: 0, right: 0, pointerEvents: "none", opacity: 0 }}
+          style={{ position: "fixed", top: 0, right: 0, pointerEvents: "none", opacity: 0 }}
         />
       )}
       {/* Following preloads the power station larger images */}
@@ -144,7 +144,7 @@ export function PowerStationMarker({
           height={powerStation.images.full.height}
           transformation={[{ width: 310, quality: 75, format: 'webp' }]}
           responsive={false}
-          style={{position: "fixed", top: 0, right: 0, pointerEvents: "none", opacity: 0 }}
+          style={{ position: "fixed", top: 0, right: 0, pointerEvents: "none", opacity: 0 }}
         />
       )}
       {isHoverOpen && (
@@ -187,12 +187,12 @@ export function PowerStationMarker({
                     {powerStation.powerOutput} MW
                   </p>
                 )}
-                {powerStation.operator && <p>{powerStation.operator.name}</p>}
-                {powerStation.owner &&
-                  powerStation.operator &&
-                  powerStation.operator.name !== powerStation.owner.name && (
-                    <p>{powerStation.owner.name}</p>
-                  )}
+                {powerStation.operator && powerStation.operator.length > 0 && (
+                  <p>{powerStation.operator.map(op => op.name).join(", ")}</p>
+                )}
+                {powerStation.owner && powerStation.owner.length > 0 && (
+                  <p>{powerStation.owner.map(ow => ow.name).join(", ")}</p>
+                )}
               </div>
             </Stack>
           </div>
@@ -224,12 +224,12 @@ export function PowerStationMarker({
             className={`infowindowContent ${powerStation.images ? "" : "noImage"
               }`}
           >
-            <Box sx={{ width: '100%'}} className="marker-box-container">
-            <Stack alignItems="center" direction="row" gap={2}>
+            <Box sx={{ width: '100%' }} className="marker-box-container">
+              <Stack alignItems="center" direction="row" gap={2}>
                 <Typography className="name" variant="h1" component="h1">
-                  
-                    {powerStation.name}
-                  
+
+                  {powerStation.name}
+
                 </Typography>
                 <button
                   className="moreInfoWindowCloseButton"
@@ -238,121 +238,121 @@ export function PowerStationMarker({
                   <CloseIcon fontSize="medium" />
                 </button>
               </Stack>
-            <Tabs value={tab} onChange={handleTabChange}>
-              <Tab label="About" />
-              <Tab label="Controversies" />
-            </Tabs>
-            <Box sx={{backgroundColor: '#fff', padding: '1em'}}>
-              {tab === 0 && (
-                <>
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td>Type:</td>
-                        <td>{powerStation.fuelType.name}</td>
-                      </tr>
-                      <tr>
-                        <td>Location:</td>
-                        <td>{powerStation.region.name}</td>
-                      </tr>
-                      <tr>
-                        <td>GPS:</td>
-                        <td>
-                          {powerStation.position.lat.toFixed(5)},{" "}
-                          {powerStation.position.lng.toFixed(5)}
-                        </td>
-                      </tr>
-                      {powerStation.operator && powerStation.operator.length > 0 && (
+              <Tabs value={tab} onChange={handleTabChange}>
+                <Tab label="About" />
+                <Tab label="Controversies" />
+              </Tabs>
+              <Box sx={{ backgroundColor: '#fff', padding: '1em' }}>
+                {tab === 0 && (
+                  <>
+                    <table>
+                      <tbody>
                         <tr>
-                          <td>Operator:</td>
+                          <td>Type:</td>
+                          <td>{powerStation.fuelType.name}</td>
+                        </tr>
+                        <tr>
+                          <td>Location:</td>
+                          <td>{powerStation.region.name}</td>
+                        </tr>
+                        <tr>
+                          <td>GPS:</td>
                           <td>
-                            {powerStation.operator.map(operator => (
-                              <span key={operator.id}>
-                              <a
-                              
-                              onClick={() =>
-                                showSidePanelEntity(operator?.id)
-                              }
-                              className="entityButton"
-                            >
-                              {operator.name}
-                              </a>{operator !== powerStation.operator[powerStation.operator.length - 1] && ", "}
-                              </span>
-                            ))}
+                            {powerStation.position.lat.toFixed(5)},{" "}
+                            {powerStation.position.lng.toFixed(5)}
                           </td>
                         </tr>
-                      )}
-                      {powerStation.owner && powerStation.owner.length > 0 && (
-                        <tr>
-                          <td>Owner:</td>
-                          <td>
-                            {powerStation.owner.map(owner => (
-                              <span key={owner.id}>
-                              <a
-                              
-                              onClick={() =>
-                                showSidePanelEntity(owner?.id)
-                              }
-                              className="entityButton"
-                            >
-                              {owner.name}
-                              </a>{owner !== powerStation.owner[powerStation.owner.length - 1] && ", "}
-                              </span>
-                            ))}
-                          </td>
-                        </tr>
-                      )}
-                     
-                      {powerStation.powerOutput && (
-                        <tr>
-                          <td>Power Output:</td>
-                          <td>{powerStation.powerOutput} MW</td>
-                        </tr>
-                      )}
-                      {powerStation.age.commissionStart &&
-                        powerStation.age.commissionEnd && (
+                        {powerStation.operator && powerStation.operator.length > 0 && (
                           <tr>
-                            <td>Commissioned:</td>
+                            <td>Operator:</td>
                             <td>
-                              {new Date(
-                                powerStation.age.commissionStart
-                              ).getFullYear()}
-                              &ndash;
-                              {new Date(powerStation.age.commissionEnd).getFullYear()}
+                              {powerStation.operator.map(operator => (
+                                <span key={operator.id}>
+                                  <a
+
+                                    onClick={() =>
+                                      showSidePanelEntity(operator?.id)
+                                    }
+                                    className="entityButton"
+                                  >
+                                    {operator.name}
+                                  </a>{operator !== powerStation.operator[powerStation.operator.length - 1] && ", "}
+                                </span>
+                              ))}
                             </td>
                           </tr>
                         )}
-                      {powerStation.age.decommissionStart &&
-                        powerStation.age.decommissionEnd && (
+                        {powerStation.owner && powerStation.owner.length > 0 && (
                           <tr>
-                            <td>Decommissioned:</td>
+                            <td>Owner:</td>
                             <td>
-                              {new Date(
-                                powerStation.age.decommissionStart
-                              ).getFullYear()}
-                              &ndash;
-                              {new Date(
-                                powerStation.age.decommissionEnd
-                              ).getFullYear()}
+                              {powerStation.owner.map(owner => (
+                                <span key={owner.id}>
+                                  <a
+
+                                    onClick={() =>
+                                      showSidePanelEntity(owner?.id)
+                                    }
+                                    className="entityButton"
+                                  >
+                                    {owner.name}
+                                  </a>{owner !== powerStation.owner[powerStation.owner.length - 1] && ", "}
+                                </span>
+                              ))}
                             </td>
                           </tr>
                         )}
-                      {powerStation.description && (
-                        <tr>
-                          <td colSpan={2} className="description">
-                            {powerStation.description}
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-              </>
-              )}
-              {tab === 1 && (
-                <>{powerStation.controversies}</>
-              )}
+
+                        {powerStation.powerOutput && (
+                          <tr>
+                            <td>Power Output:</td>
+                            <td>{powerStation.powerOutput} MW</td>
+                          </tr>
+                        )}
+                        {powerStation.age.commissionStart &&
+                          powerStation.age.commissionEnd && (
+                            <tr>
+                              <td>Commissioned:</td>
+                              <td>
+                                {new Date(
+                                  powerStation.age.commissionStart
+                                ).getFullYear()}
+                                &ndash;
+                                {new Date(powerStation.age.commissionEnd).getFullYear()}
+                              </td>
+                            </tr>
+                          )}
+                        {powerStation.age.decommissionStart &&
+                          powerStation.age.decommissionEnd && (
+                            <tr>
+                              <td>Decommissioned:</td>
+                              <td>
+                                {new Date(
+                                  powerStation.age.decommissionStart
+                                ).getFullYear()}
+                                &ndash;
+                                {new Date(
+                                  powerStation.age.decommissionEnd
+                                ).getFullYear()}
+                              </td>
+                            </tr>
+                          )}
+                        {powerStation.description && (
+                          <tr>
+                            <td colSpan={2} className="description">
+                              {powerStation.description}
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </>
+                )}
+                {tab === 1 && (
+                  <>{powerStation.controversies}</>
+                )}
+              </Box>
             </Box>
-          </Box>
           </div>
         </InfoWindow>
       )}
