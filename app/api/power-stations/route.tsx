@@ -200,7 +200,7 @@ export async function GET(req: Request) {
         powerStation.operator = Array.isArray(operatorIds)
           ? operatorIds
             .map(id => entities.find(entity => entity.id === id))
-            .filter(Boolean)
+            .filter(Boolean) as Entity[]
           : [];
 
 
@@ -208,7 +208,7 @@ export async function GET(req: Request) {
         powerStation.owner = Array.isArray(ownerIds)
           ? ownerIds
             .map(id => entities.find(entity => entity.id === id))
-            .filter(Boolean)
+            .filter(Boolean) as Entity[] 
           : [];
 
         if (fields["DecommissionStart"]) {
