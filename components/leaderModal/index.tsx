@@ -23,11 +23,11 @@ const LeaderModal = ({
           alt={leader.name}
           style={{
             width: 120,
-            height: 120,
             borderRadius: "5px",
             objectFit: "cover",
-            margin: "0 auto 1em auto",
+            margin: "2em auto 1em auto",
             display: "block",
+            border: "1px solid #eee"
           }}
         />
       <DialogTitle>{leader.name}</DialogTitle>

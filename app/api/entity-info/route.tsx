@@ -105,13 +105,13 @@ export async function GET(request: NextRequest) {
 
   // Hydrate entityRoles
   entityRoles.forEach((entityRole) => {
-    if (entityRole.entity_id) {
+    if (Array.isArray(entityRole.entity_id) && entityRole.entity_id.length > 0) {
       entityRole.entity = entities.find(
         (e) => e.id === entityRole.entity_id[0]
       ) as Entity;
     }
 
-    if (entityRole.personPolitician_id) {
+    if (Array.isArray(entityRole.personPolitician_id) && entityRole.personPolitician_id.length > 0) {
       entityRole.personPolitician = entities.find(
         (e) => e.id === entityRole.personPolitician_id[0]
       ) as Entity;
@@ -124,6 +124,7 @@ export async function GET(request: NextRequest) {
 
   entityRoles.forEach((entityRole) => {
     if (
+      Array.isArray(entityRole.entity_id) &&
       entityRole.entity_id[0] === entityToExpandId &&
       entityRole.personPolitician
     ) {
