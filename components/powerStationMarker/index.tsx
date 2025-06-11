@@ -285,7 +285,7 @@ export function PowerStationMarker({
                             </td>
                           </tr>
                         )}
-                        {powerStation.owner && powerStation.owner!.length > 0 && (
+                        {powerStation.owner && powerStation.owner.length > 0 && (
                           <tr>
                             <td>Owner:</td>
                             <td>
@@ -299,7 +299,7 @@ export function PowerStationMarker({
                                       >
                                         {owner.name}
                                       </a>
-                                      {idx < powerStation.owner.length - 1 && ', '}
+                                      {idx < powerStation.owner!.length - 1 && ', '}
                                     </span>
                                   ))}
                                 </span>
