@@ -376,10 +376,10 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                     </>
                   )}
                   <LeaderModal
-  open={leaderModalOpen}
-  leader={selectedLeader}
-  onClose={() => setLeaderModalOpen(false)}
-/>
+                    open={leaderModalOpen}
+                    leader={selectedLeader}
+                    onClose={() => setLeaderModalOpen(false)}
+                  />
                   {sidePanelEntityInfo.controversies && (
                     <>
                       <h3>Controversies</h3>
