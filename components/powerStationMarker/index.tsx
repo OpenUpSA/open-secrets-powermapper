@@ -267,7 +267,7 @@ export function PowerStationMarker({
                           <tr>
                             <td>Operator:</td>
                             <td>
-                              {powerStation.operator && powerStation.operator.length > 0 && (
+                              
                                 <span>
                                   {powerStation.operator.map((operator, idx) => (
                                     <span key={operator.id}>
@@ -277,19 +277,19 @@ export function PowerStationMarker({
                                       >
                                         {operator.name}
                                       </a>
-                                      {idx < powerStation.operator.length - 1 && ', '}
+                                      {idx < powerStation.operator!.length - 1 && ', '}
                                     </span>
                                   ))}
                                 </span>
-                              )}
+                             
                             </td>
                           </tr>
                         )}
-                        {powerStation.owner && powerStation.owner.length > 0 && (
+                        {powerStation.owner && powerStation.owner!.length > 0 && (
                           <tr>
                             <td>Owner:</td>
                             <td>
-                            {powerStation.owner && powerStation.owner.length > 0 && (
+                            
                                 <span>
                                   {powerStation.owner.map((owner, idx) => (
                                     <span key={owner.id}>
@@ -303,7 +303,7 @@ export function PowerStationMarker({
                                     </span>
                                   ))}
                                 </span>
-                              )}
+                              
                             </td>
                           </tr>
                         )}
