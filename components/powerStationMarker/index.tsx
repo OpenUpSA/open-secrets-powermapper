@@ -262,36 +262,47 @@ export function PowerStationMarker({
                           {powerStation.position.lng.toFixed(5)}
                         </td>
                       </tr>
-                      {powerStation.operator && (
+                      {powerStation.operator && powerStation.operator.length > 0 && (
                         <tr>
                           <td>Operator:</td>
                           <td>
-                            <a
+                            {powerStation.operator.map(operator => (
+                              <>
+                              <a
+                              key={operator.id}
                               onClick={() =>
-                                showSidePanelEntity(powerStation.operator?.id)
+                                showSidePanelEntity(operator?.id)
                               }
                               className="entityButton"
                             >
-                              {powerStation.operator.name}
-                            </a>
+                              {operator.name}
+                              </a>{operator !== powerStation.operator[powerStation.operator.length - 1] && ", "}
+                              </>
+                            ))}
                           </td>
                         </tr>
                       )}
-                      {powerStation.owner && (
+                      {powerStation.owner && powerStation.owner.length > 0 && (
                         <tr>
                           <td>Owner:</td>
                           <td>
-                            <a
+                            {powerStation.owner.map(owner => (
+                              <>
+                              <a
+                              key={owner.id}
                               onClick={() =>
-                                showSidePanelEntity(powerStation.owner?.id)
+                                showSidePanelEntity(owner?.id)
                               }
                               className="entityButton"
                             >
-                              {powerStation.owner.name}
-                            </a>
+                              {owner.name}
+                              </a>{owner !== powerStation.owner[powerStation.owner.length - 1] && ", "}
+                              </>
+                            ))}
                           </td>
                         </tr>
                       )}
+                     
                       {powerStation.powerOutput && (
                         <tr>
                           <td>Power Output:</td>

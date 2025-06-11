@@ -107,7 +107,7 @@ export async function GET(req: Request) {
               fuelType.id ===
               (
                 fields[
-                  PowerStationFieldNameToIdMapping["FuelType"]
+                PowerStationFieldNameToIdMapping["FuelType"]
                 ] as readonly string[]
               )[0]
           ) as PowerStation["fuelType"],
@@ -119,7 +119,7 @@ export async function GET(req: Request) {
               region.id ===
               (
                 fields[
-                  PowerStationFieldNameToIdMapping["Region"]
+                PowerStationFieldNameToIdMapping["Region"]
                 ] as readonly string[]
               )[0]
           ) as PowerStation["region"],
@@ -137,22 +137,22 @@ export async function GET(req: Request) {
           age: {
             commissionStart: new Date(
               fields[
-                PowerStationFieldNameToIdMapping["CommissionStart"]
+              PowerStationFieldNameToIdMapping["CommissionStart"]
               ] as string
             ),
             commissionEnd: new Date(
               fields[
-                PowerStationFieldNameToIdMapping["CommissionEnd"]
+              PowerStationFieldNameToIdMapping["CommissionEnd"]
               ] as string
             ),
             decommissionStart: new Date(
               fields[
-                PowerStationFieldNameToIdMapping["DecommissionStart"]
+              PowerStationFieldNameToIdMapping["DecommissionStart"]
               ] as string
             ),
             decommissionEnd: new Date(
               fields[
-                PowerStationFieldNameToIdMapping["DecommissionEnd"]
+              PowerStationFieldNameToIdMapping["DecommissionEnd"]
               ] as string
             ),
             years: 0,
@@ -196,29 +196,20 @@ export async function GET(req: Request) {
           );
         }
 
-        if (fields[PowerStationFieldNameToIdMapping["Operator"]]) {
-          powerStation.operator = entities.find(
-            (entity) =>
-              entity.id ===
-              (
-                fields[
-                  PowerStationFieldNameToIdMapping["Operator"]
-                ] as readonly string[]
-              )[0]
-          ) as Entity;
-        }
+        const operatorIds = fields[PowerStationFieldNameToIdMapping["Operator"]];
+        powerStation.operator = Array.isArray(operatorIds)
+          ? operatorIds
+            .map(id => entities.find(entity => entity.id === id))
+            .filter(Boolean)
+          : [];
 
-        if (fields[PowerStationFieldNameToIdMapping["Owner"]]) {
-          powerStation.owner = entities.find(
-            (entity) =>
-              entity.id ===
-              (
-                fields[
-                  PowerStationFieldNameToIdMapping["Owner"]
-                ] as readonly string[]
-              )[0]
-          ) as Entity;
-        }
+
+        const ownerIds = fields[PowerStationFieldNameToIdMapping["Owner"]];
+        powerStation.owner = Array.isArray(ownerIds)
+          ? ownerIds
+            .map(id => entities.find(entity => entity.id === id))
+            .filter(Boolean)
+          : [];
 
         if (fields["DecommissionStart"]) {
           powerStation.age.years =
