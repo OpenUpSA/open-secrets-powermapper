@@ -18,6 +18,8 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
+import Markdown from 'react-markdown';
+
 import SVG from "react-inlinesvg";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -314,7 +316,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                 <Divider className="buffer" />
                 <div className="content">
                   <h3>{sidePanelEntityInfo.role}</h3>
-                  <p>{sidePanelEntityInfo.details}</p>
+                  <Markdown>{sidePanelEntityInfo.details}</Markdown>
                   <table>
                     <tbody>
                       <tr>
@@ -383,7 +385,7 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                   {sidePanelEntityInfo.controversies && (
                     <>
                       <h3>Controversies</h3>
-                      <p>{sidePanelEntityInfo.controversies}</p>
+                      <Markdown>{sidePanelEntityInfo.controversies}</Markdown>
                     </>
                   )}
                 </div>
