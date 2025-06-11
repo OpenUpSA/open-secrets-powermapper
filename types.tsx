@@ -14,8 +14,8 @@ export type PowerStation = {
   description?: string;
   controversies?: string;
   powerOutput?: number;
-  operator?: Entity;
-  owner?: Entity;
+  operator?: Entity[];
+  owner?: Entity[];
   images?: {
     large: Image;
     full: Image;

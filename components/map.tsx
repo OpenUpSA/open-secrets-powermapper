@@ -68,10 +68,11 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
 
   // Get all entities from powerStation.owner and powerStation.operator
   const entities = powerStations
-    .map((powerStation) => [powerStation.owner, powerStation.operator])
-    .flat()
-    .filter((entity) => entity !== null)
-    .filter((entity) => entity !== undefined) as Entity[];
+  .flatMap((powerStation) => [
+    ...(powerStation.owner ?? []),
+    ...(powerStation.operator ?? []),
+  ])
+  .filter((entity): entity is Entity => !!entity);
 
   const [sidePanelEntity, setSidePanelEntity] = useState<string | null>(
     currentSearchParams.get("eip") || null
