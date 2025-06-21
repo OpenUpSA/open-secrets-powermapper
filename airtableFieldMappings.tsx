@@ -83,3 +83,22 @@ export const EntityRoleFieldIdToNameMapping = {
 export const EntityRoleFieldNameToIdMapping = Object.fromEntries(
   Object.entries(EntityRoleFieldIdToNameMapping).map(([id, name]) => [name, id])
 );
+
+export const AboutToolFieldIdToNameMapping = {
+  fld5WrBSW2rnDcvpE: "Title",
+  fldsL02yf2auNwEgB: "Body text",
+  fldERGHsN07aXtZZt: "Report URL"
+};
+
+export const AboutToolFieldNameToIdMapping = Object.fromEntries(
+  Object.entries(AboutToolFieldIdToNameMapping).map(([id, name]) => [name, id])
+);
+
+export const DataSourcesFieldIdToNameMapping = {
+  fldrwi6Ws6dcvsX31: "Source name",
+  fldYfhQql44m5XHid: "URL"
+};
+
+export const DataSourcesFieldNameToIdMapping = Object.fromEntries(
+  Object.entries(DataSourcesFieldIdToNameMapping).map(([id, name]) => [name, id])
+);

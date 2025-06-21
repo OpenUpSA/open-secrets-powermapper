@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 import "./index.scss";
 
 import { Modal } from "@mui/material";
@@ -8,6 +10,7 @@ import Stack from "@mui/material/Stack";
 
 import CloseIcon from "@mui/icons-material/Close";
 import StorageRounded from "@mui/icons-material/StorageRounded";
+import { DataSource } from "@/types";
 
 type Props = {
   dataSourcesModalOpen: boolean;
@@ -18,6 +21,26 @@ export function DataSourcesModal({
   dataSourcesModalOpen,
   closeDataSourcesModal,
 }: Props) {
+
+  const [dataSources, setDataSources] = useState<DataSource[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (dataSourcesModalOpen) {
+      setLoading(true);
+      fetch('/api/data-sources')
+        .then(res => res.json())
+        .then(data => {
+          setDataSources(data);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching data sources:', error);
+          setLoading(false);
+        });
+    }
+  }, [dataSourcesModalOpen]);
+
   return (
     <Modal
       open={dataSourcesModalOpen}
@@ -52,46 +75,24 @@ export function DataSourcesModal({
               <CloseIcon fontSize="medium" />
             </button>
           </Stack>
-          <ul className="tabularList">
-            <li>
-              <a
-                href="https://www.opensecrets.org.za/report-who-has-the-power/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Who Has the Power: South Africa’s Energy Profiteers
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Global Coal Plant Tracker, Global Energy Monitor, April 2024
-                Supplemental release.
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://globalenergymonitor.org/projects/global-methane-emitters-tracker/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Global Methane Emitters Tracker, Global Energy Monitor, November
-                2023 release.
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://globalenergymonitor.org/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Global Energy Monitor
-              </a>
-            </li>
-          </ul>
+          
+          {loading ? (
+            <Typography>Loading data sources...</Typography>
+          ) : (
+            <ul className="tabularList">
+              {dataSources.map((dataSource, index) => (
+                <li key={index}>
+                  <a
+                    href={dataSource.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {dataSource.source}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
     </Modal>
