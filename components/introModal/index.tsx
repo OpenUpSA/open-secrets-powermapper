@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 import "./index.scss";
 import intro from "@/public/images/intro.png";
 
@@ -10,6 +12,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
+import Markdown from 'react-markdown';
+import { About } from "@/types";
 
 type Props = {
   introModalOpen: boolean;
@@ -20,8 +24,26 @@ type Props = {
 export function IntroModal({
   introModalOpen,
   closeIntroModal,
-  showUseToolButton,
+  showUseToolButton
 }: Props) {
+
+  const [aboutData, setAboutData] = useState<About | null>(null);
+
+  useEffect(() => {
+    async function getAbout() {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/about`
+      );
+      const data = await res.json();
+      if (data) {
+        setAboutData(data);
+      } else {
+        console.error("No about data found");
+      }
+    }
+    getAbout();
+  }, []); 
+
   return (
     <Modal
       open={introModalOpen}
@@ -45,21 +67,10 @@ export function IntroModal({
             component="h1"
             className="title"
           >
-            Meet South Africa&#8217;s energy profiteers
+            {aboutData?.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            The PowerMapper is an interactive database which maps and profiles
-            the &#8216;power players&#8217; who benefit from the climate crisis and the
-            transition to renewables. The database uses the conceptual framework
-            developed in Open Secrets&#8217; Who Has the Power? South Africa&#8217;s Energy
-            Profiteers investigative report. The report shows who holds the
-            power in South Africa&#8217;s energy sector and spotlights the key private
-            players in the coal, gas, oil and renewable energy industries—who we
-            call &#8216;energy profiteers&#8217;. We identify the private corporations that
-            stand to benefit from maintaining the status quo, i.e. a reliance on
-            fossil fuels, in South Africa&#8217;s energy sector. We also identify the
-            corporations that stand to benefit from South Africa&#8217;s transition to
-            new energy sources.
+            <Markdown>{aboutData?.body}</Markdown>
           </Typography>
         </CardContent>
         <CardActions className="actions">
@@ -74,7 +85,7 @@ export function IntroModal({
             </Button>
           )}
           <a
-            href="https://www.opensecrets.org.za/energy-profiteers/"
+            href={aboutData?.reportUrl}
             rel="noopener"
             target="_blank"
             className="button secondary"

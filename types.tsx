@@ -96,3 +96,14 @@ export type Image = {
   height: number;
   type: string;
 };
+
+export type About = {
+  title: string;
+  body: string;
+  reportUrl: string;
+};
+
+export type DataSource = {
+  source: string;
+  url: string;
+}
