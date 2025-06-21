@@ -114,7 +114,6 @@ function Component(props: Props) {
 
   const showByControversiesParam = currentSearchParams.get("show-by-controversies") === "true";
 
-
   const initialized = useRef(false);
   const {
     setFilteredPowerStations,
@@ -124,10 +123,10 @@ function Component(props: Props) {
     showDataSourcesModal,
   } = props;
   const [powerStations, setPowerStations] = useState<PowerStation[]>([]);
-  const [energyTypes, setEnergyTypes] = useState<ItemLabel>();
-  const [operators, setOperators] = useState<ItemLabel>();
-  const [owners, setOwners] = useState<ItemLabel>();
-  const [locations, setLocations] = useState<ItemLabel>();
+  const [availableEnergyTypes, setAvailableEnergyTypes] = useState<ItemLabel>({});
+  const [availableOperators, setAvailableOperators] = useState<ItemLabel>({});
+  const [availableOwners, setAvailableOwners] = useState<ItemLabel>({});
+  const [availableLocations, setAvailableLocations] = useState<ItemLabel>({});
 
   const powerOutputMarksDefault = useRef([
     {
@@ -146,6 +145,99 @@ function Component(props: Props) {
 
   const powerOutputValueDefault = (powerOutputs: Marks[]) => {
     return [powerOutputs[0].value, powerOutputs[powerOutputs.length - 1].value];
+  };
+
+  
+  const getFilteredDataset = (
+    stations: PowerStation[],
+    excludeFilter?: string
+  ): PowerStation[] => {
+    const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
+    const regionParam = excludeFilter === "locations" ? [] : currentSearchParams.get("locations")?.split(",") || [];
+    const fuelTypeParam = excludeFilter === "energies" ? [] : currentSearchParams.get("energies")?.split(",") || [];
+    const operatorParam = excludeFilter === "operators" ? [] : currentSearchParams.get("operators")?.split(",") || [];
+    const ownerParam = excludeFilter === "owners" ? [] : currentSearchParams.get("owners")?.split(",") || [];
+    const powerParam = excludeFilter === "power" ? null : currentSearchParams.get("power")?.split(",").map(Number);
+
+    return stations.filter(
+      (station) =>
+        station.name.toLowerCase().includes(nameParam) &&
+        (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&
+        (regionParam.length === 0 ||
+          regionParam.includes(station.region.name)) &&
+        (fuelTypeParam.length === 0 ||
+          fuelTypeParam.includes(station.fuelType.shorthand)) &&
+        (
+          operatorParam.length === 0 ||
+          station.operator?.some(op => operatorParam.includes(op.name))
+        ) &&
+        (
+          ownerParam.length === 0 ||
+          station.owner?.some(ow => ownerParam.includes(ow.name))
+        ) &&
+        (!powerParam ||
+          !station.powerOutput ||
+          (station.powerOutput >= powerParam[0] &&
+            station.powerOutput <= powerParam[1]))
+    );
+  };
+
+  
+  const buildFilterOptions = (stations: PowerStation[]) => {
+    const energyTypesData = stations.reduce(
+      (acc: ItemLabel, cur: PowerStation) => {
+        if (cur.fuelType) {
+          acc[cur.fuelType.shorthand] = { label: cur.fuelType.name };
+        }
+        return acc;
+      },
+      {} as ItemLabel
+    );
+
+    const operatorsData = stations.reduce(
+      (acc: ItemLabel, cur: PowerStation) => {
+        if (Array.isArray(cur.operator)) {
+          cur.operator.forEach(op => {
+            if (op && op.name) {
+              acc[op.name] = { label: op.name };
+            }
+          });
+        }
+        return acc;
+      },
+      {} as ItemLabel
+    );
+
+    const ownersData = stations.reduce(
+      (acc: ItemLabel, cur: PowerStation) => {
+        if (Array.isArray(cur.owner)) {
+          cur.owner.forEach(ow => {
+            if (ow && ow.name) {
+              acc[ow.name] = { label: ow.name };
+            }
+          });
+        }
+        return acc;
+      },
+      {} as ItemLabel
+    );
+
+    const locationsData = stations.reduce(
+      (acc: ItemLabel, cur: PowerStation) => {
+        if (cur.region) {
+          acc[cur.region.name] = { label: cur.region.name };
+        }
+        return acc;
+      },
+      {} as ItemLabel
+    );
+
+    return {
+      energyTypes: energyTypesData,
+      operators: operatorsData,
+      owners: ownersData,
+      locations: locationsData,
+    };
   };
 
   const handleEnergiesChange = (event: SelectChangeEvent<string[]>) => {
@@ -235,40 +327,31 @@ function Component(props: Props) {
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
-
+  
   useEffect(() => {
-    const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
-    const regionParam = currentSearchParams.get("locations")?.split(",") || [];
-    const fuelTypeParam = currentSearchParams.get("energies")?.split(",") || [];
-    const operatorParam = currentSearchParams.get("operators")?.split(",") || [];
-    const ownerParam = currentSearchParams.get("owners")?.split(",") || [];
-    const powerParam = currentSearchParams.get("power")?.split(",").map(Number);
+    if (powerStations.length === 0) return;
 
+    
+    const filteredStations = getFilteredDataset(powerStations);
+    setFilteredPowerStations(filteredStations);
 
-    setFilteredPowerStations(
-      powerStations.filter(
-        (station) =>
-          station.name.toLowerCase().includes(nameParam) &&
-          (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&
-          (regionParam.length === 0 ||
-            regionParam.includes(station.region.name)) &&
-          (fuelTypeParam.length === 0 ||
-            fuelTypeParam.includes(station.fuelType.shorthand)) &&
-          (
-            operatorParam.length === 0 ||
-            station.operator?.some(op => operatorParam.includes(op.name))
-          ) &&
-          (
-            ownerParam.length === 0 ||
-            station.owner?.some(ow => ownerParam.includes(ow.name))
-          ) &&
-          (!powerParam ||
-            !station.powerOutput ||
-            (station.powerOutput >= powerParam[0] &&
-              station.powerOutput <= powerParam[1]))
-      )
-    );
-  }, [currentSearchParams, powerStations, setFilteredPowerStations]);
+    
+    const availableForEnergyTypes = getFilteredDataset(powerStations, "energies");
+    const availableForOperators = getFilteredDataset(powerStations, "operators");
+    const availableForOwners = getFilteredDataset(powerStations, "owners");
+    const availableForLocations = getFilteredDataset(powerStations, "locations");
+
+    const energyOptions = buildFilterOptions(availableForEnergyTypes);
+    const operatorOptions = buildFilterOptions(availableForOperators);
+    const ownerOptions = buildFilterOptions(availableForOwners);
+    const locationOptions = buildFilterOptions(availableForLocations);
+
+    setAvailableEnergyTypes(energyOptions.energyTypes);
+    setAvailableOperators(operatorOptions.operators);
+    setAvailableOwners(ownerOptions.owners);
+    setAvailableLocations(locationOptions.locations);
+
+  }, [currentSearchParams, powerStations, setFilteredPowerStations, showByControversiesParam]);
 
   const clearFilters = () => {
     const newParams = new URLSearchParams(currentSearchParams.toString());
@@ -352,20 +435,20 @@ function Component(props: Props) {
       case "name":
         return filter[1];
       case "energy":
-        return energyTypes
-          ? energyTypes[filter[1] as keyof typeof energyTypes].label
+        return availableEnergyTypes
+          ? availableEnergyTypes[filter[1] as keyof typeof availableEnergyTypes]?.label || filter[1]
           : filter[1];
       case "operator":
-        return operators
-          ? operators[filter[1] as keyof typeof operators].label
+        return availableOperators
+          ? availableOperators[filter[1] as keyof typeof availableOperators]?.label || filter[1]
           : filter[1];
       case "owner":
-        return owners
-          ? owners[filter[1] as keyof typeof owners].label
+        return availableOwners
+          ? availableOwners[filter[1] as keyof typeof availableOwners]?.label || filter[1]
           : filter[1];
       case "location":
-        return locations
-          ? locations[filter[1] as keyof typeof locations].label
+        return availableLocations
+          ? availableLocations[filter[1] as keyof typeof availableLocations]?.label || filter[1]
           : filter[1];
       case "power":
         return `${filter[1]} MW`;
@@ -384,57 +467,11 @@ function Component(props: Props) {
       const powerStationsData = await res.json();
       setPowerStations(powerStationsData.powerStations);
 
-      const energyTypesData = powerStationsData.powerStations.reduce(
-        (acc: ItemLabel, cur: PowerStation) => {
-          if (cur.fuelType) {
-            acc[cur.fuelType.shorthand] = { label: cur.fuelType.name };
-          }
-          return acc;
-        },
-        {} as ItemLabel
-      );
-      setEnergyTypes(energyTypesData);
-
-      const operatorsData = powerStationsData.powerStations.reduce(
-        (acc: ItemLabel, cur: PowerStation) => {
-          if (Array.isArray(cur.operator)) {
-            cur.operator.forEach(op => {
-              if (op && op.name) {
-                acc[op.name] = { label: op.name };
-              }
-            });
-          }
-          return acc;
-        },
-        {} as ItemLabel
-      );
-      setOperators(operatorsData);
-
-      const ownersData = powerStationsData.powerStations.reduce(
-        (acc: ItemLabel, cur: PowerStation) => {
-          if (Array.isArray(cur.owner)) {
-            cur.owner.forEach(ow => {
-              if (ow && ow.name) {
-                acc[ow.name] = { label: ow.name };
-              }
-            });
-          }
-          return acc;
-        },
-        {} as ItemLabel
-      );
-      setOwners(ownersData);
-
-      const locationsData = powerStationsData.powerStations.reduce(
-        (acc: ItemLabel, cur: PowerStation) => {
-          if (cur.region) {
-            acc[cur.region.name] = { label: cur.region.name };
-          }
-          return acc;
-        },
-        {} as ItemLabel
-      );
-      setLocations(locationsData);
+      const initialOptions = buildFilterOptions(powerStationsData.powerStations);
+      setAvailableEnergyTypes(initialOptions.energyTypes);
+      setAvailableOperators(initialOptions.operators);
+      setAvailableOwners(initialOptions.owners);
+      setAvailableLocations(initialOptions.locations);
 
       const minPowerOutput = Math.min(
         ...powerStationsData.powerStations
@@ -456,7 +493,7 @@ function Component(props: Props) {
     if (!initialized.current) {
       getData();
     }
-  }, [powerStations, currentSearchParams]);
+  }, []);
 
   const chipFilters = (): string[][] => {
     const newFilters: string[][] = [];
@@ -497,8 +534,6 @@ function Component(props: Props) {
         newFilters.push(["location", location]);
       });
 
-
-
     if (currentSearchParams.get("power")) {
       newFilters.push([
         "power",
@@ -519,7 +554,6 @@ function Component(props: Props) {
       newParams.delete("show-by-controversies");
     }
     window.history.pushState(null, "", `?${newParams.toString()}`);
-    // Optionally, trigger filter update here if not handled by useEffect on search params
   };
 
   return (
@@ -667,7 +701,7 @@ function Component(props: Props) {
                 primary={
                   selected
                     .map((value) => {
-                      return energyTypes?.[value]?.label || value;
+                      return availableEnergyTypes?.[value]?.label || value;
                     })
                     .join(", ") || "Select energy type(s)"
                 }
@@ -676,8 +710,8 @@ function Component(props: Props) {
           )}
           multiple
         >
-          {energyTypes &&
-            Object.entries(energyTypes)
+          {availableEnergyTypes &&
+            Object.entries(availableEnergyTypes)
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
@@ -709,7 +743,7 @@ function Component(props: Props) {
                 primary={
                   selected
                     .map((value) => {
-                      return operators?.[value]?.label || value;
+                      return availableOperators?.[value]?.label || value;
                     })
                     .join(", ") || "Select operator(s)"
                 }
@@ -718,8 +752,8 @@ function Component(props: Props) {
           )}
           multiple
         >
-          {operators &&
-            Object.entries(operators)
+          {availableOperators &&
+            Object.entries(availableOperators)
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
@@ -751,7 +785,7 @@ function Component(props: Props) {
                 primary={
                   selected
                     .map((value) => {
-                      return owners?.[value]?.label || value;
+                      return availableOwners?.[value]?.label || value;
                     })
                     .join(", ") || "Select owner(s)"
                 }
@@ -760,8 +794,8 @@ function Component(props: Props) {
           )}
           multiple
         >
-          {owners &&
-            Object.entries(owners)
+          {availableOwners &&
+            Object.entries(availableOwners)
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
@@ -792,7 +826,7 @@ function Component(props: Props) {
                 primary={
                   selected
                     .map((value) => {
-                      return locations?.[value]?.label || value;
+                      return availableLocations?.[value]?.label || value;
                     })
                     .join(", ") || "Select province(s)"
                 }
@@ -802,8 +836,8 @@ function Component(props: Props) {
           multiple
           label="Select province(s)"
         >
-          {locations &&
-            Object.entries(locations)
+          {availableLocations &&
+            Object.entries(availableLocations)
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
