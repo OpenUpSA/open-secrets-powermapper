@@ -233,5 +233,11 @@ export async function GET(req: Request) {
     );
   }
 
-  return NextResponse.json({ powerStations }, { status: 200 });
+  return NextResponse.json({ powerStations }, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Tag": "power-stations",
+    },
+  });
 }
