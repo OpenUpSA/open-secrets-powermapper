@@ -147,42 +147,6 @@ function Component(props: Props) {
     return [powerOutputs[0].value, powerOutputs[powerOutputs.length - 1].value];
   };
 
-  
-  const getFilteredDataset = (
-    stations: PowerStation[],
-    excludeFilter?: string
-  ): PowerStation[] => {
-    const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
-    const regionParam = excludeFilter === "locations" ? [] : currentSearchParams.get("locations")?.split(",") || [];
-    const fuelTypeParam = excludeFilter === "energies" ? [] : currentSearchParams.get("energies")?.split(",") || [];
-    const operatorParam = excludeFilter === "operators" ? [] : currentSearchParams.get("operators")?.split(",") || [];
-    const ownerParam = excludeFilter === "owners" ? [] : currentSearchParams.get("owners")?.split(",") || [];
-    const powerParam = excludeFilter === "power" ? null : currentSearchParams.get("power")?.split(",").map(Number);
-
-    return stations.filter(
-      (station) =>
-        station.name.toLowerCase().includes(nameParam) &&
-        (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&
-        (regionParam.length === 0 ||
-          regionParam.includes(station.region.name)) &&
-        (fuelTypeParam.length === 0 ||
-          fuelTypeParam.includes(station.fuelType.shorthand)) &&
-        (
-          operatorParam.length === 0 ||
-          station.operator?.some(op => operatorParam.includes(op.name))
-        ) &&
-        (
-          ownerParam.length === 0 ||
-          station.owner?.some(ow => ownerParam.includes(ow.name))
-        ) &&
-        (!powerParam ||
-          !station.powerOutput ||
-          (station.powerOutput >= powerParam[0] &&
-            station.powerOutput <= powerParam[1]))
-    );
-  };
-
-  
   const buildFilterOptions = (stations: PowerStation[]) => {
     const energyTypesData = stations.reduce(
       (acc: ItemLabel, cur: PowerStation) => {
@@ -327,15 +291,47 @@ function Component(props: Props) {
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
-  
+
   useEffect(() => {
+    const getFilteredDataset = (
+      stations: PowerStation[],
+      excludeFilter?: string
+    ): PowerStation[] => {
+      const nameParam = currentSearchParams.get("name")?.toLowerCase() || "";
+      const regionParam = excludeFilter === "locations" ? [] : currentSearchParams.get("locations")?.split(",") || [];
+      const fuelTypeParam = excludeFilter === "energies" ? [] : currentSearchParams.get("energies")?.split(",") || [];
+      const operatorParam = excludeFilter === "operators" ? [] : currentSearchParams.get("operators")?.split(",") || [];
+      const ownerParam = excludeFilter === "owners" ? [] : currentSearchParams.get("owners")?.split(",") || [];
+      const powerParam = excludeFilter === "power" ? null : currentSearchParams.get("power")?.split(",").map(Number);
+
+      return stations.filter(
+        (station) =>
+          station.name.toLowerCase().includes(nameParam) &&
+          (showByControversiesParam ? Boolean(station.controversies && station.controversies.trim()) : true) &&
+          (regionParam.length === 0 ||
+            regionParam.includes(station.region.name)) &&
+          (fuelTypeParam.length === 0 ||
+            fuelTypeParam.includes(station.fuelType.shorthand)) &&
+          (
+            operatorParam.length === 0 ||
+            station.operator?.some(op => operatorParam.includes(op.name))
+          ) &&
+          (
+            ownerParam.length === 0 ||
+            station.owner?.some(ow => ownerParam.includes(ow.name))
+          ) &&
+          (!powerParam ||
+            !station.powerOutput ||
+            (station.powerOutput >= powerParam[0] &&
+              station.powerOutput <= powerParam[1]))
+      );
+    };
+
     if (powerStations.length === 0) return;
 
-    
     const filteredStations = getFilteredDataset(powerStations);
     setFilteredPowerStations(filteredStations);
 
-    
     const availableForEnergyTypes = getFilteredDataset(powerStations, "energies");
     const availableForOperators = getFilteredDataset(powerStations, "operators");
     const availableForOwners = getFilteredDataset(powerStations, "owners");
