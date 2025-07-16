@@ -187,7 +187,7 @@ export async function GET(req: Request) {
               type: image.type,
             },
           };
-          // We cache the Airtable image URLs on Imgkit because Airtable image URLs expire after
+          // We the Airtable image URLs on Imgkit because Airtable image URLs expire after
           // 2 hours
           uploadToImgKit(
             powerStation.images.full.url,
@@ -208,7 +208,7 @@ export async function GET(req: Request) {
         powerStation.owner = Array.isArray(ownerIds)
           ? ownerIds
             .map(id => entities.find(entity => entity.id === id))
-            .filter(Boolean) as Entity[] 
+            .filter(Boolean) as Entity[]
           : [];
 
         if (fields["DecommissionStart"]) {
