@@ -233,6 +233,8 @@ export async function GET(req: Request) {
     );
   }
 
+  console.log(JSON.stringify(powerStations));
+
   return NextResponse.json({ powerStations }, {
     status: 200,
     headers: {
