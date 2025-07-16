@@ -459,8 +459,7 @@ function Component(props: Props) {
       initialized.current = true;
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/power-stations`, {
-        next: { tags: ["power-stations"] },
-        cache: "force-cache"
+        next: { tags: ["power-stations"] }
       });
 
       const powerStationsData = await res.json();

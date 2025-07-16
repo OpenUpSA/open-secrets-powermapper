@@ -240,7 +240,7 @@ export async function GET(req: Request) {
     headers: {
       "Content-Type": "application/json",
       "Cache-Control": "public, max-age=0, must-revalidate",
-      "Netlify-CDN-Cache-Control": "Netlify-CDN-Cache-Control",
+      "Netlify-CDN-Cache-Control": "no-cache",
       "Cache-Tag": "power-stations",
     },
   });
