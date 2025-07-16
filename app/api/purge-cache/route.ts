@@ -8,6 +8,7 @@ export async function GET() {
     revalidateTag('entities')
     revalidateTag('data-sources')
     revalidateTag('about')
+    await purgeCache();
     await purgeCache({ tags: ["power-stations", "entities", "data-sources", "about"] });
     return new Response("Cache Purged.", { status: 202 })
   } catch (e: any) {
