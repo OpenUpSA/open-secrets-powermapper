@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 
 
 import { Image } from '@imagekit/next';
+import Markdown from "react-markdown";
 
 type Props = {
   powerStation: PowerStation;
@@ -358,7 +359,7 @@ export function PowerStationMarker({
                           {powerStation.description && (
                             <tr>
                               <td colSpan={2} className="description">
-                                {powerStation.description}
+                                <Markdown>{powerStation.description}</Markdown>
                               </td>
                             </tr>
                           )}
@@ -367,7 +368,7 @@ export function PowerStationMarker({
                     </>
                   )}
                   {tab === 1 && (
-                    <>{powerStation.controversies}</>
+                    <Markdown>{powerStation.controversies}</Markdown>
                   )}
                 </Box>
               </Box>
