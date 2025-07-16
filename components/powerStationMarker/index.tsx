@@ -241,7 +241,7 @@ export function PowerStationMarker({
               </Stack>
               <Tabs value={tab} onChange={handleTabChange}>
                 <Tab label="About" />
-                <Tab label="Controversies" />
+                {powerStation.controversies && <Tab label="Controversies" />}
               </Tabs>
               <Box sx={{
                 backgroundColor: '#fff',
