@@ -5,7 +5,10 @@ import { revalidateTag } from "next/cache";
 export async function GET() {
   try {
     revalidateTag('power-stations')
-    //await purgeCache({ tags: ["power-stations", "entities", "data-sources", "about"] });
+    revalidateTag('entities')
+    revalidateTag('data-sources')
+    revalidateTag('about')
+    await purgeCache({ tags: ["power-stations", "entities", "data-sources", "about"] });
     return new Response("Cache Purged.", { status: 202 })
   } catch (e: any) {
     const message = e?.description || e?.message || "Unknown error";

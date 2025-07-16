@@ -15,6 +15,8 @@ import { uploadToImgKit } from "@/utils/imgkit";
 import Airtable from "airtable";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-static';
+export const revalidate = 3600;
 
 export async function GET(req: Request) {
   const base = Airtable.base("appZdj1pFZQOBMn4E");
@@ -238,7 +240,7 @@ export async function GET(req: Request) {
     headers: {
       "Content-Type": "application/json",
       "Cache-Control": "public, max-age=0, must-revalidate",
-      "Netlify-CDN-Cache-Control": "public, max-age=31536000, must-revalidate",
+      "Netlify-CDN-Cache-Control": "Netlify-CDN-Cache-Control",
       "Cache-Tag": "power-stations",
     },
   });
