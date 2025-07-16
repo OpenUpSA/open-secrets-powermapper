@@ -64,15 +64,15 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
     lng: Number(currentSearchParams.get("lng")) || defaultCenter.lng,
   });
   const [selectedLeader, setSelectedLeader] = useState<Record<string, any> | null>(null);
-const [leaderModalOpen, setLeaderModalOpen] = useState(false);
+  const [leaderModalOpen, setLeaderModalOpen] = useState(false);
 
   // Get all entities from powerStation.owner and powerStation.operator
   const entities = powerStations
-  .flatMap((powerStation) => [
-    ...(powerStation.owner ?? []),
-    ...(powerStation.operator ?? []),
-  ])
-  .filter((entity): entity is Entity => !!entity);
+    .flatMap((powerStation) => [
+      ...(powerStation.owner ?? []),
+      ...(powerStation.operator ?? []),
+    ])
+    .filter((entity): entity is Entity => !!entity);
 
   const [sidePanelEntity, setSidePanelEntity] = useState<string | null>(
     currentSearchParams.get("eip") || null
@@ -132,7 +132,11 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
 
   function handleLegendClick(energyType: string) {
     const params = new URLSearchParams(currentSearchParams.toString());
-    params.set('energies', energyType);
+    if (params.get("energies") === energyType) {
+      params.delete("energies");
+    } else {
+      params.set('energies', energyType);
+    }
     window.history.pushState(null, "", `?${params.toString()}`);
   }
 
@@ -347,21 +351,21 @@ const [leaderModalOpen, setLeaderModalOpen] = useState(false);
                     <>
                       <h3>Leadership</h3>
                       {sidePanelEntityInfo.leadership.map((leader) => (
-                        
+
                         <div className="leadership" key={leader.id}>
                           <div className="leadershipItem"
-                          onClick={() => handleLeaderClick(leader)}
-                          style={{ cursor: "pointer" }}>
-                            
+                            onClick={() => handleLeaderClick(leader)}
+                            style={{ cursor: "pointer" }}>
+
                             <div className="leaderImgWrap">
-                            {leader.image?.[0]?.url ? 
-                            (
-                              <img
-                                src={leader.image[0].url}
-                                alt={leader.name}
-                                className="leaderImg"
-                              />
-                            ) : null}
+                              {leader.image?.[0]?.url ?
+                                (
+                                  <img
+                                    src={leader.image[0].url}
+                                    alt={leader.name}
+                                    className="leaderImg"
+                                  />
+                                ) : null}
                             </div>
                             <div className="leadershipText">
                               <span className="name">{leader.name}</span>
