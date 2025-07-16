@@ -21,6 +21,7 @@
     "@mui/icons-material": "^5.18.0",
     "@mui/material": "^5.18.0",
     "@mui/material-nextjs": "^5.18.0",
+    "@netlify/functions": "^4.1.11",
     "@vis.gl/react-google-maps": "^1.5.4",
     "airtable": "^0.12.2",
     "cookies-next": "^4.3.0",
