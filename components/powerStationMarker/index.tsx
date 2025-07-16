@@ -241,33 +241,46 @@ export function PowerStationMarker({
               </Stack>
               <Tabs value={tab} onChange={handleTabChange}>
                 <Tab label="About" />
-                <Tab label="Controversies" />
+                {powerStation.controversies && <Tab label="Controversies" />}
               </Tabs>
-              <Box sx={{ backgroundColor: '#fff', padding: '1em' }}>
-                {tab === 0 && (
-                  <>
-                    <table>
-                      <tbody>
-                        <tr>
-                          <td>Type:</td>
-                          <td>{powerStation.fuelType.name}</td>
-                        </tr>
-                        <tr>
-                          <td>Location:</td>
-                          <td>{powerStation.region.name}</td>
-                        </tr>
-                        <tr>
-                          <td>GPS:</td>
-                          <td>
-                            {powerStation.position.lat.toFixed(5)},{" "}
-                            {powerStation.position.lng.toFixed(5)}
-                          </td>
-                        </tr>
-                        {powerStation.operator && powerStation.operator.length > 0 && (
+              <Box sx={{
+                backgroundColor: '#fff',
+                padding: '1em 0',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                maxHeight: '43em',
+              }}>
+                <Box sx={{
+                  backgroundColor: '#fff',
+                  padding: '0 1em',
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                  maxHeight: '30.5em',
+                }}>
+                  {tab === 0 && (
+                    <>
+                      <table>
+                        <tbody>
                           <tr>
-                            <td>Operator:</td>
+                            <td>Type:</td>
+                            <td>{powerStation.fuelType.name}</td>
+                          </tr>
+                          <tr>
+                            <td>Location:</td>
+                            <td>{powerStation.region.name}</td>
+                          </tr>
+                          <tr>
+                            <td>GPS:</td>
                             <td>
-                              
+                              {powerStation.position.lat.toFixed(5)},{" "}
+                              {powerStation.position.lng.toFixed(5)}
+                            </td>
+                          </tr>
+                          {powerStation.operator && powerStation.operator.length > 0 && (
+                            <tr>
+                              <td>Operator:</td>
+                              <td>
+
                                 <span>
                                   {powerStation.operator.map((operator, idx) => (
                                     <span key={operator.id}>
@@ -281,15 +294,15 @@ export function PowerStationMarker({
                                     </span>
                                   ))}
                                 </span>
-                             
-                            </td>
-                          </tr>
-                        )}
-                        {powerStation.owner && powerStation.owner.length > 0 && (
-                          <tr>
-                            <td>Owner:</td>
-                            <td>
-                            
+
+                              </td>
+                            </tr>
+                          )}
+                          {powerStation.owner && powerStation.owner.length > 0 && (
+                            <tr>
+                              <td>Owner:</td>
+                              <td>
+
                                 <span>
                                   {powerStation.owner.map((owner, idx) => (
                                     <span key={owner.id}>
@@ -303,59 +316,60 @@ export function PowerStationMarker({
                                     </span>
                                   ))}
                                 </span>
-                              
-                            </td>
-                          </tr>
-                        )}
 
-                        {powerStation.powerOutput && (
-                          <tr>
-                            <td>Power Output:</td>
-                            <td>{powerStation.powerOutput} MW</td>
-                          </tr>
-                        )}
-                        {powerStation.age.commissionStart &&
-                          powerStation.age.commissionEnd && (
-                            <tr>
-                              <td>Commissioned:</td>
-                              <td>
-                                {new Date(
-                                  powerStation.age.commissionStart
-                                ).getFullYear()}
-                                &ndash;
-                                {new Date(powerStation.age.commissionEnd).getFullYear()}
                               </td>
                             </tr>
                           )}
-                        {powerStation.age.decommissionStart &&
-                          powerStation.age.decommissionEnd && (
+
+                          {powerStation.powerOutput && (
                             <tr>
-                              <td>Decommissioned:</td>
-                              <td>
-                                {new Date(
-                                  powerStation.age.decommissionStart
-                                ).getFullYear()}
-                                &ndash;
-                                {new Date(
-                                  powerStation.age.decommissionEnd
-                                ).getFullYear()}
+                              <td>Power Output:</td>
+                              <td>{powerStation.powerOutput} MW</td>
+                            </tr>
+                          )}
+                          {powerStation.age.commissionStart &&
+                            powerStation.age.commissionEnd && (
+                              <tr>
+                                <td>Commissioned:</td>
+                                <td>
+                                  {new Date(
+                                    powerStation.age.commissionStart
+                                  ).getFullYear()}
+                                  &ndash;
+                                  {new Date(powerStation.age.commissionEnd).getFullYear()}
+                                </td>
+                              </tr>
+                            )}
+                          {powerStation.age.decommissionStart &&
+                            powerStation.age.decommissionEnd && (
+                              <tr>
+                                <td>Decommissioned:</td>
+                                <td>
+                                  {new Date(
+                                    powerStation.age.decommissionStart
+                                  ).getFullYear()}
+                                  &ndash;
+                                  {new Date(
+                                    powerStation.age.decommissionEnd
+                                  ).getFullYear()}
+                                </td>
+                              </tr>
+                            )}
+                          {powerStation.description && (
+                            <tr>
+                              <td colSpan={2} className="description">
+                                {powerStation.description}
                               </td>
                             </tr>
                           )}
-                        {powerStation.description && (
-                          <tr>
-                            <td colSpan={2} className="description">
-                              {powerStation.description}
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </>
-                )}
-                {tab === 1 && (
-                  <>{powerStation.controversies}</>
-                )}
+                        </tbody>
+                      </table>
+                    </>
+                  )}
+                  {tab === 1 && (
+                    <>{powerStation.controversies}</>
+                  )}
+                </Box>
               </Box>
             </Box>
           </div>
