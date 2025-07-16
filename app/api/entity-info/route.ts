@@ -147,5 +147,9 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(responseEntity, {
     status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Tag": "entities",
+    },
   });
 }

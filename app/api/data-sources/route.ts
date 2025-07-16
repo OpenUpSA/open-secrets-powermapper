@@ -39,5 +39,9 @@ export async function GET(request: NextRequest) {
  
   return NextResponse.json(dataSourcesData, {
     status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Tag": "data-sources",
+    },
   });
 }

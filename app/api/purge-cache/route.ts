@@ -3,7 +3,7 @@ import { purgeCache } from "@netlify/functions";
 // Netlify only helper to purge cache. Initiated by Airtable.
 export async function GET() {
   try {
-    await purgeCache({ tags: ["power-stations"] });
+    await purgeCache({ tags: ["power-stations", "entities", "data-sources", "about"] });
     return new Response("Cache Purged.", { status: 202 })
   } catch (e: any) {
     const message = e?.description || e?.message || "Unknown error";

@@ -10,13 +10,13 @@ import { NextResponse, NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   const base = Airtable.base("appZdj1pFZQOBMn4E");
 
-  
+
   const aboutTable = base("tblOZsCYUFdB5gZug").select({
-    view: "Grid view", 
+    view: "Grid view",
     fields: Object.keys(AboutToolFieldIdToNameMapping),
     returnFieldsByFieldId: true,
   });
-  
+
   const aboutData: About[] = [];
 
   try {
@@ -42,5 +42,9 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(responseData, {
     status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Tag": "about",
+    },
   });
 }
