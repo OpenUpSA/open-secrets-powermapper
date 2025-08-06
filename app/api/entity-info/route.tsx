@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Entity, EntityRole, Country } from "@/types";
 import {
   EntityFieldIdToNameMapping,
