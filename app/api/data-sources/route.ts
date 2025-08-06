@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { DataSource } from "@/types";
 import {
   DataSourcesFieldIdToNameMapping,

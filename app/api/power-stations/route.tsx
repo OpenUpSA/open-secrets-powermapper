@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Position, PowerStation, Region, FuelType, Entity } from "@/types";
 import {
   PowerStationFieldNameToIdMapping,
