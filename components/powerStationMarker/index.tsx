@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 
 
 import { Image } from '@imagekit/next';
+import ImageWithFallback from "@/components/imageWithFallback";
 import Markdown from "react-markdown";
 
 type Props = {
@@ -167,16 +168,15 @@ export function PowerStationMarker({
           >
             <Stack alignItems="center" direction="row" gap={1}>
               {powerStation.images && powerStation.images.large && (
-                <Image
-                  urlEndpoint="https://ik.imagekit.io/powermapper/"
+                <ImageWithFallback
                   src={`powerstations/full_${powerStation.images.full.filename}`}
                   alt={powerStation.name}
-                  width="48"
-                  height="48"
                   className="photograph"
-                  loading="eager"
-                  transformation={[{ width: 48, height: 48, quality: 100, format: 'webp' }]}
-                  responsive={false}
+                  width={48}
+                  height={48}
+                  transformation={[
+                    { width: 48, height: 48, quality: 100, format: 'webp' },
+                  ]}
                 />
               )}
               <div>
@@ -211,15 +211,13 @@ export function PowerStationMarker({
           ]}
         >
           {powerStation.images && powerStation.images.full && (
-            <Image
-              className="photograph"
-              urlEndpoint="https://ik.imagekit.io/powermapper/"
+            <ImageWithFallback
               src={`powerstations/full_${powerStation.images.full.filename}`}
               alt={powerStation.name}
+              className="photograph"
               width={powerStation.images.full.width}
               height={powerStation.images.full.height}
               transformation={[{ width: 310, quality: 75, format: 'webp' }]}
-              responsive={false}
             />
           )}
           <div

@@ -202,10 +202,6 @@ function Component({ powerStations, panelOpen, setPanelOpen }: Props) {
         onCenterChanged={centerChanged}
         streetViewControl={false}
         fullscreenControl={false}
-        cameraControl={true}
-        cameraControlOptions={{
-          position: ControlPosition.RIGHT_BOTTOM
-        }}
         mapTypeControl={true}
         mapTypeControlOptions={{
           position: ControlPosition.TOP_RIGHT,
