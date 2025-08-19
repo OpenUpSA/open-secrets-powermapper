@@ -127,7 +127,6 @@ function Component(props: Props) {
   const [availableOperators, setAvailableOperators] = useState<ItemLabel>({});
   const [availableOwners, setAvailableOwners] = useState<ItemLabel>({});
   const [availableLocations, setAvailableLocations] = useState<ItemLabel>({});
-  const [energyTypeSearch, setEnergyTypeSearch] = useState("");
 
   const powerOutputMarksDefault = useRef([
     {
@@ -707,47 +706,9 @@ function Component(props: Props) {
             </Stack>
           )}
           multiple
-          MenuProps={{
-            PaperProps: {
-              style: { maxHeight: 300 },
-            },
-          }}
         >
-          {/* Search box as the first menu item */}
-          <MenuItem
-            disableRipple
-            style={{ 
-              position: 'sticky', 
-              top: 0, 
-              backgroundColor: 'white', 
-              zIndex: 1,
-              borderBottom: '1px solid #e0e0e0'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <TextField
-              size="small"
-              placeholder="Search energy types..."
-              value={energyTypeSearch}
-              onChange={(e) => setEnergyTypeSearch(e.target.value)}
-              onClick={(e) => e.stopPropagation()}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
-                  </InputAdornment>
-                ),
-              }}
-              style={{ width: '100%' }}
-            />
-          </MenuItem>
-          
-          {/* Filtered energy type options */}
           {availableEnergyTypes &&
             Object.entries(availableEnergyTypes)
-              .filter(([value, { label }]) =>
-                label.toLowerCase().includes(energyTypeSearch.toLowerCase())
-              )
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
