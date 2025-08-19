@@ -554,8 +554,6 @@ function Component(props: Props) {
     window.history.pushState(null, "", `?${newParams.toString()}`);
   };
 
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
   return (
     <Stack spacing={2} className={`filterPanel ${panelOpen ? "" : "closed"}`}>
       <Stack alignItems="center" direction="row" gap={2}>
@@ -725,34 +723,19 @@ function Component(props: Props) {
               borderBottom: '1px solid #e0e0e0'
             }}
             onClick={(e) => e.stopPropagation()}
-            onMouseDown={(e) => e.stopPropagation()}
           >
             <TextField
-              ref={searchInputRef}
               size="small"
               placeholder="Search energy types..."
               value={energyTypeSearch}
-              onChange={(e) => {
-                setEnergyTypeSearch(e.target.value);
-                setTimeout(() => {
-                  if (searchInputRef.current) {
-                    searchInputRef.current.focus();
-                  }
-                }, 0);
-              }}
+              onChange={(e) => setEnergyTypeSearch(e.target.value)}
               onClick={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onFocus={(e) => e.stopPropagation()}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon fontSize="small" />
                   </InputAdornment>
                 ),
-              }}
-              inputProps={{
-                onMouseDown: (e) => e.stopPropagation(),
-                onFocus: (e) => e.stopPropagation(),
               }}
               style={{ width: '100%' }}
             />
