@@ -730,12 +730,20 @@ function Component(props: Props) {
               value={energyTypeSearch}
               onChange={(e) => setEnergyTypeSearch(e.target.value)}
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              onKeyUp={(e) => e.stopPropagation()}
+              onKeyPress={(e) => e.stopPropagation()}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon fontSize="small" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                onKeyDown: (e) => e.stopPropagation(),
+                onKeyUp: (e) => e.stopPropagation(),
+                onKeyPress: (e) => e.stopPropagation(),
               }}
               style={{ width: '100%' }}
             />
