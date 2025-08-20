@@ -668,7 +668,7 @@ function Component(props: Props) {
       />
       <TextField
         id="name"
-        label="Name search"
+        label="Quick search"
         value={currentSearchParams.get("name") || ""}
         onChange={changeNameValue}
         placeholder="Enter a station name"
