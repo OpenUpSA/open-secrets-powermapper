@@ -128,6 +128,8 @@ function Component(props: Props) {
   const [availableOwners, setAvailableOwners] = useState<ItemLabel>({});
   const [availableLocations, setAvailableLocations] = useState<ItemLabel>({});
   const [energyTypeSearch, setEnergyTypeSearch] = useState("");
+  const [operatorSearch, setOperatorSearch] = useState("");
+  const [ownerSearch, setOwnerSearch] = useState("");
 
   const powerOutputMarksDefault = useRef([
     {
@@ -792,9 +794,52 @@ function Component(props: Props) {
             </Stack>
           )}
           multiple
+          MenuProps={{
+            PaperProps: {
+              style: { maxHeight: 300 },
+            },
+          }}
         >
+          <MenuItem
+            disableRipple
+            style={{ 
+              position: 'sticky', 
+              top: 0, 
+              backgroundColor: 'white', 
+              zIndex: 1,
+              borderBottom: '1px solid #e0e0e0'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <TextField
+              size="small"
+              placeholder="Search operators..."
+              value={operatorSearch}
+              onChange={(e) => setOperatorSearch(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              onKeyUp={(e) => e.stopPropagation()}
+              onKeyPress={(e) => e.stopPropagation()}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{
+                onKeyDown: (e) => e.stopPropagation(),
+                onKeyUp: (e) => e.stopPropagation(),
+                onKeyPress: (e) => e.stopPropagation(),
+              }}
+              style={{ width: '100%' }}
+            />
+          </MenuItem>
           {availableOperators &&
             Object.entries(availableOperators)
+              .filter(([value, { label }]) =>
+                label.toLowerCase().includes(operatorSearch.toLowerCase())
+              )
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
@@ -834,9 +879,52 @@ function Component(props: Props) {
             </Stack>
           )}
           multiple
+          MenuProps={{
+            PaperProps: {
+              style: { maxHeight: 300 },
+            },
+          }}
         >
+          <MenuItem
+            disableRipple
+            style={{ 
+              position: 'sticky', 
+              top: 0, 
+              backgroundColor: 'white', 
+              zIndex: 1,
+              borderBottom: '1px solid #e0e0e0'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <TextField
+              size="small"
+              placeholder="Search owners..."
+              value={ownerSearch}
+              onChange={(e) => setOwnerSearch(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              onKeyUp={(e) => e.stopPropagation()}
+              onKeyPress={(e) => e.stopPropagation()}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{
+                onKeyDown: (e) => e.stopPropagation(),
+                onKeyUp: (e) => e.stopPropagation(),
+                onKeyPress: (e) => e.stopPropagation(),
+              }}
+              style={{ width: '100%' }}
+            />
+          </MenuItem>
           {availableOwners &&
             Object.entries(availableOwners)
+              .filter(([value, { label }]) =>
+                label.toLowerCase().includes(ownerSearch.toLowerCase())
+              )
               .sort((a, b) => a[1].label.localeCompare(b[1].label))
               .map(([value, { label }]) => (
                 <MenuItem key={value} value={value}>
